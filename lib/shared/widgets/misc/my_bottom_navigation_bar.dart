@@ -5,6 +5,7 @@ import 'package:flutter_app_template/core/constants/app_durations.dart';
 import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
 import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
 
+
 enum MyBottomNavigationBarDisplayMode { iconOnly, titleOnly, both }
 
 enum MyBottomNavigationBarAnimation { none, bounce, slide, scale }
@@ -561,4 +562,32 @@ class _BottomNavItem extends StatelessWidget {
                                       isAnimated
                                   ? lerpDouble(context.setSize(2), 0, t)!
                                   : 0,
-                            )
+                            ),
+                            child: Transform.scale(
+                              scale: isScaleAnimation
+                                  ? lerpDouble(1.0, 1.15, clampedT)!
+                                  : 1.0,
+                              child: Text(
+                                item.title,
+                                style: TextStyle.lerp(
+                                  inactiveStyle,
+                                  activeStyle,
+                                  clampedT,
+                                )?.copyWith(color: color),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
