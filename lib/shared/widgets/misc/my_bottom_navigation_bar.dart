@@ -36,6 +36,7 @@ class MyBottomNavigationBar extends StatefulWidget {
   final BorderRadiusGeometry? borderRadius;
   final double? elevation;
   final bool expandItems;
+  final bool withBlur;
 
   // Item Properties
   final MyBottomNavigationBarDisplayMode displayMode;
@@ -66,6 +67,7 @@ class MyBottomNavigationBar extends StatefulWidget {
     this.borderRadius,
     this.elevation,
     this.expandItems = false,
+    this.withBlur = true,
 
     // Item Properties
     this.displayMode = MyBottomNavigationBarDisplayMode.both,
@@ -96,14 +98,46 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   double _indicatorWidth = 0;
   double _indicatorHeight = 0;
   bool _isInitialized = false;
+  bool _skipNextAnimation = false;
+
+  TextDirection? _lastDirectionality;
+  Locale? _lastLocale;
+  Size? _lastSize;
 
   @override
   void initState() {
     super.initState();
     _keys = List.generate(widget.items.length, (_) => GlobalKey());
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _updateIndicatorPosition(),
+      (_) => _updateIndicatorPosition(immediate: true),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final currentDirectionality = Directionality.of(context);
+    final currentLocale = Localizations.maybeLocaleOf(context);
+    final currentSize = MediaQuery.sizeOf(context);
+
+    final bool isDirectionalityChanged =
+        _lastDirectionality != null &&
+        _lastDirectionality != currentDirectionality;
+    final bool isLocaleChanged =
+        _lastLocale != null && _lastLocale != currentLocale;
+    final bool isSizeChanged = _lastSize != null && _lastSize != currentSize;
+
+    _lastDirectionality = currentDirectionality;
+    _lastLocale = currentLocale;
+    _lastSize = currentSize;
+
+    if (isDirectionalityChanged || isLocaleChanged || isSizeChanged) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _updateIndicatorPosition(immediate: true);
+        }
+      });
+    }
   }
 
   @override
@@ -113,41 +147,82 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       _keys = List.generate(widget.items.length, (_) => GlobalKey());
     }
 
-    if (oldWidget.currentIndex != widget.currentIndex ||
-        oldWidget.items.length != widget.items.length ||
+    final bool itemsCountChanged =
+        oldWidget.items.length != widget.items.length;
+    final bool layoutPropsChanged =
         oldWidget.expandItems != widget.expandItems ||
         oldWidget.displayMode != widget.displayMode ||
-        oldWidget.itemOrientation != widget.itemOrientation) {
-      if (oldWidget.items.length != widget.items.length ||
-          oldWidget.expandItems != widget.expandItems ||
-          oldWidget.displayMode != widget.displayMode ||
-          oldWidget.itemOrientation != widget.itemOrientation) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => _updateIndicatorPosition(),
-        );
-      } else {
-        _updateIndicatorPosition();
+        oldWidget.itemOrientation != widget.itemOrientation;
+    final bool selectionChanged = oldWidget.currentIndex != widget.currentIndex;
+
+    bool itemsContentChanged = false;
+    if (oldWidget.items.length == widget.items.length) {
+      for (int i = 0; i < widget.items.length; i++) {
+        if (oldWidget.items[i].title != widget.items[i].title) {
+          itemsContentChanged = true;
+          break;
+        }
       }
+    }
+
+    if (itemsCountChanged || layoutPropsChanged || itemsContentChanged) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _updateIndicatorPosition(
+            immediate: itemsContentChanged || layoutPropsChanged,
+          );
+        }
+      });
+    } else if (selectionChanged) {
+      _updateIndicatorPosition();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _updateIndicatorPosition();
+        }
+      });
     }
   }
 
-  void _updateIndicatorPosition() {
+  void _updateIndicatorPosition({bool immediate = false}) {
     if (!mounted) return;
     if (widget.currentIndex >= 0 && widget.currentIndex < _keys.length) {
       final keyContext = _keys[widget.currentIndex].currentContext;
       final rowContext = _rowKey.currentContext;
       if (keyContext != null && rowContext != null) {
-        final rowBox = rowContext.findRenderObject() as RenderBox;
-        final itemBox = keyContext.findRenderObject() as RenderBox;
-        final offset = itemBox.localToGlobal(Offset.zero, ancestor: rowBox);
-        setState(() {
-          _indicatorLeft = offset.dx;
-          _indicatorTop = offset.dy;
-          _indicatorWidth = itemBox.size.width;
-          _indicatorHeight = itemBox.size.height;
-          _isInitialized = true;
-        });
+        final rowBox = rowContext.findRenderObject() as RenderBox?;
+        final itemBox = keyContext.findRenderObject() as RenderBox?;
+        if (rowBox != null &&
+            itemBox != null &&
+            rowBox.attached &&
+            itemBox.attached &&
+            rowBox.hasSize &&
+            itemBox.hasSize) {
+          final offset = itemBox.localToGlobal(Offset.zero, ancestor: rowBox);
+          setState(() {
+            _indicatorLeft = offset.dx;
+            _indicatorTop = offset.dy;
+            _indicatorWidth = itemBox.size.width;
+            _indicatorHeight = itemBox.size.height;
+            _isInitialized = true;
+            _skipNextAnimation = immediate;
+          });
+          if (immediate) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && _skipNextAnimation) {
+                setState(() {
+                  _skipNextAnimation = false;
+                });
+              }
+            });
+          }
+          return;
+        }
       }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _updateIndicatorPosition(immediate: immediate);
+        }
+      });
     }
   }
 
@@ -175,20 +250,19 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         activeIconSize:
             widget.selectedIconSize ??
             widget.unselectedIconSize ??
-            context.iconL,
-        inactiveIconSize: widget.unselectedIconSize ?? context.iconL,
+            context.iconL * 0.90,
+        inactiveIconSize: widget.unselectedIconSize ?? context.iconL * 0.90,
         activeStyle:
             widget.selectedLabelStyle ??
             widget.unselectedLabelStyle ??
-            TextStyle(
-              fontSize: context.setSize(12),
+            context.textTheme.labelMedium!.copyWith(
               fontWeight: FontWeight.w600,
+              fontSize: context.setSize(11),
             ),
         inactiveStyle:
             widget.unselectedLabelStyle ??
-            TextStyle(
-              fontSize: context.setSize(12),
-              fontWeight: FontWeight.w500,
+            context.textTheme.labelMedium!.copyWith(
+              fontSize: context.setSize(11),
             ),
         selectedBackgroundColor: isSlidingMode
             ? Colors.transparent
@@ -209,73 +283,99 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       }
     }
 
-    return SafeArea(
-      child: Padding(
-        padding: widget.margin ?? EdgeInsets.zero,
-        child: Container(
-          height: widget.height,
-          padding: widget.padding ?? context.insetsAllS,
-          decoration: BoxDecoration(
-            color:
-                widget.backgroundColor ??
-                theme.bottomNavigationBarTheme.backgroundColor ??
-                theme.colorScheme.surface,
-            border: widget.border,
-            borderRadius: widget.borderRadius ?? BorderRadius.zero,
-            boxShadow: (widget.elevation ?? context.elevationNone) > 0
-                ? [
-                    BoxShadow(
-                      color: theme.shadowColor.withValues(alpha: 0.1),
-                      blurRadius: widget.elevation ?? context.elevationNone,
-                      offset: Offset(0, context.setSize(4)),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              if (isSlidingMode && _isInitialized)
-                AnimatedPositioned(
-                  left: _indicatorLeft,
-                  top: _indicatorTop,
-                  width: _indicatorWidth,
-                  height: _indicatorHeight,
-                  duration: AppDurations.slow,
-                  curve:
-                      widget.itemAnimation ==
-                          MyBottomNavigationBarAnimation.bounce
-                      ? Curves.easeOutBack
-                      : Curves.easeOutQuint,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color:
-                          widget.selectedBackgroundColor ??
-                          theme.colorScheme.primary.withValues(alpha: 0.1),
-                      border: widget.itemBorder,
-                      borderRadius: widget.itemBorderRadius ?? context.brL,
-                    ),
-                  ),
-                ),
-              NotificationListener<SizeChangedLayoutNotification>(
-                onNotification: (n) {
-                  WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => _updateIndicatorPosition(),
-                  );
-                  return true;
-                },
-                child: SizeChangedLayoutNotifier(
-                  child: Row(
-                    key: _rowKey,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: children,
-                  ),
+    final defaultBgColor =
+        widget.backgroundColor ??
+        theme.bottomNavigationBarTheme.backgroundColor ??
+        theme.colorScheme.surface;
+    final bgColor = defaultBgColor.withValues(
+      alpha: widget.withBlur ? 0.8 : 1.0,
+    );
+
+    final borderRadius = widget.borderRadius ?? BorderRadius.zero;
+    final hasShadow = (widget.elevation ?? context.elevationNone) > 0;
+
+    Widget navContainer = Container(
+      height: widget.height,
+      padding: widget.padding ?? context.insetsAllXs,
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: widget.border,
+        borderRadius: borderRadius,
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          if (isSlidingMode && _isInitialized)
+            AnimatedPositioned(
+              left: _indicatorLeft,
+              top: _indicatorTop,
+              width: _indicatorWidth,
+              height: _indicatorHeight,
+              duration: _skipNextAnimation ? Duration.zero : AppDurations.slow,
+              curve:
+                  widget.itemAnimation == MyBottomNavigationBarAnimation.bounce
+                  ? Curves.easeOutBack
+                  : Curves.easeOutQuint,
+              child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      widget.selectedBackgroundColor ??
+                      theme.colorScheme.primary.withValues(alpha: 0.1),
+                  border: widget.itemBorder,
+                  borderRadius: widget.itemBorderRadius ?? context.brL,
                 ),
               ),
-            ],
+            ),
+          NotificationListener<SizeChangedLayoutNotification>(
+            onNotification: (n) {
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _updateIndicatorPosition(immediate: true),
+              );
+              return true;
+            },
+            child: SizeChangedLayoutNotifier(
+              child: Row(
+                key: _rowKey,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: children,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
+    );
+
+    Widget content;
+    if (widget.withBlur) {
+      content = ClipRRect(
+        borderRadius: borderRadius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: navContainer,
+        ),
+      );
+    } else {
+      content = navContainer;
+    }
+
+    if (hasShadow) {
+      content = Container(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          boxShadow: [
+            BoxShadow(
+              color: theme.shadowColor.withValues(alpha: 0.1),
+              blurRadius: widget.elevation ?? context.elevationNone,
+              offset: Offset(0, context.setSize(4)),
+            ),
+          ],
+        ),
+        child: content,
+      );
+    }
+
+    return SafeArea(
+      child: Padding(padding: widget.margin ?? EdgeInsets.zero, child: content),
     );
   }
 }
@@ -461,32 +561,4 @@ class _BottomNavItem extends StatelessWidget {
                                       isAnimated
                                   ? lerpDouble(context.setSize(2), 0, t)!
                                   : 0,
-                            ),
-                            child: Transform.scale(
-                              scale: isScaleAnimation
-                                  ? lerpDouble(1.0, 1.15, clampedT)!
-                                  : 1.0,
-                              child: Text(
-                                item.title,
-                                style: TextStyle.lerp(
-                                  inactiveStyle,
-                                  activeStyle,
-                                  clampedT,
-                                )?.copyWith(color: color),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
+                            )
