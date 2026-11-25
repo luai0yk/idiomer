@@ -44,9 +44,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SettingsCubit>(
-          create: (_) => sl<SettingsCubit>(),
-        ),
+        BlocProvider<SettingsCubit>(create: (_) => sl<SettingsCubit>()),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, settingsState) {
@@ -64,18 +62,19 @@ class _MyAppState extends State<MyApp> {
             builder: (context, child) {
               final theme = Theme.of(context);
 
-              final textTheme = MaterialTheme.responsiveTextTheme(context).apply(
-                bodyColor: theme.colorScheme.onSurface,
-                displayColor: theme.colorScheme.onSurface,
-                fontFamily: AppConstants.fontFamily,
-              );
+              final textTheme = MaterialTheme.responsiveTextTheme(context)
+                  .apply(
+                    bodyColor: theme.colorScheme.onSurface,
+                    displayColor: theme.colorScheme.onSurface,
+                    fontFamily: AppConstants.fontFamily,
+                  );
 
               final systemOverlayStyle = SystemUiOverlayStyle(
                 systemNavigationBarColor: theme.colorScheme.surface,
                 systemNavigationBarIconBrightness:
                     theme.brightness == Brightness.light
-                        ? Brightness.dark
-                        : Brightness.light,
+                    ? Brightness.dark
+                    : Brightness.light,
                 statusBarColor: Colors.transparent,
                 statusBarIconBrightness: theme.brightness == Brightness.light
                     ? Brightness.dark

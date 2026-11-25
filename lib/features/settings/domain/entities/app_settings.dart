@@ -6,10 +6,7 @@ class AppSettings extends Equatable {
   final ThemeMode themeMode;
   final LangCode langCode;
 
-  const AppSettings({
-    required this.themeMode,
-    required this.langCode,
-  });
+  const AppSettings({required this.themeMode, required this.langCode});
 
   @override
   List<Object?> get props => [themeMode, langCode];

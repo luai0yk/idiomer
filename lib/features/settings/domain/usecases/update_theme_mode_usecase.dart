@@ -6,5 +6,6 @@ class UpdateThemeModeUseCase {
 
   const UpdateThemeModeUseCase(this._repository);
 
-  Future<void> call(ThemeMode themeMode) => _repository.saveThemeMode(themeMode);
+  Future<void> call(ThemeMode themeMode) =>
+      _repository.saveThemeMode(themeMode);
 }

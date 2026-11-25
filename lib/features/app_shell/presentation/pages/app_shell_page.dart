@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
-import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 import 'package:idiomer/shared/widgets/misc/my_bottom_navigation_bar.dart';
 
 class AppShellPage extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  const AppShellPage({
-    super.key,
-    required this.navigationShell,
-  });
+  const AppShellPage({super.key, required this.navigationShell});
 
   void _onItemSelected(int index) {
     navigationShell.goBranch(
@@ -32,9 +28,6 @@ class AppShellPage extends StatelessWidget {
           top: BorderSide(
             color: colorScheme.outlineVariant.withValues(alpha: 0.4),
           ),
-        ),
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(context.radiusL),
         ),
         expandItems: true,
         selectedForegroundColor: colorScheme.primary,

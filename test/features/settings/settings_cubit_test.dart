@@ -44,28 +44,31 @@ void main() {
       await cubit.close();
     });
 
-    test('persists theme and locale updates and clears system locale', () async {
-      SharedPreferences.setMockInitialValues({});
-      await initDependencies();
+    test(
+      'persists theme and locale updates and clears system locale',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        await initDependencies();
 
-      final cubit = sl<SettingsCubit>();
-      final cash = sl<CashService>();
+        final cubit = sl<SettingsCubit>();
+        final cash = sl<CashService>();
 
-      await cubit.changeTheme(ThemeMode.light);
-      expect(cubit.state.themeMode, ThemeMode.light);
-      expect(cash.getString(CashKeys.themeMode), ThemeMode.light.name);
+        await cubit.changeTheme(ThemeMode.light);
+        expect(cubit.state.themeMode, ThemeMode.light);
+        expect(cash.getString(CashKeys.themeMode), ThemeMode.light.name);
 
-      await cubit.changeLocale(LangCode.en);
-      expect(cubit.state.langCode, LangCode.en);
-      expect(cubit.state.locale, const Locale('en'));
-      expect(cash.getString(CashKeys.languageCode), LangCode.en.name);
+        await cubit.changeLocale(LangCode.en);
+        expect(cubit.state.langCode, LangCode.en);
+        expect(cubit.state.locale, const Locale('en'));
+        expect(cash.getString(CashKeys.languageCode), LangCode.en.name);
 
-      await cubit.changeLocale(LangCode.system);
-      expect(cubit.state.langCode, LangCode.system);
-      expect(cubit.state.locale, isNull);
-      expect(cash.contains(CashKeys.languageCode), isFalse);
+        await cubit.changeLocale(LangCode.system);
+        expect(cubit.state.langCode, LangCode.system);
+        expect(cubit.state.locale, isNull);
+        expect(cash.contains(CashKeys.languageCode), isFalse);
 
-      await cubit.close();
-    });
+        await cubit.close();
+      },
+    );
   });
 }

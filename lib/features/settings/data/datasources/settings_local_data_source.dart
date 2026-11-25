@@ -14,7 +14,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   final CashService _cashService;
 
   const SettingsLocalDataSourceImpl({required CashService cashService})
-      : _cashService = cashService;
+    : _cashService = cashService;
 
   @override
   ThemeMode getThemeMode() {

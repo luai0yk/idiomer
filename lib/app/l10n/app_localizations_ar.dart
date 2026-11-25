@@ -189,4 +189,147 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get noFlashcardsSubtitle =>
       'تدرّب وراجع التعابير باستخدام البطاقات هنا.';
+
+  @override
+  String get appName => 'Idiomer';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get dbSetupSubtitle => 'جارٍ تجهيز مكتبة التعابير الإنجليزية والعربية';
+
+  @override
+  String get dbChecking => 'جارٍ التحقق من قاعدة البيانات المحلية...';
+
+  @override
+  String get dbDownloading => 'جارٍ تحميل قاعدة بيانات التعابير...';
+
+  @override
+  String get dbExtracting => 'جارٍ استخراج قاعدة البيانات...';
+
+  @override
+  String get dbVerifying => 'جارٍ التحقق من سلامة قاعدة البيانات...';
+
+  @override
+  String get dbReady => 'جاهز';
+
+  @override
+  String get noInternetTitle => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get noInternetSubtitle =>
+      'يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى لتحميل قاعدة بيانات التعابير.';
+
+  @override
+  String get dbDownloadFailedTitle => 'فشل التحميل';
+
+  @override
+  String get dbDownloadFailedSubtitle =>
+      'تعذّر تحميل قاعدة بيانات التعابير. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get dbExtractionFailedTitle => 'فشل الاستخراج';
+
+  @override
+  String get dbExtractionFailedSubtitle =>
+      'تعذّر استخراج الملف المحمّل. يرجى إعادة المحاولة.';
+
+  @override
+  String get dbVerificationFailedTitle => 'فشل التحقق من قاعدة البيانات';
+
+  @override
+  String get dbVerificationFailedSubtitle =>
+      'تبدو قاعدة البيانات المحلية غير مكتملة أو تالفة. يرجى إعادة المحاولة.';
+
+  @override
+  String get dbSetupFailedTitle => 'فشل الإعداد';
+
+  @override
+  String get dbSetupFailedSubtitle =>
+      'حدث خطأ غير متوقع أثناء تجهيز قاعدة البيانات.';
+
+  @override
+  String get searchIdiomsHint => 'ابحث في التعابير أو الترجمات أو الأمثلة...';
+
+  @override
+  String get allCategories => 'الكل';
+
+  @override
+  String get expandCategories => 'عرض جميع التصنيفات';
+
+  @override
+  String get collapseCategories => 'طيّ التصنيفات';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get loadErrorTitle => 'حدث خطأ ما';
+
+  @override
+  String get loadErrorSubtitle =>
+      'تعذّر تحميل التعابير حالياً. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get idiomDetails => 'تفاصيل التعبير';
+
+  @override
+  String get idiomLabel => 'التعبير';
+
+  @override
+  String get translationLabel => 'الترجمة';
+
+  @override
+  String get meaningLabel => 'المعنى';
+
+  @override
+  String get meaningsLabel => 'المعاني';
+
+  @override
+  String get exampleLabel => 'مثال';
+
+  @override
+  String get examplesLabel => 'أمثلة';
+
+  @override
+  String get notesLabel => 'ملاحظات';
+
+  @override
+  String get categoriesLabel => 'التصنيفات';
+
+  @override
+  String get share => 'مشاركة';
+
+  @override
+  String get copy => 'نسخ';
+
+  @override
+  String get copyAll => 'نسخ الكل';
+
+  @override
+  String get copiedToClipboard => 'تم النسخ إلى الحافظة';
+
+  @override
+  String get idiomNotFoundTitle => 'التعبير غير موجود';
+
+  @override
+  String get idiomNotFoundSubtitle =>
+      'تعذّر تحميل هذا التعبير من قاعدة البيانات.';
+
+  @override
+  String get addedToFavorites => 'تمت الإضافة إلى المفضلة';
+
+  @override
+  String get removedFromFavorites => 'تمت الإزالة من المفضلة';
+
+  @override
+  String get clearFavoritesTitle => 'مسح جميع المفضلات؟';
+
+  @override
+  String get clearFavoritesMessage =>
+      'هل أنت متأكد من إزالة جميع التعابير المحفوظة من المفضلة؟';
+
+  @override
+  String get favoritesCleared => 'تم مسح جميع المفضلات';
 }

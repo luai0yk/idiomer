@@ -190,4 +190,147 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noFlashcardsSubtitle =>
       'Practice and review idioms with flashcards here.';
+
+  @override
+  String get appName => 'Idiomer';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get dbSetupSubtitle => 'Preparing your English–Arabic idioms library';
+
+  @override
+  String get dbChecking => 'Checking local database...';
+
+  @override
+  String get dbDownloading => 'Downloading idioms database...';
+
+  @override
+  String get dbExtracting => 'Extracting database...';
+
+  @override
+  String get dbVerifying => 'Verifying database...';
+
+  @override
+  String get dbReady => 'Ready';
+
+  @override
+  String get noInternetTitle => 'No Internet Connection';
+
+  @override
+  String get noInternetSubtitle =>
+      'Please check your internet connection and try again to download the idioms database.';
+
+  @override
+  String get dbDownloadFailedTitle => 'Download Failed';
+
+  @override
+  String get dbDownloadFailedSubtitle =>
+      'We couldn\'t download the idioms database. Please try again.';
+
+  @override
+  String get dbExtractionFailedTitle => 'Extraction Failed';
+
+  @override
+  String get dbExtractionFailedSubtitle =>
+      'Could not extract the downloaded archive. Please retry.';
+
+  @override
+  String get dbVerificationFailedTitle => 'Database Verification Failed';
+
+  @override
+  String get dbVerificationFailedSubtitle =>
+      'The local database appears incomplete or corrupted. Please retry.';
+
+  @override
+  String get dbSetupFailedTitle => 'Setup Failed';
+
+  @override
+  String get dbSetupFailedSubtitle =>
+      'An unexpected error occurred while preparing the database.';
+
+  @override
+  String get searchIdiomsHint => 'Search idioms, translations, or examples...';
+
+  @override
+  String get allCategories => 'All';
+
+  @override
+  String get expandCategories => 'Show all categories';
+
+  @override
+  String get collapseCategories => 'Collapse categories';
+
+  @override
+  String get clearFilters => 'Clear Filters';
+
+  @override
+  String get loadErrorTitle => 'Something Went Wrong';
+
+  @override
+  String get loadErrorSubtitle =>
+      'Unable to load idioms right now. Please try again.';
+
+  @override
+  String get idiomDetails => 'Idiom Details';
+
+  @override
+  String get idiomLabel => 'Idiom';
+
+  @override
+  String get translationLabel => 'Translation';
+
+  @override
+  String get meaningLabel => 'Meaning';
+
+  @override
+  String get meaningsLabel => 'Meanings';
+
+  @override
+  String get exampleLabel => 'Example';
+
+  @override
+  String get examplesLabel => 'Examples';
+
+  @override
+  String get notesLabel => 'Notes';
+
+  @override
+  String get categoriesLabel => 'Categories';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get copyAll => 'Copy All';
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get idiomNotFoundTitle => 'Idiom Not Found';
+
+  @override
+  String get idiomNotFoundSubtitle =>
+      'This idiom could not be loaded from the database.';
+
+  @override
+  String get addedToFavorites => 'Added to favorites';
+
+  @override
+  String get removedFromFavorites => 'Removed from favorites';
+
+  @override
+  String get clearFavoritesTitle => 'Clear All Favorites?';
+
+  @override
+  String get clearFavoritesMessage =>
+      'Are you sure you want to remove all saved idioms from your favorites?';
+
+  @override
+  String get favoritesCleared => 'All favorites cleared';
 }

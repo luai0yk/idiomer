@@ -457,6 +457,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Practice and review idioms with flashcards here.'**
   String get noFlashcardsSubtitle;
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiomer'**
+  String get appName;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @dbSetupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing your English–Arabic idioms library'**
+  String get dbSetupSubtitle;
+
+  /// No description provided for @dbChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking local database...'**
+  String get dbChecking;
+
+  /// No description provided for @dbDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading idioms database...'**
+  String get dbDownloading;
+
+  /// No description provided for @dbExtracting.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting database...'**
+  String get dbExtracting;
+
+  /// No description provided for @dbVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying database...'**
+  String get dbVerifying;
+
+  /// No description provided for @dbReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get dbReady;
+
+  /// No description provided for @noInternetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No Internet Connection'**
+  String get noInternetTitle;
+
+  /// No description provided for @noInternetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again to download the idioms database.'**
+  String get noInternetSubtitle;
+
+  /// No description provided for @dbDownloadFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Failed'**
+  String get dbDownloadFailedTitle;
+
+  /// No description provided for @dbDownloadFailedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t download the idioms database. Please try again.'**
+  String get dbDownloadFailedSubtitle;
+
+  /// No description provided for @dbExtractionFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Extraction Failed'**
+  String get dbExtractionFailedTitle;
+
+  /// No description provided for @dbExtractionFailedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not extract the downloaded archive. Please retry.'**
+  String get dbExtractionFailedSubtitle;
+
+  /// No description provided for @dbVerificationFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Database Verification Failed'**
+  String get dbVerificationFailedTitle;
+
+  /// No description provided for @dbVerificationFailedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The local database appears incomplete or corrupted. Please retry.'**
+  String get dbVerificationFailedSubtitle;
+
+  /// No description provided for @dbSetupFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Failed'**
+  String get dbSetupFailedTitle;
+
+  /// No description provided for @dbSetupFailedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred while preparing the database.'**
+  String get dbSetupFailedSubtitle;
+
+  /// No description provided for @searchIdiomsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search idioms, translations, or examples...'**
+  String get searchIdiomsHint;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allCategories;
+
+  /// No description provided for @expandCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all categories'**
+  String get expandCategories;
+
+  /// No description provided for @collapseCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse categories'**
+  String get collapseCategories;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clearFilters;
+
+  /// No description provided for @loadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something Went Wrong'**
+  String get loadErrorTitle;
+
+  /// No description provided for @loadErrorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load idioms right now. Please try again.'**
+  String get loadErrorSubtitle;
+
+  /// No description provided for @idiomDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom Details'**
+  String get idiomDetails;
+
+  /// No description provided for @idiomLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom'**
+  String get idiomLabel;
+
+  /// No description provided for @translationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get translationLabel;
+
+  /// No description provided for @meaningLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Meaning'**
+  String get meaningLabel;
+
+  /// No description provided for @meaningsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Meanings'**
+  String get meaningsLabel;
+
+  /// No description provided for @exampleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get exampleLabel;
+
+  /// No description provided for @examplesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Examples'**
+  String get examplesLabel;
+
+  /// No description provided for @notesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notesLabel;
+
+  /// No description provided for @categoriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get categoriesLabel;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copy;
+
+  /// No description provided for @copyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy All'**
+  String get copyAll;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @idiomNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom Not Found'**
+  String get idiomNotFoundTitle;
+
+  /// No description provided for @idiomNotFoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This idiom could not be loaded from the database.'**
+  String get idiomNotFoundSubtitle;
+
+  /// No description provided for @addedToFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites'**
+  String get addedToFavorites;
+
+  /// No description provided for @removedFromFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get removedFromFavorites;
+
+  /// No description provided for @clearFavoritesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All Favorites?'**
+  String get clearFavoritesTitle;
+
+  /// No description provided for @clearFavoritesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove all saved idioms from your favorites?'**
+  String get clearFavoritesMessage;
+
+  /// No description provided for @favoritesCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'All favorites cleared'**
+  String get favoritesCleared;
 }
 
 class _AppLocalizationsDelegate

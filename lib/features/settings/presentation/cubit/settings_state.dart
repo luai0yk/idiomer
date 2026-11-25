@@ -14,10 +14,7 @@ class SettingsState extends Equatable {
   Locale? get locale =>
       langCode == LangCode.system ? null : Locale(langCode.name);
 
-  SettingsState copyWith({
-    ThemeMode? themeMode,
-    LangCode? langCode,
-  }) {
+  SettingsState copyWith({ThemeMode? themeMode, LangCode? langCode}) {
     return SettingsState(
       themeMode: themeMode ?? this.themeMode,
       langCode: langCode ?? this.langCode,

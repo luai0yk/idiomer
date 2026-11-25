@@ -63,14 +63,14 @@ class AnimatedChip extends StatelessWidget {
             ] else if (prefixIcon != null) ...[
               MyIcon(
                 icon: prefixIcon!,
-                color: isSelected ? Colors.white : colors.onSurface,
+                color: isSelected ? colors.onPrimary : colors.onSurface,
                 size: context.setSize(14),
               ),
               SizedBox(width: context.setSize(6)),
             ] else if (isSelected && showIcon) ...[
               MyIcon(
                 icon: AppIcons.checkCircle,
-                color: Colors.white,
+                color: colors.onPrimary,
                 size: context.setSize(14),
               ),
               SizedBox(width: context.setSize(6)),
@@ -78,7 +78,7 @@ class AnimatedChip extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color: isSelected ? Colors.white : colors.onSurface,
+                color: isSelected ? colors.onPrimary : colors.onSurface,
                 fontSize: context.setSize(13),
                 fontWeight: FontWeight.w500,
               ),
@@ -90,7 +90,7 @@ class AnimatedChip extends StatelessWidget {
               SizedBox(width: context.setSize(6)),
               MyIcon(
                 icon: suffixIcon!,
-                color: isSelected ? Colors.white : colors.onSurface,
+                color: isSelected ? colors.onPrimary : colors.onSurface,
                 size: context.setSize(14),
               ),
             ],
