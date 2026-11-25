@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
-import 'package:flutter_app_template/shared/widgets/animations/my_animated_visibility.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_fade_switcher.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_visibility.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
 
 enum AppButtonTextStyle { bold, medium, regular }
 
@@ -437,10 +438,15 @@ class _MyButtonState extends State<MyButton> {
         // Content hides when loading
         MyAnimatedVisibility(visible: !_isLoading, child: content),
 
-        // Spinner shows when loading (matching foreground color)
-        MyAnimatedVisibility(
-          visible: _isLoading,
-          child: MyProgressIndicator(size: context.iconM, color: fgColor),
+        // Mount spinner only while loading so idle buttons don't tick frames.
+        MyAnimatedFadeSwitcher(
+          child: _isLoading
+              ? MyProgressIndicator(
+                  key: const ValueKey('loading'),
+                  size: context.iconM,
+                  color: fgColor,
+                )
+              : const SizedBox.shrink(key: ValueKey('idle')),
         ),
       ],
     );

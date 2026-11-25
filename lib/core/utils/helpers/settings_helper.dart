@@ -1,15 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/services/cash/cash_keys.dart';
-import 'package:flutter_app_template/core/services/cash/cash_service.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:get/get.dart';
+import 'package:idiomer/core/services/cash/cash_keys.dart';
+import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
 
 class SettingsHelper {
   SettingsHelper._();
 
-  static final CashService _cash = Get.find<CashService>();
+  static final CashService _cash = CashService.instance;
 
   static ThemeMode get currentTheme {
     final String? storedTheme = _cash.getString(CashKeys.themeMode);

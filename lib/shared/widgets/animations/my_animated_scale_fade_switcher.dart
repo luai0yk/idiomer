@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/constants/app_durations.dart';
+import 'package:idiomer/core/constants/app_durations.dart';
 
 /// An [AnimatedSwitcher] that automatically applies both a scale and a fade transition.
 class MyAnimatedScaleFadeSwitcher extends StatelessWidget {

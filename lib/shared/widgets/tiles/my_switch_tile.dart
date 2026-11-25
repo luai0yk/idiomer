@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/shared/widgets/input/my_switch.dart';
-import 'package:flutter_app_template/shared/widgets/tiles/my_list_tile.dart';
+import 'package:idiomer/shared/widgets/input/my_switch.dart';
+import 'package:idiomer/shared/widgets/tiles/my_list_tile.dart';
 
 class MySwitchTile extends StatelessWidget {
   final String title;

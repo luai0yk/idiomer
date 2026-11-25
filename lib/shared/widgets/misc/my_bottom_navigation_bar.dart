@@ -1,12 +1,84 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/constants/app_durations.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/constants/app_durations.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 
+enum MyBottomNavigationBarDisplayMode {
+  /// Always display both icon and title for all items.
+  both,
 
-enum MyBottomNavigationBarDisplayMode { iconOnly, titleOnly, both }
+  /// Always display only the icon for all items.
+  iconOnly,
+
+  /// Always display only the title for all items.
+  titleOnly,
+
+  /// Displays icon for all items, but displays the title only when selected.
+  /// (Unselected items show icon only; selected item shows both icon and title).
+  showSelectedTitle,
+
+  /// Displays icon for all items, but hides the title when selected.
+  /// (Unselected items show both icon and title; selected item shows icon only).
+  hideSelectedTitle,
+
+  /// Displays title for all items, but displays the icon only when selected.
+  /// (Unselected items show title only; selected item shows both icon and title).
+  showSelectedIcon,
+
+  /// Displays title for all items, but hides the icon when selected.
+  /// (Unselected items show both icon and title; selected item shows title only).
+  hideSelectedIcon,
+
+  /// Displays only the icon when unselected, and switches to only the title when selected.
+  iconToTitle,
+
+  /// Displays only the title when unselected, and switches to only the icon when selected.
+  titleToIcon,
+}
+
+extension MyBottomNavigationBarDisplayModeX
+    on MyBottomNavigationBarDisplayMode {
+  /// Whether the icon should be displayed for the given selection state.
+  bool shouldShowIcon({required bool isSelected}) {
+    switch (this) {
+      case MyBottomNavigationBarDisplayMode.both:
+      case MyBottomNavigationBarDisplayMode.iconOnly:
+      case MyBottomNavigationBarDisplayMode.showSelectedTitle:
+      case MyBottomNavigationBarDisplayMode.hideSelectedTitle:
+        return true;
+      case MyBottomNavigationBarDisplayMode.titleOnly:
+        return false;
+      case MyBottomNavigationBarDisplayMode.showSelectedIcon:
+      case MyBottomNavigationBarDisplayMode.titleToIcon:
+        return isSelected;
+      case MyBottomNavigationBarDisplayMode.hideSelectedIcon:
+      case MyBottomNavigationBarDisplayMode.iconToTitle:
+        return !isSelected;
+    }
+  }
+
+  /// Whether the title should be displayed for the given selection state.
+  bool shouldShowTitle({required bool isSelected}) {
+    switch (this) {
+      case MyBottomNavigationBarDisplayMode.both:
+      case MyBottomNavigationBarDisplayMode.titleOnly:
+      case MyBottomNavigationBarDisplayMode.showSelectedIcon:
+      case MyBottomNavigationBarDisplayMode.hideSelectedIcon:
+        return true;
+      case MyBottomNavigationBarDisplayMode.iconOnly:
+        return false;
+      case MyBottomNavigationBarDisplayMode.showSelectedTitle:
+      case MyBottomNavigationBarDisplayMode.iconToTitle:
+        return isSelected;
+      case MyBottomNavigationBarDisplayMode.hideSelectedTitle:
+      case MyBottomNavigationBarDisplayMode.titleToIcon:
+        return !isSelected;
+    }
+  }
+}
 
 enum MyBottomNavigationBarAnimation { none, bounce, slide, scale }
 
@@ -43,6 +115,7 @@ class MyBottomNavigationBar extends StatefulWidget {
   final MyBottomNavigationBarDisplayMode displayMode;
   final MyBottomNavigationBarItemOrientation itemOrientation;
   final MyBottomNavigationBarAnimation itemAnimation;
+  final double? itemHeight;
   final Color? selectedForegroundColor;
   final Color? unselectedForegroundColor;
   final Color? selectedBackgroundColor;
@@ -74,6 +147,7 @@ class MyBottomNavigationBar extends StatefulWidget {
     this.displayMode = MyBottomNavigationBarDisplayMode.both,
     this.itemOrientation = MyBottomNavigationBarItemOrientation.vertical,
     this.itemAnimation = MyBottomNavigationBarAnimation.scale,
+    this.itemHeight,
     this.selectedForegroundColor,
     this.unselectedForegroundColor,
     this.selectedBackgroundColor,
@@ -153,8 +227,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     final bool layoutPropsChanged =
         oldWidget.expandItems != widget.expandItems ||
         oldWidget.displayMode != widget.displayMode ||
-        oldWidget.itemOrientation != widget.itemOrientation;
+        oldWidget.itemOrientation != widget.itemOrientation ||
+        oldWidget.itemHeight != widget.itemHeight;
     final bool selectionChanged = oldWidget.currentIndex != widget.currentIndex;
+    final bool mayChangeSizeOnSelection =
+        widget.displayMode != MyBottomNavigationBarDisplayMode.both &&
+        widget.displayMode != MyBottomNavigationBarDisplayMode.iconOnly &&
+        widget.displayMode != MyBottomNavigationBarDisplayMode.titleOnly;
 
     bool itemsContentChanged = false;
     if (oldWidget.items.length == widget.items.length) {
@@ -175,7 +254,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         }
       });
     } else if (selectionChanged) {
-      _updateIndicatorPosition();
+      if (!mayChangeSizeOnSelection) {
+        _updateIndicatorPosition();
+      }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           _updateIndicatorPosition();
@@ -275,6 +356,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         itemBorderRadius: widget.itemBorderRadius,
         itemAnimation: widget.itemAnimation,
         itemOrientation: widget.itemOrientation,
+        itemHeight: widget.itemHeight,
       );
 
       if (widget.expandItems) {
@@ -297,6 +379,16 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
     Widget navContainer = Container(
       height: widget.height,
+      constraints: widget.height != null
+          ? null
+          : BoxConstraints(
+              minHeight: context.setSize(
+                widget.itemOrientation ==
+                        MyBottomNavigationBarItemOrientation.horizontal
+                    ? 64.0
+                    : 0.0,
+              ),
+            ),
       padding: widget.padding ?? context.insetsAllXs,
       decoration: BoxDecoration(
         color: bgColor,
@@ -398,6 +490,7 @@ class _BottomNavItem extends StatelessWidget {
   final BorderRadiusGeometry? itemBorderRadius;
   final MyBottomNavigationBarAnimation itemAnimation;
   final MyBottomNavigationBarItemOrientation itemOrientation;
+  final double? itemHeight;
 
   const _BottomNavItem({
     required this.item,
@@ -416,6 +509,7 @@ class _BottomNavItem extends StatelessWidget {
     this.itemBorderRadius,
     required this.itemAnimation,
     required this.itemOrientation,
+    this.itemHeight,
   });
 
   @override
@@ -450,6 +544,17 @@ class _BottomNavItem extends StatelessWidget {
               final isScaleAnimation =
                   itemAnimation == MyBottomNavigationBarAnimation.scale;
 
+              final showIcon = displayMode.shouldShowIcon(
+                isSelected: isSelected,
+              );
+              final showTitle = displayMode.shouldShowTitle(
+                isSelected: isSelected,
+              );
+              final showBoth = showIcon && showTitle;
+              final isVertical =
+                  itemOrientation ==
+                  MyBottomNavigationBarItemOrientation.vertical;
+
               Widget background = Container(
                 decoration: BoxDecoration(
                   color: Color.lerp(
@@ -473,113 +578,106 @@ class _BottomNavItem extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Positioned.fill(child: background),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: context.spaceS,
-                      horizontal: context.spaceM,
-                    ),
-                    child: Flex(
-                      direction:
-                          itemOrientation ==
-                              MyBottomNavigationBarItemOrientation.horizontal
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (displayMode !=
-                            MyBottomNavigationBarDisplayMode.titleOnly)
-                          Transform.translate(
-                            offset: Offset(
-                              0,
-                              displayMode !=
-                                          MyBottomNavigationBarDisplayMode
-                                              .iconOnly &&
-                                      isAnimated
-                                  ? lerpDouble(0, context.setSize(-3), t)!
-                                  : 0,
-                            ),
-                            child: Transform.scale(
-                              scale:
-                                  itemAnimation ==
-                                      MyBottomNavigationBarAnimation.bounce
-                                  ? lerpDouble(1.0, 1.1, t)!
-                                  : (isScaleAnimation
-                                        ? lerpDouble(1.0, 1.15, clampedT)!
-                                        : 1.0),
-                              child: IconTheme(
-                                data: IconThemeData(
-                                  color: color,
-                                  size: lerpDouble(
-                                    inactiveIconSize,
-                                    activeIconSize,
-                                    clampedT,
-                                  ),
-                                ),
-                                child: item.selectedIcon != null
-                                    ? Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Opacity(
-                                            opacity: (1.0 - t).clamp(0.0, 1.0),
-                                            child: item.icon,
-                                          ),
-                                          Opacity(
-                                            opacity: clampedT,
-                                            child: item.selectedIcon!,
-                                          ),
-                                        ],
-                                      )
-                                    : item.icon,
-                              ),
-                            ),
-                          ),
-                        if (displayMode ==
-                            MyBottomNavigationBarDisplayMode.both)
-                          SizedBox(
-                            width:
-                                itemOrientation ==
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight:
+                          itemHeight ??
+                          context.setSize(
+                            itemOrientation ==
                                     MyBottomNavigationBarItemOrientation
                                         .horizontal
-                                ? context.spaceS
-                                : 0,
-                            height:
-                                itemOrientation ==
-                                    MyBottomNavigationBarItemOrientation
-                                        .vertical
-                                ? context.spaceXs
-                                : 0,
+                                ? 56.0
+                                : 48.0,
                           ),
-                        if (displayMode !=
-                            MyBottomNavigationBarDisplayMode.iconOnly)
-                          Transform.translate(
-                            offset: Offset(
-                              0,
-                              displayMode !=
-                                          MyBottomNavigationBarDisplayMode
-                                              .titleOnly &&
-                                      isAnimated
-                                  ? lerpDouble(context.setSize(2), 0, t)!
-                                  : 0,
-                            ),
-                            child: Transform.scale(
-                              scale: isScaleAnimation
-                                  ? lerpDouble(1.0, 1.15, clampedT)!
-                                  : 1.0,
-                              child: Text(
-                                item.title,
-                                style: TextStyle.lerp(
-                                  inactiveStyle,
-                                  activeStyle,
-                                  clampedT,
-                                )?.copyWith(color: color),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: context.spaceS,
+                        horizontal: context.spaceM,
+                      ),
+                      child: Flex(
+                        direction: isVertical ? Axis.vertical : Axis.horizontal,
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (showIcon)
+                            Transform.translate(
+                              offset: Offset(
+                                0,
+                                showBoth && isVertical && isAnimated
+                                    ? lerpDouble(0, context.setSize(-3), t)!
+                                    : 0,
+                              ),
+                              child: Transform.scale(
+                                scale:
+                                    itemAnimation ==
+                                        MyBottomNavigationBarAnimation.bounce
+                                    ? lerpDouble(1.0, 1.1, t)!
+                                    : (isScaleAnimation
+                                          ? lerpDouble(1.0, 1.15, clampedT)!
+                                          : 1.0),
+                                child: IconTheme(
+                                  data: IconThemeData(
+                                    color: color,
+                                    size: lerpDouble(
+                                      inactiveIconSize,
+                                      activeIconSize,
+                                      clampedT,
+                                    ),
+                                  ),
+                                  child: item.selectedIcon != null
+                                      ? Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Opacity(
+                                              opacity: (1.0 - t).clamp(
+                                                0.0,
+                                                1.0,
+                                              ),
+                                              child: item.icon,
+                                            ),
+                                            Opacity(
+                                              opacity: clampedT,
+                                              child: item.selectedIcon!,
+                                            ),
+                                          ],
+                                        )
+                                      : item.icon,
+                                ),
                               ),
                             ),
-                          ),
-                      ],
+                          if (showBoth)
+                            SizedBox(
+                              width: !isVertical ? context.spaceS : 0,
+                              height: isVertical ? context.spaceXs : 0,
+                            ),
+                          if (showTitle)
+                            Transform.translate(
+                              offset: Offset(
+                                0,
+                                showBoth && isVertical && isAnimated
+                                    ? lerpDouble(context.setSize(2), 0, t)!
+                                    : 0,
+                              ),
+                              child: Transform.scale(
+                                scale: isScaleAnimation
+                                    ? lerpDouble(1.0, 1.15, clampedT)!
+                                    : 1.0,
+                                child: Text(
+                                  item.title,
+                                  style: TextStyle.lerp(
+                                    inactiveStyle,
+                                    activeStyle,
+                                    clampedT,
+                                  )?.copyWith(color: color),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

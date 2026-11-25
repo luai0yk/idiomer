@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_template/core/constants/app_icons.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/shared/widgets/buttons/my_icon_button.dart';
+import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// The title to display in the app bar.
@@ -38,7 +38,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Whether the title should be centered.
   /// Default to [true]
-  final bool isTitleCenter;
+  final bool centerTitle;
 
   /// The bottom widget to display at the bottom of the app bar.
   /// Default to [null]
@@ -58,7 +58,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leadingIconColor,
     this.leadingBackgroundColor,
     this.isElevated = true,
-    this.isTitleCenter = true,
+    this.centerTitle = true,
     this.bottom,
     this.systemOverlayStyle,
   });
@@ -81,7 +81,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: color ?? colors.surface,
       surfaceTintColor: color ?? colors.surface,
       shadowColor: Colors.black.withValues(alpha: isElevated ? .2 : 0),
-      centerTitle: isTitleCenter,
+      centerTitle: centerTitle,
       actionsPadding: EdgeInsets.symmetric(horizontal: context.setSize(12)),
       systemOverlayStyle: systemOverlayStyle,
       actions: actions,

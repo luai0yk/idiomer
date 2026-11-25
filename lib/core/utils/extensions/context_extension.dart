@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/l10n/app_localizations.dart';
-import 'package:flutter_app_template/core/theme/extended_colors.dart';
+import 'package:idiomer/app/l10n/app_localizations.dart';
+import 'package:idiomer/app/theme/extended_colors.dart';
 
 extension ContextExtension on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;

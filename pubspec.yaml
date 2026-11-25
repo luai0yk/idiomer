@@ -1,5 +1,5 @@
-name: flutter_app_template
-description: "A flutter app template."
+name: idiomer
+description: "Idiomer application."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get: ^4.7.3
   shared_preferences: ^2.5.5
   phone_numbers_parser: ^9.0.24
   skeletonizer: ^2.1.0
@@ -34,12 +33,22 @@ dependencies:
     sdk: flutter
   intl: any
 
+  # App Startup
+  flutter_native_splash: ^2.4.7
+  flutter_bloc: ^9.1.1
+  equatable: ^3.0.0
+  go_router: ^17.5.0
+  get_it: ^9.3.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+
+  # App Icons
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   generate: true

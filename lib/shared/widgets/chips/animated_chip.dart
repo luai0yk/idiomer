@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/constants/app_icons.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
-import 'package:flutter_app_template/shared/widgets/animations/my_animated_fade_switcher.dart';
-import 'package:flutter_app_template/shared/widgets/cards/my_card.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_fade_switcher.dart';
+import 'package:idiomer/shared/widgets/cards/my_card.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
 
 class AnimatedChip extends StatelessWidget {
   final String text;

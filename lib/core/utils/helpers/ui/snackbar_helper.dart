@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/app_navigator.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_snackbar.dart';
+import 'package:idiomer/core/utils/helpers/ui/app_navigator.dart';
+import 'package:idiomer/shared/widgets/misc/my_snackbar.dart';
 
 class SnackBarHelper {
   SnackBarHelper._();

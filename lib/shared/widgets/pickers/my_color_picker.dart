@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_template/core/constants/app_durations.dart';
-import 'package:flutter_app_template/core/l10n/app_localizations.dart';
-import 'package:flutter_app_template/core/services/cash/cash_keys.dart';
-import 'package:flutter_app_template/core/services/cash/cash_service.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/bottom_sheet_helper.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/toast_helper.dart';
-import 'package:flutter_app_template/shared/widgets/cards/my_card.dart';
-import 'package:flutter_app_template/shared/widgets/input/my_text_field.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_toast.dart';
-import 'package:flutter_app_template/shared/widgets/sheets/my_bottom_sheet.dart';
-import 'package:get/get.dart';
+import 'package:idiomer/app/l10n/app_localizations.dart';
+import 'package:idiomer/core/constants/app_durations.dart';
+import 'package:idiomer/core/services/cash/cash_keys.dart';
+import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/helpers/ui/bottom_sheet_helper.dart';
+import 'package:idiomer/core/utils/helpers/ui/toast_helper.dart';
+import 'package:idiomer/shared/widgets/cards/my_card.dart';
+import 'package:idiomer/shared/widgets/input/my_text_field.dart';
+import 'package:idiomer/shared/widgets/misc/my_toast.dart';
+import 'package:idiomer/shared/widgets/sheets/my_bottom_sheet.dart';
 
 class MyColorPicker extends StatefulWidget {
   final Color initialColor;
@@ -76,7 +75,7 @@ class MyColorPicker extends StatefulWidget {
   }
 
   static void _saveColorToRecents(Color color) {
-    final cashService = Get.find<CashService>();
+    final cashService = CashService.instance;
     final colorsStrList =
         cashService.getStringList(CashKeys.recentColors) ?? [];
 
@@ -123,7 +122,7 @@ class MyColorPicker extends StatefulWidget {
 class _MyColorPickerState extends State<MyColorPicker> {
   late final ValueNotifier<HSVColor> _hsvColorNotifier;
   final TextEditingController _hexController = TextEditingController();
-  final CashService _cashService = Get.find<CashService>();
+  final CashService _cashService = CashService.instance;
 
   List<Color> _recentColors = [];
 

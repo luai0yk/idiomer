@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/constants/app_icons.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
-import 'package:flutter_app_template/shared/controller/selectable_list_controller.dart';
-import 'package:flutter_app_template/shared/widgets/animations/my_animated_scale_switcher.dart';
-import 'package:flutter_app_template/shared/widgets/input/my_text_field.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_empty_state.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
-import 'package:flutter_app_template/shared/widgets/texts/text_separator.dart';
-import 'package:flutter_app_template/shared/widgets/tiles/my_list_tile.dart';
+import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/shared/controller/selectable_list_controller.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_scale_switcher.dart';
+import 'package:idiomer/shared/widgets/input/my_text_field.dart';
+import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/shared/widgets/texts/text_separator.dart';
+import 'package:idiomer/shared/widgets/tiles/my_list_tile.dart';
 
 class SelectableList<T> extends StatefulWidget {
   final SelectableListType _type;

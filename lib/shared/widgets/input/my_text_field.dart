@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_template/core/constants/app_icons.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
-import 'package:flutter_app_template/core/utils/validators/empty_validator.dart';
-import 'package:flutter_app_template/shared/widgets/animations/my_animated_scale_fade_switcher.dart';
-import 'package:flutter_app_template/shared/widgets/buttons/my_icon_button.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/validators/empty_validator.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_scale_fade_switcher.dart';
+import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
 
 enum _MyTextFieldType { standard, plain }
 

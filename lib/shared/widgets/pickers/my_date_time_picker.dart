@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app_template/core/l10n/app_localizations.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/bottom_sheet_helper.dart';
-import 'package:flutter_app_template/shared/widgets/sheets/my_bottom_sheet.dart';
+import 'package:idiomer/app/l10n/app_localizations.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/helpers/ui/bottom_sheet_helper.dart';
+import 'package:idiomer/shared/widgets/sheets/my_bottom_sheet.dart';
 
 enum MyDateBottomPickerMode { date, dateTime, time }
 

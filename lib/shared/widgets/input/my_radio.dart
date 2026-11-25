@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/constants/app_durations.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/shared/widgets/animations/my_animated_scale_switcher.dart';
+import 'package:idiomer/core/constants/app_durations.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_scale_switcher.dart';
 
 class MyRadio<T> extends StatelessWidget {
   final T value;

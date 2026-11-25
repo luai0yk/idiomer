@@ -1,13 +1,20 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CashService extends GetxService {
-  late final SharedPreferences _prefs;
+class CashService {
+  CashService._();
 
-  Future<CashService> init() async {
-    _prefs = await SharedPreferences.getInstance();
+  static final CashService instance = CashService._();
+
+  factory CashService() => instance;
+
+  late SharedPreferences _prefs;
+
+  /// Initialize the CashService.
+  /// Optionally accepts [SharedPreferences] for testing/mocking.
+  Future<CashService> init([SharedPreferences? prefs]) async {
+    _prefs = prefs ?? await SharedPreferences.getInstance();
     return this;
   }
 

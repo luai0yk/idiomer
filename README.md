@@ -1,4 +1,4 @@
-# flutter_app_template
+# idiomer
 
 A new Flutter project.
 

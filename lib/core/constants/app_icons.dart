@@ -5,6 +5,10 @@ class AppIcons {
   AppIcons._();
 
   // Navigation
+  static const idioms = Iconsax.book_1_copy;
+  static const idiomsFilled = Iconsax.book_1;
+  static const flashcards = Iconsax.cards_copy;
+  static const flashcardsFilled = Iconsax.cards;
   static const home = Iconsax.home_2_copy;
   static const homeFilled = Iconsax.home_2;
   static const user = Iconsax.user_copy;

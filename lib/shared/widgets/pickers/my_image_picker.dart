@@ -1,22 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/l10n/app_localizations.dart';
-import 'package:flutter_app_template/core/constants/app_icons.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/bottom_sheet_helper.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/dialog_helper.dart';
-import 'package:flutter_app_template/core/utils/helpers/ui/toast_helper.dart';
-import 'package:flutter_app_template/core/utils/validators/empty_validator.dart';
-import 'package:flutter_app_template/shared/controller/image_picker_controller.dart';
-import 'package:flutter_app_template/shared/widgets/buttons/my_button.dart';
-import 'package:flutter_app_template/shared/widgets/cards/my_card.dart';
-import 'package:flutter_app_template/shared/widgets/dialogs/my_dialog.dart';
-import 'package:flutter_app_template/shared/widgets/images/my_image.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
-import 'package:flutter_app_template/shared/widgets/sheets/my_bottom_sheet.dart';
+import 'package:idiomer/app/l10n/app_localizations.dart';
+import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/ui/bottom_sheet_helper.dart';
+import 'package:idiomer/core/utils/helpers/ui/dialog_helper.dart';
+import 'package:idiomer/core/utils/helpers/ui/toast_helper.dart';
+import 'package:idiomer/core/utils/validators/empty_validator.dart';
+import 'package:idiomer/shared/controller/image_picker_controller.dart';
+import 'package:idiomer/shared/widgets/buttons/my_button.dart';
+import 'package:idiomer/shared/widgets/cards/my_card.dart';
+import 'package:idiomer/shared/widgets/dialogs/my_dialog.dart';
+import 'package:idiomer/shared/widgets/images/my_image.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/shared/widgets/sheets/my_bottom_sheet.dart';
 
 class MyImagePicker extends StatelessWidget {
   final ImagePickerController controller;

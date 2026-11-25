@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_template/core/constants/app_durations.dart';
-import 'package:flutter_app_template/core/constants/app_icons.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/shared/widgets/appbars/my_app_bar.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/core/constants/app_durations.dart';
+import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/shared/widgets/appbars/my_app_bar.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageViewerPage extends StatefulWidget {
@@ -113,7 +113,7 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
         appBar: MyAppBar(
           color: Colors.transparent,
           isElevated: false,
-          isTitleCenter: false,
+          centerTitle: false,
           title: widget.title ?? '',
           titleColor: Colors.white,
           leadingIconColor: Colors.white,

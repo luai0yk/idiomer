@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/core/utils/extensions/context_extension.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_size.dart';
-import 'package:flutter_app_template/core/utils/extensions/responsive_values.dart';
-import 'package:flutter_app_template/shared/widgets/animations/my_animated_visibility.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_icon.dart';
-import 'package:flutter_app_template/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
+import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_fade_switcher.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_visibility.dart';
+import 'package:idiomer/shared/widgets/misc/my_icon.dart';
+import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
 
 enum _MyIconButtonType { solid, outlined, ghost, bordered }
 
@@ -344,13 +345,15 @@ class _MyIconButtonState extends State<MyIconButton> {
                 ),
               ),
 
-              // Spinner fades in when loading
-              MyAnimatedVisibility(
-                visible: _isLoading,
-                child: MyProgressIndicator(
-                  size: defaultIconSize,
-                  color: finalIconColor,
-                ),
+              // Mount spinner only while loading so idle buttons don't tick frames.
+              MyAnimatedFadeSwitcher(
+                child: _isLoading
+                    ? MyProgressIndicator(
+                        key: const ValueKey('loading'),
+                        size: defaultIconSize,
+                        color: finalIconColor,
+                      )
+                    : const SizedBox.shrink(key: ValueKey('idle')),
               ),
             ],
           ),
