@@ -50,6 +50,27 @@ class UrlHelper {
     }
   }
 
+  /// Opens WhatsApp directly with a pre-filled [message] so the user can pick a recipient.
+  static Future<bool> shareToWhatsApp(String message) async {
+    final encodedMessage = Uri.encodeComponent(message);
+    final nativeUri = Uri.parse('whatsapp://send?text=$encodedMessage');
+    try {
+      final launched = await launchUrl(
+        nativeUri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (launched) return true;
+    } catch (_) {}
+
+    final webUri = Uri.parse('https://wa.me/?text=$encodedMessage');
+    try {
+      return await launchUrl(webUri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      log('Error sharing via WhatsApp: $e');
+      return false;
+    }
+  }
+
   /// Opens an external URL in the default browser or application.
   /// Returns `true` if launched successfully, `false` otherwise.
   static Future<bool> openUrl(String url) async {

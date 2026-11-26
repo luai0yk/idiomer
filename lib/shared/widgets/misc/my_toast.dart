@@ -137,7 +137,7 @@ class MyToastState extends State<MyToast> with SingleTickerProviderStateMixin {
                 ),
                 margin: EdgeInsets.symmetric(horizontal: context.spaceM),
                 decoration: BoxDecoration(
-                  borderRadius: context.brM,
+                  borderRadius: context.brL,
                   color: bgColor,
                   boxShadow: [
                     BoxShadow(

@@ -9,14 +9,14 @@ import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 import 'package:idiomer/core/utils/helpers/ui/dialog_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/toast_helper.dart';
 import 'package:idiomer/features/favorites/presentation/bloc/favorites_bloc.dart';
+import 'package:idiomer/features/idioms/domain/entities/category_entity.dart';
 import 'package:idiomer/features/idioms/presentation/bloc/idioms_event.dart';
 import 'package:idiomer/features/idioms/presentation/bloc/idioms_state.dart';
-import 'package:idiomer/features/idioms/presentation/widgets/category_filter_bar.dart';
+import 'package:idiomer/features/idioms/presentation/widgets/explore_header.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_card.dart';
-import 'package:idiomer/shared/widgets/appbars/my_app_bar.dart';
+import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/dialogs/my_dialog.dart';
-import 'package:idiomer/shared/widgets/input/my_text_field.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
 import 'package:idiomer/shared/widgets/misc/my_toast.dart';
@@ -60,160 +60,164 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: MyAppBar(
-        title: l10n.appName,
-        withLeading: false,
-        centerTitle: true,
-        isElevated: false,
-        actions: [
-          BlocSelector<FavoritesBloc, IdiomsState, bool>(
-            selector: (state) => state.idioms.isNotEmpty,
-            builder: (context, hasFavorites) {
-              if (!hasFavorites) return const SizedBox.shrink();
-              return MyIconButton.ghost(
-                icon: AppIcons.clear,
-                tooltip: l10n.clearAll,
-                onPressed: () => _confirmClearAll(context, l10n),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              context.spaceM,
-              context.spaceXs,
-              context.spaceM,
-              context.spaceS,
-            ),
-            child: MyTextField(
-              controller: _searchController,
-              isSearch: true,
-              hintText: l10n.searchIdiomsHint,
-              onChanged: (value) {
-                context.read<FavoritesBloc>().add(IdiomsSearchChanged(value));
-              },
-            ),
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverToBoxAdapter(
+            child:
+                BlocSelector<
+                  FavoritesBloc,
+                  IdiomsState,
+                  ({
+                    bool hasFavorites,
+                    bool searchEnabled,
+                    List<CategoryEntity> categories,
+                    String? selectedCategoryId,
+                  })
+                >(
+                  selector: (state) => (
+                    hasFavorites: state.idioms.isNotEmpty,
+                    searchEnabled:
+                        state.status == IdiomsStatus.loaded &&
+                        (state.idioms.isNotEmpty ||
+                            state.hasActiveFilters ||
+                            state.isApplyingFilter),
+                    categories: state.categories,
+                    selectedCategoryId: state.selectedCategoryId,
+                  ),
+                  builder: (context, headerState) {
+                    return ExploreHeader(
+                      title: l10n.favorites,
+                      searchEnabled: headerState.searchEnabled,
+                      trailing: headerState.hasFavorites
+                          ? MyIconButton.ghost(
+                              icon: AppIcons.clear,
+                              iconColor: colorScheme.primary,
+                              tooltip: l10n.clearAll,
+                              onPressed: () => _confirmClearAll(context, l10n),
+                            )
+                          : null,
+                      searchController: _searchController,
+                      onSearchChanged: (value) {
+                        context.read<FavoritesBloc>().add(
+                          IdiomsSearchChanged(value),
+                        );
+                      },
+                      hasCategories: headerState.categories.isNotEmpty,
+                      hasActiveCategoryFilter:
+                          headerState.selectedCategoryId != null,
+                      onOpenCategorySheet: () {
+                        SelectCategorySheet.show(
+                          context,
+                          categories: headerState.categories,
+                          selectedCategoryId: headerState.selectedCategoryId,
+                          onCategorySelected: (categoryId) {
+                            context.read<FavoritesBloc>().add(
+                              IdiomsCategorySelected(categoryId),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
           ),
           BlocBuilder<FavoritesBloc, IdiomsState>(
-            buildWhen: (prev, curr) =>
-                prev.categories != curr.categories ||
-                prev.selectedCategoryId != curr.selectedCategoryId ||
-                prev.isCategoriesExpanded != curr.isCategoriesExpanded,
-            builder: (context, state) {
-              return CategoryFilterBar(
-                categories: state.categories,
-                selectedCategoryId: state.selectedCategoryId,
-                isExpanded: state.isCategoriesExpanded,
-                onCategorySelected: (categoryId) {
-                  context.read<FavoritesBloc>().add(
-                    IdiomsCategorySelected(categoryId),
-                  );
-                },
-                onToggleExpand: () {
-                  context.read<FavoritesBloc>().add(
-                    const IdiomsCategoryExpandToggled(),
-                  );
-                },
-              );
-            },
-          ),
-          Expanded(
-            child: BlocBuilder<FavoritesBloc, IdiomsState>(
-              builder: (context, state) {
-                return _buildBody(context, state, l10n);
-              },
-            ),
+            builder: (context, state) => _buildBodySliver(context, state, l10n),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBody(
+  Widget _buildBodySliver(
     BuildContext context,
     IdiomsState state,
     AppLocalizations l10n,
   ) {
     if (state.status == IdiomsStatus.initial ||
         state.status == IdiomsStatus.loading) {
-      return const Center(child: MyProgressIndicator());
+      return const SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(child: MyProgressIndicator()),
+      );
     }
 
     if (state.status == IdiomsStatus.error) {
-      return Center(
-        child: MyEmptyState(
-          icon: AppIcons.error,
-          title: l10n.loadErrorTitle,
-          subtitle: l10n.loadErrorSubtitle,
-          actionText: l10n.retry,
-          onAction: () {
-            context.read<FavoritesBloc>().add(const IdiomsRetryRequested());
-          },
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: MyEmptyState(
+            icon: AppIcons.error,
+            title: l10n.loadErrorTitle,
+            subtitle: l10n.loadErrorSubtitle,
+            actionText: l10n.retry,
+            onAction: () {
+              context.read<FavoritesBloc>().add(const IdiomsRetryRequested());
+            },
+          ),
         ),
       );
     }
 
     if (state.idioms.isEmpty) {
       if (state.hasActiveFilters) {
-        return Center(
-          child: MyEmptyState(
-            icon: AppIcons.searchOff,
-            title: l10n.noResultsFound,
-            subtitle: l10n.tryAdjustingSearch,
-            actionText: l10n.clearFilters,
-            onAction: () {
-              _searchController.clear();
-              context.read<FavoritesBloc>().add(const IdiomsFiltersCleared());
-            },
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(
+            child: MyEmptyState(
+              icon: AppIcons.searchOff,
+              title: l10n.noResultsFound,
+              subtitle: l10n.tryAdjustingSearch,
+              actionText: l10n.clearFilters,
+              onAction: () {
+                _searchController.clear();
+                context.read<FavoritesBloc>().add(const IdiomsFiltersCleared());
+              },
+            ),
           ),
         );
       }
 
-      return Center(
-        child: MyEmptyState(
-          icon: AppIcons.favorite,
-          title: l10n.noFavoritesTitle,
-          subtitle: l10n.noFavoritesSubtitle,
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: MyEmptyState(
+            icon: AppIcons.favorite,
+            title: l10n.noFavoritesTitle,
+            subtitle: l10n.noFavoritesSubtitle,
+          ),
         ),
       );
     }
 
     final itemCount = state.idioms.length + (state.isLoadingMore ? 1 : 0);
 
-    return ListView.separated(
-      controller: _scrollController,
+    return SliverPadding(
       padding: EdgeInsets.fromLTRB(
         context.spaceM,
         context.spaceXs,
         context.spaceM,
         context.spaceXl,
       ),
-      itemCount: itemCount,
-      separatorBuilder: (_, _) => context.verticalSpace(10),
-      itemBuilder: (context, index) {
-        if (index >= state.idioms.length) {
-          return Padding(
-            padding: context.insetsVerticalM,
-            child: const Center(child: MyProgressIndicator()),
-          );
-        }
-
-        final idiom = state.idioms[index];
-        return IdiomCard(
-          idiom: idiom,
-          onTap: () => context.push(AppRoutes.idiomDetailPath(idiom.id)),
-          onToggleFavorite: () {
-            context.read<FavoritesBloc>().add(IdiomsFavoriteToggled(idiom.id));
-            ToastHelper.show(
-              msg: l10n.removedFromFavorites,
-              status: ToastStatus.info,
+      sliver: SliverList.separated(
+        itemCount: itemCount,
+        separatorBuilder: (_, _) => context.verticalSpace(10),
+        itemBuilder: (context, index) {
+          if (index >= state.idioms.length) {
+            return Padding(
+              padding: context.insetsVerticalM,
+              child: const Center(child: MyProgressIndicator()),
             );
-          },
-        );
-      },
+          }
+
+          final idiom = state.idioms[index];
+          return IdiomCard(
+            idiom: idiom,
+            onTap: () => context.push(AppRoutes.idiomDetailPath(idiom.id)),
+          );
+        },
+      ),
     );
   }
 
@@ -222,11 +226,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
     DialogHelper.show(
       child: MyDialog(
         status: DialogStatus.danger,
-        statusIcon: AppIcons.favRemove,
+        statusIcon: AppIcons.clear,
         title: l10n.clearFavoritesTitle,
         content: l10n.clearFavoritesMessage,
         primaryButton: DialogButton(
           text: l10n.clearAll,
+          timerSeconds: 10,
           onPressed: () {
             bloc.add(const FavoritesClearedRequested());
             ToastHelper.show(

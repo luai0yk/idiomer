@@ -3071,6 +3071,1546 @@ class FavoriteIdiomsCompanion extends UpdateCompanion<FavoriteIdiom> {
   }
 }
 
+class $FlashcardGroupsTable extends FlashcardGroups
+    with TableInfo<$FlashcardGroupsTable, FlashcardGroup> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FlashcardGroupsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 100,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
+    'categoryId',
+  );
+  @override
+  late final GeneratedColumn<String> categoryId = GeneratedColumn<String>(
+    'category_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES categories (id) ON UPDATE CASCADE ON DELETE SET NULL',
+    ),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    categoryId,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'flashcard_groups';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FlashcardGroup> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+        _categoryIdMeta,
+        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FlashcardGroup map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FlashcardGroup(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_id'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $FlashcardGroupsTable createAlias(String alias) {
+    return $FlashcardGroupsTable(attachedDatabase, alias);
+  }
+}
+
+class FlashcardGroup extends DataClass implements Insertable<FlashcardGroup> {
+  final int id;
+  final String name;
+
+  /// Optional link to the idiom category that auto-created this group.
+  final String? categoryId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const FlashcardGroup({
+    required this.id,
+    required this.name,
+    this.categoryId,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<String>(categoryId);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  FlashcardGroupsCompanion toCompanion(bool nullToAbsent) {
+    return FlashcardGroupsCompanion(
+      id: Value(id),
+      name: Value(name),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory FlashcardGroup.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FlashcardGroup(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      categoryId: serializer.fromJson<String?>(json['categoryId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'categoryId': serializer.toJson<String?>(categoryId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  FlashcardGroup copyWith({
+    int? id,
+    String? name,
+    Value<String?> categoryId = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => FlashcardGroup(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    categoryId: categoryId.present ? categoryId.value : this.categoryId,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  FlashcardGroup copyWithCompanion(FlashcardGroupsCompanion data) {
+    return FlashcardGroup(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FlashcardGroup(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, categoryId, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FlashcardGroup &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.categoryId == this.categoryId &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class FlashcardGroupsCompanion extends UpdateCompanion<FlashcardGroup> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> categoryId;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  const FlashcardGroupsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.categoryId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  FlashcardGroupsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.categoryId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<FlashcardGroup> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? categoryId,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (categoryId != null) 'category_id': categoryId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  FlashcardGroupsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String?>? categoryId,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+  }) {
+    return FlashcardGroupsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      categoryId: categoryId ?? this.categoryId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<String>(categoryId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FlashcardGroupsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FlashcardGroupItemsTable extends FlashcardGroupItems
+    with TableInfo<$FlashcardGroupItemsTable, FlashcardGroupItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FlashcardGroupItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
+  @override
+  late final GeneratedColumn<int> groupId = GeneratedColumn<int>(
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES flashcard_groups (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _idiomIdMeta = const VerificationMeta(
+    'idiomId',
+  );
+  @override
+  late final GeneratedColumn<int> idiomId = GeneratedColumn<int>(
+    'idiom_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES idioms (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, groupId, idiomId, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'flashcard_group_items';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FlashcardGroupItem> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('group_id')) {
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_groupIdMeta);
+    }
+    if (data.containsKey('idiom_id')) {
+      context.handle(
+        _idiomIdMeta,
+        idiomId.isAcceptableOrUnknown(data['idiom_id']!, _idiomIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_idiomIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {groupId, idiomId},
+  ];
+  @override
+  FlashcardGroupItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FlashcardGroupItem(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      groupId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}group_id'],
+      )!,
+      idiomId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}idiom_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $FlashcardGroupItemsTable createAlias(String alias) {
+    return $FlashcardGroupItemsTable(attachedDatabase, alias);
+  }
+}
+
+class FlashcardGroupItem extends DataClass
+    implements Insertable<FlashcardGroupItem> {
+  final int id;
+  final int groupId;
+  final int idiomId;
+  final DateTime createdAt;
+  const FlashcardGroupItem({
+    required this.id,
+    required this.groupId,
+    required this.idiomId,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['group_id'] = Variable<int>(groupId);
+    map['idiom_id'] = Variable<int>(idiomId);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  FlashcardGroupItemsCompanion toCompanion(bool nullToAbsent) {
+    return FlashcardGroupItemsCompanion(
+      id: Value(id),
+      groupId: Value(groupId),
+      idiomId: Value(idiomId),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory FlashcardGroupItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FlashcardGroupItem(
+      id: serializer.fromJson<int>(json['id']),
+      groupId: serializer.fromJson<int>(json['groupId']),
+      idiomId: serializer.fromJson<int>(json['idiomId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'groupId': serializer.toJson<int>(groupId),
+      'idiomId': serializer.toJson<int>(idiomId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  FlashcardGroupItem copyWith({
+    int? id,
+    int? groupId,
+    int? idiomId,
+    DateTime? createdAt,
+  }) => FlashcardGroupItem(
+    id: id ?? this.id,
+    groupId: groupId ?? this.groupId,
+    idiomId: idiomId ?? this.idiomId,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  FlashcardGroupItem copyWithCompanion(FlashcardGroupItemsCompanion data) {
+    return FlashcardGroupItem(
+      id: data.id.present ? data.id.value : this.id,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      idiomId: data.idiomId.present ? data.idiomId.value : this.idiomId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FlashcardGroupItem(')
+          ..write('id: $id, ')
+          ..write('groupId: $groupId, ')
+          ..write('idiomId: $idiomId, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, groupId, idiomId, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FlashcardGroupItem &&
+          other.id == this.id &&
+          other.groupId == this.groupId &&
+          other.idiomId == this.idiomId &&
+          other.createdAt == this.createdAt);
+}
+
+class FlashcardGroupItemsCompanion extends UpdateCompanion<FlashcardGroupItem> {
+  final Value<int> id;
+  final Value<int> groupId;
+  final Value<int> idiomId;
+  final Value<DateTime> createdAt;
+  const FlashcardGroupItemsCompanion({
+    this.id = const Value.absent(),
+    this.groupId = const Value.absent(),
+    this.idiomId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  FlashcardGroupItemsCompanion.insert({
+    this.id = const Value.absent(),
+    required int groupId,
+    required int idiomId,
+    this.createdAt = const Value.absent(),
+  }) : groupId = Value(groupId),
+       idiomId = Value(idiomId);
+  static Insertable<FlashcardGroupItem> custom({
+    Expression<int>? id,
+    Expression<int>? groupId,
+    Expression<int>? idiomId,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (groupId != null) 'group_id': groupId,
+      if (idiomId != null) 'idiom_id': idiomId,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  FlashcardGroupItemsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? groupId,
+    Value<int>? idiomId,
+    Value<DateTime>? createdAt,
+  }) {
+    return FlashcardGroupItemsCompanion(
+      id: id ?? this.id,
+      groupId: groupId ?? this.groupId,
+      idiomId: idiomId ?? this.idiomId,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (groupId.present) {
+      map['group_id'] = Variable<int>(groupId.value);
+    }
+    if (idiomId.present) {
+      map['idiom_id'] = Variable<int>(idiomId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FlashcardGroupItemsCompanion(')
+          ..write('id: $id, ')
+          ..write('groupId: $groupId, ')
+          ..write('idiomId: $idiomId, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QuizAttemptsTable extends QuizAttempts
+    with TableInfo<$QuizAttemptsTable, QuizAttempt> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuizAttemptsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _totalQuestionsMeta = const VerificationMeta(
+    'totalQuestions',
+  );
+  @override
+  late final GeneratedColumn<int> totalQuestions = GeneratedColumn<int>(
+    'total_questions',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _correctAnswersMeta = const VerificationMeta(
+    'correctAnswers',
+  );
+  @override
+  late final GeneratedColumn<int> correctAnswers = GeneratedColumn<int>(
+    'correct_answers',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _completedAtMeta = const VerificationMeta(
+    'completedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+    'completed_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    totalQuestions,
+    correctAnswers,
+    durationSeconds,
+    completedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'quiz_attempts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<QuizAttempt> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('total_questions')) {
+      context.handle(
+        _totalQuestionsMeta,
+        totalQuestions.isAcceptableOrUnknown(
+          data['total_questions']!,
+          _totalQuestionsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_totalQuestionsMeta);
+    }
+    if (data.containsKey('correct_answers')) {
+      context.handle(
+        _correctAnswersMeta,
+        correctAnswers.isAcceptableOrUnknown(
+          data['correct_answers']!,
+          _correctAnswersMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctAnswersMeta);
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+        _completedAtMeta,
+        completedAt.isAcceptableOrUnknown(
+          data['completed_at']!,
+          _completedAtMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  QuizAttempt map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuizAttempt(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      totalQuestions: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_questions'],
+      )!,
+      correctAnswers: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_answers'],
+      )!,
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      )!,
+      completedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}completed_at'],
+      )!,
+    );
+  }
+
+  @override
+  $QuizAttemptsTable createAlias(String alias) {
+    return $QuizAttemptsTable(attachedDatabase, alias);
+  }
+}
+
+class QuizAttempt extends DataClass implements Insertable<QuizAttempt> {
+  final int id;
+  final int totalQuestions;
+  final int correctAnswers;
+  final int durationSeconds;
+  final DateTime completedAt;
+  const QuizAttempt({
+    required this.id,
+    required this.totalQuestions,
+    required this.correctAnswers,
+    required this.durationSeconds,
+    required this.completedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['total_questions'] = Variable<int>(totalQuestions);
+    map['correct_answers'] = Variable<int>(correctAnswers);
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    map['completed_at'] = Variable<DateTime>(completedAt);
+    return map;
+  }
+
+  QuizAttemptsCompanion toCompanion(bool nullToAbsent) {
+    return QuizAttemptsCompanion(
+      id: Value(id),
+      totalQuestions: Value(totalQuestions),
+      correctAnswers: Value(correctAnswers),
+      durationSeconds: Value(durationSeconds),
+      completedAt: Value(completedAt),
+    );
+  }
+
+  factory QuizAttempt.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuizAttempt(
+      id: serializer.fromJson<int>(json['id']),
+      totalQuestions: serializer.fromJson<int>(json['totalQuestions']),
+      correctAnswers: serializer.fromJson<int>(json['correctAnswers']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      completedAt: serializer.fromJson<DateTime>(json['completedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'totalQuestions': serializer.toJson<int>(totalQuestions),
+      'correctAnswers': serializer.toJson<int>(correctAnswers),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'completedAt': serializer.toJson<DateTime>(completedAt),
+    };
+  }
+
+  QuizAttempt copyWith({
+    int? id,
+    int? totalQuestions,
+    int? correctAnswers,
+    int? durationSeconds,
+    DateTime? completedAt,
+  }) => QuizAttempt(
+    id: id ?? this.id,
+    totalQuestions: totalQuestions ?? this.totalQuestions,
+    correctAnswers: correctAnswers ?? this.correctAnswers,
+    durationSeconds: durationSeconds ?? this.durationSeconds,
+    completedAt: completedAt ?? this.completedAt,
+  );
+  QuizAttempt copyWithCompanion(QuizAttemptsCompanion data) {
+    return QuizAttempt(
+      id: data.id.present ? data.id.value : this.id,
+      totalQuestions: data.totalQuestions.present
+          ? data.totalQuestions.value
+          : this.totalQuestions,
+      correctAnswers: data.correctAnswers.present
+          ? data.correctAnswers.value
+          : this.correctAnswers,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      completedAt: data.completedAt.present
+          ? data.completedAt.value
+          : this.completedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuizAttempt(')
+          ..write('id: $id, ')
+          ..write('totalQuestions: $totalQuestions, ')
+          ..write('correctAnswers: $correctAnswers, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('completedAt: $completedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    totalQuestions,
+    correctAnswers,
+    durationSeconds,
+    completedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuizAttempt &&
+          other.id == this.id &&
+          other.totalQuestions == this.totalQuestions &&
+          other.correctAnswers == this.correctAnswers &&
+          other.durationSeconds == this.durationSeconds &&
+          other.completedAt == this.completedAt);
+}
+
+class QuizAttemptsCompanion extends UpdateCompanion<QuizAttempt> {
+  final Value<int> id;
+  final Value<int> totalQuestions;
+  final Value<int> correctAnswers;
+  final Value<int> durationSeconds;
+  final Value<DateTime> completedAt;
+  const QuizAttemptsCompanion({
+    this.id = const Value.absent(),
+    this.totalQuestions = const Value.absent(),
+    this.correctAnswers = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.completedAt = const Value.absent(),
+  });
+  QuizAttemptsCompanion.insert({
+    this.id = const Value.absent(),
+    required int totalQuestions,
+    required int correctAnswers,
+    required int durationSeconds,
+    this.completedAt = const Value.absent(),
+  }) : totalQuestions = Value(totalQuestions),
+       correctAnswers = Value(correctAnswers),
+       durationSeconds = Value(durationSeconds);
+  static Insertable<QuizAttempt> custom({
+    Expression<int>? id,
+    Expression<int>? totalQuestions,
+    Expression<int>? correctAnswers,
+    Expression<int>? durationSeconds,
+    Expression<DateTime>? completedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (totalQuestions != null) 'total_questions': totalQuestions,
+      if (correctAnswers != null) 'correct_answers': correctAnswers,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (completedAt != null) 'completed_at': completedAt,
+    });
+  }
+
+  QuizAttemptsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? totalQuestions,
+    Value<int>? correctAnswers,
+    Value<int>? durationSeconds,
+    Value<DateTime>? completedAt,
+  }) {
+    return QuizAttemptsCompanion(
+      id: id ?? this.id,
+      totalQuestions: totalQuestions ?? this.totalQuestions,
+      correctAnswers: correctAnswers ?? this.correctAnswers,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      completedAt: completedAt ?? this.completedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (totalQuestions.present) {
+      map['total_questions'] = Variable<int>(totalQuestions.value);
+    }
+    if (correctAnswers.present) {
+      map['correct_answers'] = Variable<int>(correctAnswers.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuizAttemptsCompanion(')
+          ..write('id: $id, ')
+          ..write('totalQuestions: $totalQuestions, ')
+          ..write('correctAnswers: $correctAnswers, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('completedAt: $completedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QuizAttemptAnswersTable extends QuizAttemptAnswers
+    with TableInfo<$QuizAttemptAnswersTable, QuizAttemptAnswer> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuizAttemptAnswersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _attemptIdMeta = const VerificationMeta(
+    'attemptId',
+  );
+  @override
+  late final GeneratedColumn<int> attemptId = GeneratedColumn<int>(
+    'attempt_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES quiz_attempts (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _questionOrderMeta = const VerificationMeta(
+    'questionOrder',
+  );
+  @override
+  late final GeneratedColumn<int> questionOrder = GeneratedColumn<int>(
+    'question_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _idiomIdMeta = const VerificationMeta(
+    'idiomId',
+  );
+  @override
+  late final GeneratedColumn<int> idiomId = GeneratedColumn<int>(
+    'idiom_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES idioms (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _selectedIdiomIdMeta = const VerificationMeta(
+    'selectedIdiomId',
+  );
+  @override
+  late final GeneratedColumn<int> selectedIdiomId = GeneratedColumn<int>(
+    'selected_idiom_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES idioms (id) ON UPDATE CASCADE ON DELETE SET NULL',
+    ),
+  );
+  static const VerificationMeta _correctIdiomIdMeta = const VerificationMeta(
+    'correctIdiomId',
+  );
+  @override
+  late final GeneratedColumn<int> correctIdiomId = GeneratedColumn<int>(
+    'correct_idiom_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES idioms (id) ON UPDATE CASCADE ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _optionIdiomIdsMeta = const VerificationMeta(
+    'optionIdiomIds',
+  );
+  @override
+  late final GeneratedColumn<String> optionIdiomIds = GeneratedColumn<String>(
+    'option_idiom_ids',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    attemptId,
+    questionOrder,
+    idiomId,
+    selectedIdiomId,
+    correctIdiomId,
+    optionIdiomIds,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'quiz_attempt_answers';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<QuizAttemptAnswer> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('attempt_id')) {
+      context.handle(
+        _attemptIdMeta,
+        attemptId.isAcceptableOrUnknown(data['attempt_id']!, _attemptIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_attemptIdMeta);
+    }
+    if (data.containsKey('question_order')) {
+      context.handle(
+        _questionOrderMeta,
+        questionOrder.isAcceptableOrUnknown(
+          data['question_order']!,
+          _questionOrderMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_questionOrderMeta);
+    }
+    if (data.containsKey('idiom_id')) {
+      context.handle(
+        _idiomIdMeta,
+        idiomId.isAcceptableOrUnknown(data['idiom_id']!, _idiomIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_idiomIdMeta);
+    }
+    if (data.containsKey('selected_idiom_id')) {
+      context.handle(
+        _selectedIdiomIdMeta,
+        selectedIdiomId.isAcceptableOrUnknown(
+          data['selected_idiom_id']!,
+          _selectedIdiomIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('correct_idiom_id')) {
+      context.handle(
+        _correctIdiomIdMeta,
+        correctIdiomId.isAcceptableOrUnknown(
+          data['correct_idiom_id']!,
+          _correctIdiomIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctIdiomIdMeta);
+    }
+    if (data.containsKey('option_idiom_ids')) {
+      context.handle(
+        _optionIdiomIdsMeta,
+        optionIdiomIds.isAcceptableOrUnknown(
+          data['option_idiom_ids']!,
+          _optionIdiomIdsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_optionIdiomIdsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {attemptId, questionOrder},
+  ];
+  @override
+  QuizAttemptAnswer map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuizAttemptAnswer(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      attemptId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}attempt_id'],
+      )!,
+      questionOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}question_order'],
+      )!,
+      idiomId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}idiom_id'],
+      )!,
+      selectedIdiomId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}selected_idiom_id'],
+      ),
+      correctIdiomId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_idiom_id'],
+      )!,
+      optionIdiomIds: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}option_idiom_ids'],
+      )!,
+    );
+  }
+
+  @override
+  $QuizAttemptAnswersTable createAlias(String alias) {
+    return $QuizAttemptAnswersTable(attachedDatabase, alias);
+  }
+}
+
+class QuizAttemptAnswer extends DataClass
+    implements Insertable<QuizAttemptAnswer> {
+  final int id;
+  final int attemptId;
+  final int questionOrder;
+  final int idiomId;
+  final int? selectedIdiomId;
+  final int correctIdiomId;
+
+  /// JSON-encoded list of option idiom IDs preserving the original option order.
+  final String optionIdiomIds;
+  const QuizAttemptAnswer({
+    required this.id,
+    required this.attemptId,
+    required this.questionOrder,
+    required this.idiomId,
+    this.selectedIdiomId,
+    required this.correctIdiomId,
+    required this.optionIdiomIds,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['attempt_id'] = Variable<int>(attemptId);
+    map['question_order'] = Variable<int>(questionOrder);
+    map['idiom_id'] = Variable<int>(idiomId);
+    if (!nullToAbsent || selectedIdiomId != null) {
+      map['selected_idiom_id'] = Variable<int>(selectedIdiomId);
+    }
+    map['correct_idiom_id'] = Variable<int>(correctIdiomId);
+    map['option_idiom_ids'] = Variable<String>(optionIdiomIds);
+    return map;
+  }
+
+  QuizAttemptAnswersCompanion toCompanion(bool nullToAbsent) {
+    return QuizAttemptAnswersCompanion(
+      id: Value(id),
+      attemptId: Value(attemptId),
+      questionOrder: Value(questionOrder),
+      idiomId: Value(idiomId),
+      selectedIdiomId: selectedIdiomId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(selectedIdiomId),
+      correctIdiomId: Value(correctIdiomId),
+      optionIdiomIds: Value(optionIdiomIds),
+    );
+  }
+
+  factory QuizAttemptAnswer.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuizAttemptAnswer(
+      id: serializer.fromJson<int>(json['id']),
+      attemptId: serializer.fromJson<int>(json['attemptId']),
+      questionOrder: serializer.fromJson<int>(json['questionOrder']),
+      idiomId: serializer.fromJson<int>(json['idiomId']),
+      selectedIdiomId: serializer.fromJson<int?>(json['selectedIdiomId']),
+      correctIdiomId: serializer.fromJson<int>(json['correctIdiomId']),
+      optionIdiomIds: serializer.fromJson<String>(json['optionIdiomIds']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'attemptId': serializer.toJson<int>(attemptId),
+      'questionOrder': serializer.toJson<int>(questionOrder),
+      'idiomId': serializer.toJson<int>(idiomId),
+      'selectedIdiomId': serializer.toJson<int?>(selectedIdiomId),
+      'correctIdiomId': serializer.toJson<int>(correctIdiomId),
+      'optionIdiomIds': serializer.toJson<String>(optionIdiomIds),
+    };
+  }
+
+  QuizAttemptAnswer copyWith({
+    int? id,
+    int? attemptId,
+    int? questionOrder,
+    int? idiomId,
+    Value<int?> selectedIdiomId = const Value.absent(),
+    int? correctIdiomId,
+    String? optionIdiomIds,
+  }) => QuizAttemptAnswer(
+    id: id ?? this.id,
+    attemptId: attemptId ?? this.attemptId,
+    questionOrder: questionOrder ?? this.questionOrder,
+    idiomId: idiomId ?? this.idiomId,
+    selectedIdiomId: selectedIdiomId.present
+        ? selectedIdiomId.value
+        : this.selectedIdiomId,
+    correctIdiomId: correctIdiomId ?? this.correctIdiomId,
+    optionIdiomIds: optionIdiomIds ?? this.optionIdiomIds,
+  );
+  QuizAttemptAnswer copyWithCompanion(QuizAttemptAnswersCompanion data) {
+    return QuizAttemptAnswer(
+      id: data.id.present ? data.id.value : this.id,
+      attemptId: data.attemptId.present ? data.attemptId.value : this.attemptId,
+      questionOrder: data.questionOrder.present
+          ? data.questionOrder.value
+          : this.questionOrder,
+      idiomId: data.idiomId.present ? data.idiomId.value : this.idiomId,
+      selectedIdiomId: data.selectedIdiomId.present
+          ? data.selectedIdiomId.value
+          : this.selectedIdiomId,
+      correctIdiomId: data.correctIdiomId.present
+          ? data.correctIdiomId.value
+          : this.correctIdiomId,
+      optionIdiomIds: data.optionIdiomIds.present
+          ? data.optionIdiomIds.value
+          : this.optionIdiomIds,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuizAttemptAnswer(')
+          ..write('id: $id, ')
+          ..write('attemptId: $attemptId, ')
+          ..write('questionOrder: $questionOrder, ')
+          ..write('idiomId: $idiomId, ')
+          ..write('selectedIdiomId: $selectedIdiomId, ')
+          ..write('correctIdiomId: $correctIdiomId, ')
+          ..write('optionIdiomIds: $optionIdiomIds')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    attemptId,
+    questionOrder,
+    idiomId,
+    selectedIdiomId,
+    correctIdiomId,
+    optionIdiomIds,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuizAttemptAnswer &&
+          other.id == this.id &&
+          other.attemptId == this.attemptId &&
+          other.questionOrder == this.questionOrder &&
+          other.idiomId == this.idiomId &&
+          other.selectedIdiomId == this.selectedIdiomId &&
+          other.correctIdiomId == this.correctIdiomId &&
+          other.optionIdiomIds == this.optionIdiomIds);
+}
+
+class QuizAttemptAnswersCompanion extends UpdateCompanion<QuizAttemptAnswer> {
+  final Value<int> id;
+  final Value<int> attemptId;
+  final Value<int> questionOrder;
+  final Value<int> idiomId;
+  final Value<int?> selectedIdiomId;
+  final Value<int> correctIdiomId;
+  final Value<String> optionIdiomIds;
+  const QuizAttemptAnswersCompanion({
+    this.id = const Value.absent(),
+    this.attemptId = const Value.absent(),
+    this.questionOrder = const Value.absent(),
+    this.idiomId = const Value.absent(),
+    this.selectedIdiomId = const Value.absent(),
+    this.correctIdiomId = const Value.absent(),
+    this.optionIdiomIds = const Value.absent(),
+  });
+  QuizAttemptAnswersCompanion.insert({
+    this.id = const Value.absent(),
+    required int attemptId,
+    required int questionOrder,
+    required int idiomId,
+    this.selectedIdiomId = const Value.absent(),
+    required int correctIdiomId,
+    required String optionIdiomIds,
+  }) : attemptId = Value(attemptId),
+       questionOrder = Value(questionOrder),
+       idiomId = Value(idiomId),
+       correctIdiomId = Value(correctIdiomId),
+       optionIdiomIds = Value(optionIdiomIds);
+  static Insertable<QuizAttemptAnswer> custom({
+    Expression<int>? id,
+    Expression<int>? attemptId,
+    Expression<int>? questionOrder,
+    Expression<int>? idiomId,
+    Expression<int>? selectedIdiomId,
+    Expression<int>? correctIdiomId,
+    Expression<String>? optionIdiomIds,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (attemptId != null) 'attempt_id': attemptId,
+      if (questionOrder != null) 'question_order': questionOrder,
+      if (idiomId != null) 'idiom_id': idiomId,
+      if (selectedIdiomId != null) 'selected_idiom_id': selectedIdiomId,
+      if (correctIdiomId != null) 'correct_idiom_id': correctIdiomId,
+      if (optionIdiomIds != null) 'option_idiom_ids': optionIdiomIds,
+    });
+  }
+
+  QuizAttemptAnswersCompanion copyWith({
+    Value<int>? id,
+    Value<int>? attemptId,
+    Value<int>? questionOrder,
+    Value<int>? idiomId,
+    Value<int?>? selectedIdiomId,
+    Value<int>? correctIdiomId,
+    Value<String>? optionIdiomIds,
+  }) {
+    return QuizAttemptAnswersCompanion(
+      id: id ?? this.id,
+      attemptId: attemptId ?? this.attemptId,
+      questionOrder: questionOrder ?? this.questionOrder,
+      idiomId: idiomId ?? this.idiomId,
+      selectedIdiomId: selectedIdiomId ?? this.selectedIdiomId,
+      correctIdiomId: correctIdiomId ?? this.correctIdiomId,
+      optionIdiomIds: optionIdiomIds ?? this.optionIdiomIds,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (attemptId.present) {
+      map['attempt_id'] = Variable<int>(attemptId.value);
+    }
+    if (questionOrder.present) {
+      map['question_order'] = Variable<int>(questionOrder.value);
+    }
+    if (idiomId.present) {
+      map['idiom_id'] = Variable<int>(idiomId.value);
+    }
+    if (selectedIdiomId.present) {
+      map['selected_idiom_id'] = Variable<int>(selectedIdiomId.value);
+    }
+    if (correctIdiomId.present) {
+      map['correct_idiom_id'] = Variable<int>(correctIdiomId.value);
+    }
+    if (optionIdiomIds.present) {
+      map['option_idiom_ids'] = Variable<String>(optionIdiomIds.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuizAttemptAnswersCompanion(')
+          ..write('id: $id, ')
+          ..write('attemptId: $attemptId, ')
+          ..write('questionOrder: $questionOrder, ')
+          ..write('idiomId: $idiomId, ')
+          ..write('selectedIdiomId: $selectedIdiomId, ')
+          ..write('correctIdiomId: $correctIdiomId, ')
+          ..write('optionIdiomIds: $optionIdiomIds')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3091,6 +4631,30 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $FavoriteIdiomsTable favoriteIdioms = $FavoriteIdiomsTable(this);
+  late final $FlashcardGroupsTable flashcardGroups = $FlashcardGroupsTable(
+    this,
+  );
+  late final $FlashcardGroupItemsTable flashcardGroupItems =
+      $FlashcardGroupItemsTable(this);
+  late final $QuizAttemptsTable quizAttempts = $QuizAttemptsTable(this);
+  late final $QuizAttemptAnswersTable quizAttemptAnswers =
+      $QuizAttemptAnswersTable(this);
+  late final Index flashcardGroupItemsGroupIdx = Index(
+    'flashcard_group_items_group_idx',
+    'CREATE INDEX flashcard_group_items_group_idx ON flashcard_group_items (group_id)',
+  );
+  late final Index flashcardGroupItemsIdiomIdx = Index(
+    'flashcard_group_items_idiom_idx',
+    'CREATE INDEX flashcard_group_items_idiom_idx ON flashcard_group_items (idiom_id)',
+  );
+  late final Index quizAttemptsCompletedAtIdx = Index(
+    'quiz_attempts_completed_at_idx',
+    'CREATE INDEX quiz_attempts_completed_at_idx ON quiz_attempts (completed_at DESC)',
+  );
+  late final Index quizAttemptAnswersAttemptIdx = Index(
+    'quiz_attempt_answers_attempt_idx',
+    'CREATE INDEX quiz_attempt_answers_attempt_idx ON quiz_attempt_answers (attempt_id)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3107,6 +4671,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     exampleTranslations,
     idiomCategories,
     favoriteIdioms,
+    flashcardGroups,
+    flashcardGroupItems,
+    quizAttempts,
+    quizAttemptAnswers,
+    flashcardGroupItemsGroupIdx,
+    flashcardGroupItemsIdiomIdx,
+    quizAttemptsCompletedAtIdx,
+    quizAttemptAnswersAttemptIdx,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -3277,6 +4849,104 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('favorite_idioms', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'categories',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('flashcard_groups', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'categories',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('flashcard_groups', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'flashcard_groups',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('flashcard_group_items', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'flashcard_groups',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('flashcard_group_items', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('flashcard_group_items', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('flashcard_group_items', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'quiz_attempts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'quiz_attempts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'idioms',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('quiz_attempt_answers', kind: UpdateKind.update)],
     ),
   ]);
 }
@@ -3935,6 +5605,26 @@ final class $$CategoriesTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$FlashcardGroupsTable, List<FlashcardGroup>>
+  _flashcardGroupsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.flashcardGroups,
+    aliasName: 'categories__id__flashcard_groups__category_id',
+  );
+
+  $$FlashcardGroupsTableProcessedTableManager get flashcardGroupsRefs {
+    final manager = $$FlashcardGroupsTableTableManager(
+      $_db,
+      $_db.flashcardGroups,
+    ).filter((f) => f.categoryId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _flashcardGroupsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$CategoriesTableFilterComposer
@@ -3997,6 +5687,31 @@ class $$CategoriesTableFilterComposer
           }) => $$IdiomCategoriesTableFilterComposer(
             $db: $db,
             $table: $db.idiomCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> flashcardGroupsRefs(
+    Expression<bool> Function($$FlashcardGroupsTableFilterComposer f) f,
+  ) {
+    final $$FlashcardGroupsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.flashcardGroups,
+      getReferencedColumn: (t) => t.categoryId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupsTableFilterComposer(
+            $db: $db,
+            $table: $db.flashcardGroups,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4094,6 +5809,31 @@ class $$CategoriesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> flashcardGroupsRefs<T extends Object>(
+    Expression<T> Function($$FlashcardGroupsTableAnnotationComposer a) f,
+  ) {
+    final $$FlashcardGroupsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.flashcardGroups,
+      getReferencedColumn: (t) => t.categoryId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.flashcardGroups,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CategoriesTableTableManager
@@ -4112,6 +5852,7 @@ class $$CategoriesTableTableManager
           PrefetchHooks Function({
             bool categoryTranslationsRefs,
             bool idiomCategoriesRefs,
+            bool flashcardGroupsRefs,
           })
         > {
   $$CategoriesTableTableManager(_$AppDatabase db, $CategoriesTable table)
@@ -4157,12 +5898,14 @@ class $$CategoriesTableTableManager
               ({
                 categoryTranslationsRefs = false,
                 idiomCategoriesRefs = false,
+                flashcardGroupsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (categoryTranslationsRefs) db.categoryTranslations,
                     if (idiomCategoriesRefs) db.idiomCategories,
+                    if (flashcardGroupsRefs) db.flashcardGroups,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -4209,6 +5952,27 @@ class $$CategoriesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (flashcardGroupsRefs)
+                        await $_getPrefetchedData<
+                          Category,
+                          $CategoriesTable,
+                          FlashcardGroup
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CategoriesTableReferences
+                              ._flashcardGroupsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CategoriesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).flashcardGroupsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.categoryId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -4232,6 +5996,7 @@ typedef $$CategoriesTableProcessedTableManager =
       PrefetchHooks Function({
         bool categoryTranslationsRefs,
         bool idiomCategoriesRefs,
+        bool flashcardGroupsRefs,
       })
     >;
 typedef $$CategoryTranslationsTableCreateCompanionBuilder =
@@ -4758,6 +6523,30 @@ final class $$IdiomsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<
+    $FlashcardGroupItemsTable,
+    List<FlashcardGroupItem>
+  >
+  _flashcardGroupItemsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.flashcardGroupItems,
+        aliasName: 'idioms__id__flashcard_group_items__idiom_id',
+      );
+
+  $$FlashcardGroupItemsTableProcessedTableManager get flashcardGroupItemsRefs {
+    final manager = $$FlashcardGroupItemsTableTableManager(
+      $_db,
+      $_db.flashcardGroupItems,
+    ).filter((f) => f.idiomId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _flashcardGroupItemsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$IdiomsTableFilterComposer
@@ -4895,6 +6684,31 @@ class $$IdiomsTableFilterComposer
           }) => $$FavoriteIdiomsTableFilterComposer(
             $db: $db,
             $table: $db.favoriteIdioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> flashcardGroupItemsRefs(
+    Expression<bool> Function($$FlashcardGroupItemsTableFilterComposer f) f,
+  ) {
+    final $$FlashcardGroupItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.flashcardGroupItems,
+      getReferencedColumn: (t) => t.idiomId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.flashcardGroupItems,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5065,6 +6879,32 @@ class $$IdiomsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> flashcardGroupItemsRefs<T extends Object>(
+    Expression<T> Function($$FlashcardGroupItemsTableAnnotationComposer a) f,
+  ) {
+    final $$FlashcardGroupItemsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.flashcardGroupItems,
+          getReferencedColumn: (t) => t.idiomId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$FlashcardGroupItemsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.flashcardGroupItems,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$IdiomsTableTableManager
@@ -5086,6 +6926,7 @@ class $$IdiomsTableTableManager
             bool examplesRefs,
             bool idiomCategoriesRefs,
             bool favoriteIdiomsRefs,
+            bool flashcardGroupItemsRefs,
           })
         > {
   $$IdiomsTableTableManager(_$AppDatabase db, $IdiomsTable table)
@@ -5122,6 +6963,7 @@ class $$IdiomsTableTableManager
                 examplesRefs = false,
                 idiomCategoriesRefs = false,
                 favoriteIdiomsRefs = false,
+                flashcardGroupItemsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -5131,6 +6973,7 @@ class $$IdiomsTableTableManager
                     if (examplesRefs) db.examples,
                     if (idiomCategoriesRefs) db.idiomCategories,
                     if (favoriteIdiomsRefs) db.favoriteIdioms,
+                    if (flashcardGroupItemsRefs) db.flashcardGroupItems,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -5236,6 +7079,27 @@ class $$IdiomsTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (flashcardGroupItemsRefs)
+                        await $_getPrefetchedData<
+                          Idiom,
+                          $IdiomsTable,
+                          FlashcardGroupItem
+                        >(
+                          currentTable: table,
+                          referencedTable: $$IdiomsTableReferences
+                              ._flashcardGroupItemsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$IdiomsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).flashcardGroupItemsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.idiomId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5262,6 +7126,7 @@ typedef $$IdiomsTableProcessedTableManager =
         bool examplesRefs,
         bool idiomCategoriesRefs,
         bool favoriteIdiomsRefs,
+        bool flashcardGroupItemsRefs,
       })
     >;
 typedef $$IdiomTranslationsTableCreateCompanionBuilder =
@@ -8074,6 +9939,1787 @@ typedef $$FavoriteIdiomsTableProcessedTableManager =
       FavoriteIdiom,
       PrefetchHooks Function({bool idiomId})
     >;
+typedef $$FlashcardGroupsTableCreateCompanionBuilder =
+    FlashcardGroupsCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<String?> categoryId,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
+typedef $$FlashcardGroupsTableUpdateCompanionBuilder =
+    FlashcardGroupsCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String?> categoryId,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
+
+final class $$FlashcardGroupsTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $FlashcardGroupsTable, FlashcardGroup> {
+  $$FlashcardGroupsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $CategoriesTable _categoryIdTable(_$AppDatabase db) => db.categories
+      .createAlias('flashcard_groups__category_id__categories__id');
+
+  $$CategoriesTableProcessedTableManager? get categoryId {
+    final $_column = $_itemColumn<String>('category_id');
+    if ($_column == null) return null;
+    final manager = $$CategoriesTableTableManager(
+      $_db,
+      $_db.categories,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_categoryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $FlashcardGroupItemsTable,
+    List<FlashcardGroupItem>
+  >
+  _flashcardGroupItemsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.flashcardGroupItems,
+        aliasName: 'flashcard_groups__id__flashcard_group_items__group_id',
+      );
+
+  $$FlashcardGroupItemsTableProcessedTableManager get flashcardGroupItemsRefs {
+    final manager = $$FlashcardGroupItemsTableTableManager(
+      $_db,
+      $_db.flashcardGroupItems,
+    ).filter((f) => f.groupId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _flashcardGroupItemsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$FlashcardGroupsTableFilterComposer
+    extends Composer<_$AppDatabase, $FlashcardGroupsTable> {
+  $$FlashcardGroupsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$CategoriesTableFilterComposer get categoryId {
+    final $$CategoriesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryId,
+      referencedTable: $db.categories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CategoriesTableFilterComposer(
+            $db: $db,
+            $table: $db.categories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> flashcardGroupItemsRefs(
+    Expression<bool> Function($$FlashcardGroupItemsTableFilterComposer f) f,
+  ) {
+    final $$FlashcardGroupItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.flashcardGroupItems,
+      getReferencedColumn: (t) => t.groupId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.flashcardGroupItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$FlashcardGroupsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FlashcardGroupsTable> {
+  $$FlashcardGroupsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$CategoriesTableOrderingComposer get categoryId {
+    final $$CategoriesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryId,
+      referencedTable: $db.categories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CategoriesTableOrderingComposer(
+            $db: $db,
+            $table: $db.categories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FlashcardGroupsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FlashcardGroupsTable> {
+  $$FlashcardGroupsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$CategoriesTableAnnotationComposer get categoryId {
+    final $$CategoriesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryId,
+      referencedTable: $db.categories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CategoriesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.categories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> flashcardGroupItemsRefs<T extends Object>(
+    Expression<T> Function($$FlashcardGroupItemsTableAnnotationComposer a) f,
+  ) {
+    final $$FlashcardGroupItemsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.flashcardGroupItems,
+          getReferencedColumn: (t) => t.groupId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$FlashcardGroupItemsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.flashcardGroupItems,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$FlashcardGroupsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FlashcardGroupsTable,
+          FlashcardGroup,
+          $$FlashcardGroupsTableFilterComposer,
+          $$FlashcardGroupsTableOrderingComposer,
+          $$FlashcardGroupsTableAnnotationComposer,
+          $$FlashcardGroupsTableCreateCompanionBuilder,
+          $$FlashcardGroupsTableUpdateCompanionBuilder,
+          (FlashcardGroup, $$FlashcardGroupsTableReferences),
+          FlashcardGroup,
+          PrefetchHooks Function({
+            bool categoryId,
+            bool flashcardGroupItemsRefs,
+          })
+        > {
+  $$FlashcardGroupsTableTableManager(
+    _$AppDatabase db,
+    $FlashcardGroupsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FlashcardGroupsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FlashcardGroupsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FlashcardGroupsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> categoryId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => FlashcardGroupsCompanion(
+                id: id,
+                name: name,
+                categoryId: categoryId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                Value<String?> categoryId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => FlashcardGroupsCompanion.insert(
+                id: id,
+                name: name,
+                categoryId: categoryId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$FlashcardGroupsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({categoryId = false, flashcardGroupItemsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (flashcardGroupItemsRefs) db.flashcardGroupItems,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (categoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.categoryId,
+                                    referencedTable:
+                                        $$FlashcardGroupsTableReferences
+                                            ._categoryIdTable(db),
+                                    referencedColumn:
+                                        $$FlashcardGroupsTableReferences
+                                            ._categoryIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (flashcardGroupItemsRefs)
+                        await $_getPrefetchedData<
+                          FlashcardGroup,
+                          $FlashcardGroupsTable,
+                          FlashcardGroupItem
+                        >(
+                          currentTable: table,
+                          referencedTable: $$FlashcardGroupsTableReferences
+                              ._flashcardGroupItemsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$FlashcardGroupsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).flashcardGroupItemsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.groupId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$FlashcardGroupsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FlashcardGroupsTable,
+      FlashcardGroup,
+      $$FlashcardGroupsTableFilterComposer,
+      $$FlashcardGroupsTableOrderingComposer,
+      $$FlashcardGroupsTableAnnotationComposer,
+      $$FlashcardGroupsTableCreateCompanionBuilder,
+      $$FlashcardGroupsTableUpdateCompanionBuilder,
+      (FlashcardGroup, $$FlashcardGroupsTableReferences),
+      FlashcardGroup,
+      PrefetchHooks Function({bool categoryId, bool flashcardGroupItemsRefs})
+    >;
+typedef $$FlashcardGroupItemsTableCreateCompanionBuilder =
+    FlashcardGroupItemsCompanion Function({
+      Value<int> id,
+      required int groupId,
+      required int idiomId,
+      Value<DateTime> createdAt,
+    });
+typedef $$FlashcardGroupItemsTableUpdateCompanionBuilder =
+    FlashcardGroupItemsCompanion Function({
+      Value<int> id,
+      Value<int> groupId,
+      Value<int> idiomId,
+      Value<DateTime> createdAt,
+    });
+
+final class $$FlashcardGroupItemsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $FlashcardGroupItemsTable,
+          FlashcardGroupItem
+        > {
+  $$FlashcardGroupItemsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $FlashcardGroupsTable _groupIdTable(_$AppDatabase db) => db
+      .flashcardGroups
+      .createAlias('flashcard_group_items__group_id__flashcard_groups__id');
+
+  $$FlashcardGroupsTableProcessedTableManager get groupId {
+    final $_column = $_itemColumn<int>('group_id')!;
+
+    final manager = $$FlashcardGroupsTableTableManager(
+      $_db,
+      $_db.flashcardGroups,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_groupIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $IdiomsTable _idiomIdTable(_$AppDatabase db) =>
+      db.idioms.createAlias('flashcard_group_items__idiom_id__idioms__id');
+
+  $$IdiomsTableProcessedTableManager get idiomId {
+    final $_column = $_itemColumn<int>('idiom_id')!;
+
+    final manager = $$IdiomsTableTableManager(
+      $_db,
+      $_db.idioms,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_idiomIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$FlashcardGroupItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $FlashcardGroupItemsTable> {
+  $$FlashcardGroupItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$FlashcardGroupsTableFilterComposer get groupId {
+    final $$FlashcardGroupsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.groupId,
+      referencedTable: $db.flashcardGroups,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupsTableFilterComposer(
+            $db: $db,
+            $table: $db.flashcardGroups,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableFilterComposer get idiomId {
+    final $$IdiomsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.idiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableFilterComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FlashcardGroupItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FlashcardGroupItemsTable> {
+  $$FlashcardGroupItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$FlashcardGroupsTableOrderingComposer get groupId {
+    final $$FlashcardGroupsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.groupId,
+      referencedTable: $db.flashcardGroups,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupsTableOrderingComposer(
+            $db: $db,
+            $table: $db.flashcardGroups,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableOrderingComposer get idiomId {
+    final $$IdiomsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.idiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableOrderingComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FlashcardGroupItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FlashcardGroupItemsTable> {
+  $$FlashcardGroupItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$FlashcardGroupsTableAnnotationComposer get groupId {
+    final $$FlashcardGroupsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.groupId,
+      referencedTable: $db.flashcardGroups,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FlashcardGroupsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.flashcardGroups,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableAnnotationComposer get idiomId {
+    final $$IdiomsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.idiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FlashcardGroupItemsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FlashcardGroupItemsTable,
+          FlashcardGroupItem,
+          $$FlashcardGroupItemsTableFilterComposer,
+          $$FlashcardGroupItemsTableOrderingComposer,
+          $$FlashcardGroupItemsTableAnnotationComposer,
+          $$FlashcardGroupItemsTableCreateCompanionBuilder,
+          $$FlashcardGroupItemsTableUpdateCompanionBuilder,
+          (FlashcardGroupItem, $$FlashcardGroupItemsTableReferences),
+          FlashcardGroupItem,
+          PrefetchHooks Function({bool groupId, bool idiomId})
+        > {
+  $$FlashcardGroupItemsTableTableManager(
+    _$AppDatabase db,
+    $FlashcardGroupItemsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FlashcardGroupItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FlashcardGroupItemsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$FlashcardGroupItemsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> groupId = const Value.absent(),
+                Value<int> idiomId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => FlashcardGroupItemsCompanion(
+                id: id,
+                groupId: groupId,
+                idiomId: idiomId,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int groupId,
+                required int idiomId,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => FlashcardGroupItemsCompanion.insert(
+                id: id,
+                groupId: groupId,
+                idiomId: idiomId,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$FlashcardGroupItemsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({groupId = false, idiomId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (groupId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.groupId,
+                                referencedTable:
+                                    $$FlashcardGroupItemsTableReferences
+                                        ._groupIdTable(db),
+                                referencedColumn:
+                                    $$FlashcardGroupItemsTableReferences
+                                        ._groupIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+                    if (idiomId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.idiomId,
+                                referencedTable:
+                                    $$FlashcardGroupItemsTableReferences
+                                        ._idiomIdTable(db),
+                                referencedColumn:
+                                    $$FlashcardGroupItemsTableReferences
+                                        ._idiomIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$FlashcardGroupItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FlashcardGroupItemsTable,
+      FlashcardGroupItem,
+      $$FlashcardGroupItemsTableFilterComposer,
+      $$FlashcardGroupItemsTableOrderingComposer,
+      $$FlashcardGroupItemsTableAnnotationComposer,
+      $$FlashcardGroupItemsTableCreateCompanionBuilder,
+      $$FlashcardGroupItemsTableUpdateCompanionBuilder,
+      (FlashcardGroupItem, $$FlashcardGroupItemsTableReferences),
+      FlashcardGroupItem,
+      PrefetchHooks Function({bool groupId, bool idiomId})
+    >;
+typedef $$QuizAttemptsTableCreateCompanionBuilder =
+    QuizAttemptsCompanion Function({
+      Value<int> id,
+      required int totalQuestions,
+      required int correctAnswers,
+      required int durationSeconds,
+      Value<DateTime> completedAt,
+    });
+typedef $$QuizAttemptsTableUpdateCompanionBuilder =
+    QuizAttemptsCompanion Function({
+      Value<int> id,
+      Value<int> totalQuestions,
+      Value<int> correctAnswers,
+      Value<int> durationSeconds,
+      Value<DateTime> completedAt,
+    });
+
+final class $$QuizAttemptsTableReferences
+    extends BaseReferences<_$AppDatabase, $QuizAttemptsTable, QuizAttempt> {
+  $$QuizAttemptsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$QuizAttemptAnswersTable, List<QuizAttemptAnswer>>
+  _quizAttemptAnswersRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.quizAttemptAnswers,
+        aliasName: 'quiz_attempts__id__quiz_attempt_answers__attempt_id',
+      );
+
+  $$QuizAttemptAnswersTableProcessedTableManager get quizAttemptAnswersRefs {
+    final manager = $$QuizAttemptAnswersTableTableManager(
+      $_db,
+      $_db.quizAttemptAnswers,
+    ).filter((f) => f.attemptId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _quizAttemptAnswersRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$QuizAttemptsTableFilterComposer
+    extends Composer<_$AppDatabase, $QuizAttemptsTable> {
+  $$QuizAttemptsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalQuestions => $composableBuilder(
+    column: $table.totalQuestions,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctAnswers => $composableBuilder(
+    column: $table.correctAnswers,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> quizAttemptAnswersRefs(
+    Expression<bool> Function($$QuizAttemptAnswersTableFilterComposer f) f,
+  ) {
+    final $$QuizAttemptAnswersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.quizAttemptAnswers,
+      getReferencedColumn: (t) => t.attemptId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuizAttemptAnswersTableFilterComposer(
+            $db: $db,
+            $table: $db.quizAttemptAnswers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$QuizAttemptsTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuizAttemptsTable> {
+  $$QuizAttemptsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalQuestions => $composableBuilder(
+    column: $table.totalQuestions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctAnswers => $composableBuilder(
+    column: $table.correctAnswers,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$QuizAttemptsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuizAttemptsTable> {
+  $$QuizAttemptsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get totalQuestions => $composableBuilder(
+    column: $table.totalQuestions,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctAnswers => $composableBuilder(
+    column: $table.correctAnswers,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get completedAt => $composableBuilder(
+    column: $table.completedAt,
+    builder: (column) => column,
+  );
+
+  Expression<T> quizAttemptAnswersRefs<T extends Object>(
+    Expression<T> Function($$QuizAttemptAnswersTableAnnotationComposer a) f,
+  ) {
+    final $$QuizAttemptAnswersTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.quizAttemptAnswers,
+          getReferencedColumn: (t) => t.attemptId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuizAttemptAnswersTableAnnotationComposer(
+                $db: $db,
+                $table: $db.quizAttemptAnswers,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$QuizAttemptsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $QuizAttemptsTable,
+          QuizAttempt,
+          $$QuizAttemptsTableFilterComposer,
+          $$QuizAttemptsTableOrderingComposer,
+          $$QuizAttemptsTableAnnotationComposer,
+          $$QuizAttemptsTableCreateCompanionBuilder,
+          $$QuizAttemptsTableUpdateCompanionBuilder,
+          (QuizAttempt, $$QuizAttemptsTableReferences),
+          QuizAttempt,
+          PrefetchHooks Function({bool quizAttemptAnswersRefs})
+        > {
+  $$QuizAttemptsTableTableManager(_$AppDatabase db, $QuizAttemptsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuizAttemptsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuizAttemptsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$QuizAttemptsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> totalQuestions = const Value.absent(),
+                Value<int> correctAnswers = const Value.absent(),
+                Value<int> durationSeconds = const Value.absent(),
+                Value<DateTime> completedAt = const Value.absent(),
+              }) => QuizAttemptsCompanion(
+                id: id,
+                totalQuestions: totalQuestions,
+                correctAnswers: correctAnswers,
+                durationSeconds: durationSeconds,
+                completedAt: completedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int totalQuestions,
+                required int correctAnswers,
+                required int durationSeconds,
+                Value<DateTime> completedAt = const Value.absent(),
+              }) => QuizAttemptsCompanion.insert(
+                id: id,
+                totalQuestions: totalQuestions,
+                correctAnswers: correctAnswers,
+                durationSeconds: durationSeconds,
+                completedAt: completedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$QuizAttemptsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({quizAttemptAnswersRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (quizAttemptAnswersRefs) db.quizAttemptAnswers,
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (quizAttemptAnswersRefs)
+                    await $_getPrefetchedData<
+                      QuizAttempt,
+                      $QuizAttemptsTable,
+                      QuizAttemptAnswer
+                    >(
+                      currentTable: table,
+                      referencedTable: $$QuizAttemptsTableReferences
+                          ._quizAttemptAnswersRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$QuizAttemptsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).quizAttemptAnswersRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.attemptId == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$QuizAttemptsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $QuizAttemptsTable,
+      QuizAttempt,
+      $$QuizAttemptsTableFilterComposer,
+      $$QuizAttemptsTableOrderingComposer,
+      $$QuizAttemptsTableAnnotationComposer,
+      $$QuizAttemptsTableCreateCompanionBuilder,
+      $$QuizAttemptsTableUpdateCompanionBuilder,
+      (QuizAttempt, $$QuizAttemptsTableReferences),
+      QuizAttempt,
+      PrefetchHooks Function({bool quizAttemptAnswersRefs})
+    >;
+typedef $$QuizAttemptAnswersTableCreateCompanionBuilder =
+    QuizAttemptAnswersCompanion Function({
+      Value<int> id,
+      required int attemptId,
+      required int questionOrder,
+      required int idiomId,
+      Value<int?> selectedIdiomId,
+      required int correctIdiomId,
+      required String optionIdiomIds,
+    });
+typedef $$QuizAttemptAnswersTableUpdateCompanionBuilder =
+    QuizAttemptAnswersCompanion Function({
+      Value<int> id,
+      Value<int> attemptId,
+      Value<int> questionOrder,
+      Value<int> idiomId,
+      Value<int?> selectedIdiomId,
+      Value<int> correctIdiomId,
+      Value<String> optionIdiomIds,
+    });
+
+final class $$QuizAttemptAnswersTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $QuizAttemptAnswersTable,
+          QuizAttemptAnswer
+        > {
+  $$QuizAttemptAnswersTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $QuizAttemptsTable _attemptIdTable(_$AppDatabase db) => db.quizAttempts
+      .createAlias('quiz_attempt_answers__attempt_id__quiz_attempts__id');
+
+  $$QuizAttemptsTableProcessedTableManager get attemptId {
+    final $_column = $_itemColumn<int>('attempt_id')!;
+
+    final manager = $$QuizAttemptsTableTableManager(
+      $_db,
+      $_db.quizAttempts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_attemptIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $IdiomsTable _idiomIdTable(_$AppDatabase db) =>
+      db.idioms.createAlias('quiz_attempt_answers__idiom_id__idioms__id');
+
+  $$IdiomsTableProcessedTableManager get idiomId {
+    final $_column = $_itemColumn<int>('idiom_id')!;
+
+    final manager = $$IdiomsTableTableManager(
+      $_db,
+      $_db.idioms,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_idiomIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $IdiomsTable _selectedIdiomIdTable(_$AppDatabase db) => db.idioms
+      .createAlias('quiz_attempt_answers__selected_idiom_id__idioms__id');
+
+  $$IdiomsTableProcessedTableManager? get selectedIdiomId {
+    final $_column = $_itemColumn<int>('selected_idiom_id');
+    if ($_column == null) return null;
+    final manager = $$IdiomsTableTableManager(
+      $_db,
+      $_db.idioms,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_selectedIdiomIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $IdiomsTable _correctIdiomIdTable(_$AppDatabase db) => db.idioms
+      .createAlias('quiz_attempt_answers__correct_idiom_id__idioms__id');
+
+  $$IdiomsTableProcessedTableManager get correctIdiomId {
+    final $_column = $_itemColumn<int>('correct_idiom_id')!;
+
+    final manager = $$IdiomsTableTableManager(
+      $_db,
+      $_db.idioms,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_correctIdiomIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$QuizAttemptAnswersTableFilterComposer
+    extends Composer<_$AppDatabase, $QuizAttemptAnswersTable> {
+  $$QuizAttemptAnswersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get questionOrder => $composableBuilder(
+    column: $table.questionOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get optionIdiomIds => $composableBuilder(
+    column: $table.optionIdiomIds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$QuizAttemptsTableFilterComposer get attemptId {
+    final $$QuizAttemptsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.attemptId,
+      referencedTable: $db.quizAttempts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuizAttemptsTableFilterComposer(
+            $db: $db,
+            $table: $db.quizAttempts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableFilterComposer get idiomId {
+    final $$IdiomsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.idiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableFilterComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableFilterComposer get selectedIdiomId {
+    final $$IdiomsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.selectedIdiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableFilterComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableFilterComposer get correctIdiomId {
+    final $$IdiomsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.correctIdiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableFilterComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuizAttemptAnswersTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuizAttemptAnswersTable> {
+  $$QuizAttemptAnswersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get questionOrder => $composableBuilder(
+    column: $table.questionOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get optionIdiomIds => $composableBuilder(
+    column: $table.optionIdiomIds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$QuizAttemptsTableOrderingComposer get attemptId {
+    final $$QuizAttemptsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.attemptId,
+      referencedTable: $db.quizAttempts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuizAttemptsTableOrderingComposer(
+            $db: $db,
+            $table: $db.quizAttempts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableOrderingComposer get idiomId {
+    final $$IdiomsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.idiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableOrderingComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableOrderingComposer get selectedIdiomId {
+    final $$IdiomsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.selectedIdiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableOrderingComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableOrderingComposer get correctIdiomId {
+    final $$IdiomsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.correctIdiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableOrderingComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuizAttemptAnswersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuizAttemptAnswersTable> {
+  $$QuizAttemptAnswersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get questionOrder => $composableBuilder(
+    column: $table.questionOrder,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get optionIdiomIds => $composableBuilder(
+    column: $table.optionIdiomIds,
+    builder: (column) => column,
+  );
+
+  $$QuizAttemptsTableAnnotationComposer get attemptId {
+    final $$QuizAttemptsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.attemptId,
+      referencedTable: $db.quizAttempts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuizAttemptsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.quizAttempts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableAnnotationComposer get idiomId {
+    final $$IdiomsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.idiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableAnnotationComposer get selectedIdiomId {
+    final $$IdiomsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.selectedIdiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$IdiomsTableAnnotationComposer get correctIdiomId {
+    final $$IdiomsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.correctIdiomId,
+      referencedTable: $db.idioms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$IdiomsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.idioms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuizAttemptAnswersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $QuizAttemptAnswersTable,
+          QuizAttemptAnswer,
+          $$QuizAttemptAnswersTableFilterComposer,
+          $$QuizAttemptAnswersTableOrderingComposer,
+          $$QuizAttemptAnswersTableAnnotationComposer,
+          $$QuizAttemptAnswersTableCreateCompanionBuilder,
+          $$QuizAttemptAnswersTableUpdateCompanionBuilder,
+          (QuizAttemptAnswer, $$QuizAttemptAnswersTableReferences),
+          QuizAttemptAnswer,
+          PrefetchHooks Function({
+            bool attemptId,
+            bool idiomId,
+            bool selectedIdiomId,
+            bool correctIdiomId,
+          })
+        > {
+  $$QuizAttemptAnswersTableTableManager(
+    _$AppDatabase db,
+    $QuizAttemptAnswersTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuizAttemptAnswersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuizAttemptAnswersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$QuizAttemptAnswersTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> attemptId = const Value.absent(),
+                Value<int> questionOrder = const Value.absent(),
+                Value<int> idiomId = const Value.absent(),
+                Value<int?> selectedIdiomId = const Value.absent(),
+                Value<int> correctIdiomId = const Value.absent(),
+                Value<String> optionIdiomIds = const Value.absent(),
+              }) => QuizAttemptAnswersCompanion(
+                id: id,
+                attemptId: attemptId,
+                questionOrder: questionOrder,
+                idiomId: idiomId,
+                selectedIdiomId: selectedIdiomId,
+                correctIdiomId: correctIdiomId,
+                optionIdiomIds: optionIdiomIds,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int attemptId,
+                required int questionOrder,
+                required int idiomId,
+                Value<int?> selectedIdiomId = const Value.absent(),
+                required int correctIdiomId,
+                required String optionIdiomIds,
+              }) => QuizAttemptAnswersCompanion.insert(
+                id: id,
+                attemptId: attemptId,
+                questionOrder: questionOrder,
+                idiomId: idiomId,
+                selectedIdiomId: selectedIdiomId,
+                correctIdiomId: correctIdiomId,
+                optionIdiomIds: optionIdiomIds,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$QuizAttemptAnswersTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                attemptId = false,
+                idiomId = false,
+                selectedIdiomId = false,
+                correctIdiomId = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (attemptId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.attemptId,
+                                    referencedTable:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._attemptIdTable(db),
+                                    referencedColumn:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._attemptIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (idiomId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.idiomId,
+                                    referencedTable:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._idiomIdTable(db),
+                                    referencedColumn:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._idiomIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (selectedIdiomId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.selectedIdiomId,
+                                    referencedTable:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._selectedIdiomIdTable(db),
+                                    referencedColumn:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._selectedIdiomIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (correctIdiomId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.correctIdiomId,
+                                    referencedTable:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._correctIdiomIdTable(db),
+                                    referencedColumn:
+                                        $$QuizAttemptAnswersTableReferences
+                                            ._correctIdiomIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$QuizAttemptAnswersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $QuizAttemptAnswersTable,
+      QuizAttemptAnswer,
+      $$QuizAttemptAnswersTableFilterComposer,
+      $$QuizAttemptAnswersTableOrderingComposer,
+      $$QuizAttemptAnswersTableAnnotationComposer,
+      $$QuizAttemptAnswersTableCreateCompanionBuilder,
+      $$QuizAttemptAnswersTableUpdateCompanionBuilder,
+      (QuizAttemptAnswer, $$QuizAttemptAnswersTableReferences),
+      QuizAttemptAnswer,
+      PrefetchHooks Function({
+        bool attemptId,
+        bool idiomId,
+        bool selectedIdiomId,
+        bool correctIdiomId,
+      })
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -8103,4 +11749,12 @@ class $AppDatabaseManager {
       $$IdiomCategoriesTableTableManager(_db, _db.idiomCategories);
   $$FavoriteIdiomsTableTableManager get favoriteIdioms =>
       $$FavoriteIdiomsTableTableManager(_db, _db.favoriteIdioms);
+  $$FlashcardGroupsTableTableManager get flashcardGroups =>
+      $$FlashcardGroupsTableTableManager(_db, _db.flashcardGroups);
+  $$FlashcardGroupItemsTableTableManager get flashcardGroupItems =>
+      $$FlashcardGroupItemsTableTableManager(_db, _db.flashcardGroupItems);
+  $$QuizAttemptsTableTableManager get quizAttempts =>
+      $$QuizAttemptsTableTableManager(_db, _db.quizAttempts);
+  $$QuizAttemptAnswersTableTableManager get quizAttemptAnswers =>
+      $$QuizAttemptAnswersTableTableManager(_db, _db.quizAttemptAnswers);
 }

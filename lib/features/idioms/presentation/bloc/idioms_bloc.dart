@@ -43,7 +43,6 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
       transformer: _debounce(const Duration(milliseconds: 250)),
     );
     on<IdiomsCategorySelected>(_onCategorySelected);
-    on<IdiomsCategoryExpandToggled>(_onCategoryExpandToggled);
     on<IdiomsLoadMoreRequested>(_onLoadMoreRequested);
     on<IdiomsFavoriteToggled>(_onFavoriteToggled);
     on<IdiomsRetryRequested>(_onRetryRequested);
@@ -72,6 +71,7 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
       state.copyWith(
         query: event.query,
         isLoadingMore: false,
+        isApplyingFilter: true,
         errorMessage: null,
       ),
     );
@@ -93,17 +93,11 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
       state.copyWith(
         selectedCategoryId: nextCategory,
         isLoadingMore: false,
+        isApplyingFilter: true,
         errorMessage: null,
       ),
     );
     await _subscribeIdioms();
-  }
-
-  void _onCategoryExpandToggled(
-    IdiomsCategoryExpandToggled event,
-    Emitter<IdiomsState> emit,
-  ) {
-    emit(state.copyWith(isCategoriesExpanded: !state.isCategoriesExpanded));
   }
 
   Future<void> _onLoadMoreRequested(
@@ -148,6 +142,7 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
         query: '',
         selectedCategoryId: null,
         isLoadingMore: false,
+        isApplyingFilter: true,
         errorMessage: null,
       ),
     );
@@ -173,6 +168,7 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
         idioms: visibleIdioms,
         hasMore: hasMore,
         isLoadingMore: false,
+        isApplyingFilter: false,
         errorMessage: null,
       ),
     );
@@ -183,6 +179,7 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
       state.copyWith(
         status: IdiomsStatus.error,
         isLoadingMore: false,
+        isApplyingFilter: false,
         errorMessage: event.message,
       ),
     );

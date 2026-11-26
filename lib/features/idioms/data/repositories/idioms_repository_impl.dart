@@ -34,6 +34,10 @@ class IdiomsRepositoryImpl implements IdiomsRepository {
       _localDataSource.watchIdiomDetail(idiomId);
 
   @override
+  Stream<IdiomDetailEntity?> watchIdiomOfTheDay({DateTime? date}) =>
+      _localDataSource.watchIdiomOfTheDay(date: date);
+
+  @override
   Future<void> toggleFavorite(int idiomId) =>
       _localDataSource.toggleFavorite(idiomId);
 

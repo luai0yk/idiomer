@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
@@ -382,12 +383,11 @@ class _MyButtonState extends State<MyButton> {
         foregroundColor: finalFg,
         disabledBackgroundColor: finalBg,
         disabledForegroundColor: finalFg,
-        minimumSize: Size(defaultWidth, widget.height ?? context.setSize(54)),
+        minimumSize: Size(defaultWidth, widget.height ?? context.setSize(58)),
         padding:
             widget.padding ?? EdgeInsets.symmetric(horizontal: context.spaceL),
         shape: RoundedRectangleBorder(
-          borderRadius:
-              widget.borderRadius ?? BorderRadius.circular(context.radiusM),
+          borderRadius: widget.borderRadius ?? context.brL,
           side: finalBorder,
         ),
       ),

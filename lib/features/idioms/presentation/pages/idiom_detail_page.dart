@@ -5,20 +5,25 @@ import 'package:idiomer/app/l10n/app_localizations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
-import 'package:idiomer/core/utils/helpers/misc/share_helper.dart';
+import 'package:idiomer/core/utils/helpers/ui/snackbar_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/toast_helper.dart';
+import 'package:idiomer/features/flashcards/domain/entities/flashcard_group_entity.dart';
+import 'package:idiomer/features/flashcards/presentation/widgets/flashcard_group_picker_sheet.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
 import 'package:idiomer/features/idioms/presentation/cubit/idiom_detail_cubit.dart';
 import 'package:idiomer/features/idioms/presentation/cubit/idiom_detail_state.dart';
-import 'package:idiomer/shared/widgets/appbars/my_app_bar.dart';
+import 'package:idiomer/features/idioms/presentation/widgets/idiom_detail_header.dart';
+import 'package:idiomer/features/idioms/presentation/widgets/idiom_detail_hero_card.dart';
+import 'package:idiomer/features/idioms/presentation/widgets/idiom_share_sheet.dart';
 import 'package:idiomer/shared/widgets/buttons/my_favorite_button.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
-import 'package:idiomer/shared/widgets/chips/animated_chip.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
 import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/shared/widgets/misc/my_snackbar.dart';
 import 'package:idiomer/shared/widgets/misc/my_toast.dart';
+import 'package:idiomer/shared/widgets/texts/highlighted_markup_text.dart';
 
 class IdiomDetailPage extends StatefulWidget {
   final int idiomId;
@@ -51,38 +56,48 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
 
         return Scaffold(
           backgroundColor: colorScheme.surface,
-          appBar: MyAppBar(
-            centerTitle: false,
-            title: l10n.idiomDetails,
-            actions: idiom == null
-                ? null
-                : [
-                    MyFavoriteButton(
-                      initialIsFavorite: idiom.isFavorite,
-                      onChanged: (_) =>
-                          context.read<IdiomDetailCubit>().toggleFavorite(),
-                    ),
-                    context.horizontalSpace(8),
-                    MyIconButton.solid(
-                      icon: AppIcons.copy,
-                      tooltip: l10n.copyAll,
-                      onPressed: () => _copyText(
-                        _formatShareText(idiom),
-                        l10n.copiedToClipboard,
-                      ),
-                    ),
-                    context.horizontalSpace(8),
-                    MyIconButton.solid(
-                      icon: AppIcons.share,
-                      tooltip: l10n.share,
-                      onPressed: () => ShareHelper.shareText(
-                        _formatShareText(idiom),
-                        subject: idiom.englishText,
-                      ),
-                    ),
-                  ],
+          body: Column(
+            children: [
+              IdiomDetailHeader(
+                title: l10n.idiomDetails,
+                actions: idiom == null
+                    ? const []
+                    : [
+                        MyFavoriteButton(
+                          initialIsFavorite: idiom.isFavorite,
+                          iconColor: colorScheme.primary,
+                          onChanged: (_) =>
+                              context.read<IdiomDetailCubit>().toggleFavorite(),
+                        ),
+                        MyIconButton.ghost(
+                          icon: state.isInFlashcards
+                              ? AppIcons.flashcardsFilled
+                              : AppIcons.flashcards,
+                          iconColor: colorScheme.primary,
+                          tooltip: l10n.addToFlashcards,
+                          autoLoading: false,
+                          onPressed: () => _handleFlashcardAction(
+                            context,
+                            state,
+                            idiom,
+                            l10n,
+                          ),
+                        ),
+                        MyIconButton.ghost(
+                          icon: AppIcons.share,
+                          autoLoading: false,
+                          iconColor: colorScheme.primary,
+                          tooltip: l10n.share,
+                          onPressed: () => IdiomShareSheet.show(
+                            context: context,
+                            idiom: idiom,
+                          ),
+                        ),
+                      ],
+              ),
+              Expanded(child: _buildBody(context, state, l10n)),
+            ],
           ),
-          body: _buildBody(context, state, l10n),
         );
       },
     );
@@ -123,7 +138,6 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
 
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
-    final isArabic = Directionality.of(context) == TextDirection.rtl;
 
     return SelectionArea(
       child: ListView(
@@ -134,30 +148,13 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           context.spaceXxl,
         ),
         children: [
-          _buildHeroCard(context, idiom, textTheme, colorScheme, l10n),
-          if (idiom.categories.isNotEmpty) ...[
-            context.verticalSpace(16),
-            _buildSectionTitle(
-              context,
-              l10n.categoriesLabel,
-              AppIcons.category,
-              textTheme,
-              colorScheme,
+          IdiomDetailHeroCard(
+            idiom: idiom,
+            onCopy: () => _copyText(
+              '${idiom.englishText}\n${idiom.arabicText}',
+              l10n.copiedToClipboard,
             ),
-            context.verticalSpace(8),
-            Wrap(
-              spacing: context.spaceS,
-              runSpacing: context.spaceS,
-              children: [
-                for (final category in idiom.categories)
-                  AnimatedChip(
-                    text: category.localizedName(isArabic: isArabic),
-                    isSelected: false,
-                    onTap: () {},
-                  ),
-              ],
-            ),
-          ],
+          ),
           if (idiom.definitions.isNotEmpty) ...[
             context.verticalSpace(20),
             _buildSectionTitle(
@@ -203,74 +200,6 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     );
   }
 
-  Widget _buildHeroCard(
-    BuildContext context,
-    IdiomDetailEntity idiom,
-    TextTheme textTheme,
-    ColorScheme colorScheme,
-    AppLocalizations l10n,
-  ) {
-    return MyCard.filled(
-      color: colorScheme.primaryContainer.withValues(alpha: 0.14),
-      borderRadius: context.brL,
-      padding: context.insetsAllL,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.idiomLabel,
-                      style: textTheme.labelMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    context.verticalSpace(4),
-                    Text(
-                      idiom.englishText,
-                      textDirection: TextDirection.ltr,
-                      style: textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              MyIconButton.ghost(
-                icon: AppIcons.copy,
-                tooltip: l10n.copy,
-                onPressed: () => _copyText(
-                  '${idiom.englishText}\n${idiom.arabicText}',
-                  l10n.copiedToClipboard,
-                ),
-              ),
-            ],
-          ),
-          context.verticalSpace(14),
-          Divider(
-            height: 1,
-            color: colorScheme.outlineVariant.withValues(alpha: 0.5),
-          ),
-          context.verticalSpace(14),
-          Text(
-            idiom.arabicText,
-            textDirection: TextDirection.rtl,
-            style: textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: colorScheme.primary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   List<Widget> _buildDefinitions(
     BuildContext context,
     IdiomDetailEntity idiom,
@@ -304,8 +233,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     required AppLocalizations l10n,
   }) {
     return MyCard.filled(
-      color: colorScheme.surfaceContainerLow,
-      borderRadius: context.brM,
+      borderRadius: context.brXl,
       padding: context.insetsAllM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -314,7 +242,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(
+                child: HighlightedMarkupText(
                   showIndex
                       ? '$index. ${definition.englishMeaning}'
                       : definition.englishMeaning,
@@ -329,7 +257,9 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                 iconSize: context.iconS,
                 tooltip: l10n.copy,
                 onPressed: () => _copyText(
-                  '${definition.englishMeaning}\n${definition.arabicMeaning}',
+                  HighlightedMarkupText.stripMarkers(
+                    '${definition.englishMeaning}\n${definition.arabicMeaning}',
+                  ),
                   l10n.copiedToClipboard,
                 ),
               ),
@@ -337,7 +267,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           ),
           if (definition.arabicMeaning.trim().isNotEmpty) ...[
             context.verticalSpace(8),
-            Text(
+            HighlightedMarkupText(
               definition.arabicMeaning,
               textDirection: TextDirection.rtl,
               style: textTheme.bodyMedium?.copyWith(
@@ -383,8 +313,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     required AppLocalizations l10n,
   }) {
     return MyCard.filled(
-      color: colorScheme.surfaceContainerLow,
-      borderRadius: context.brM,
+      borderRadius: context.brXl,
       padding: context.insetsAllM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -393,7 +322,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(
+                child: HighlightedMarkupText(
                   showIndex
                       ? '$index. ${example.englishSentence}'
                       : example.englishSentence,
@@ -408,7 +337,9 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                 iconSize: context.iconS,
                 tooltip: l10n.copy,
                 onPressed: () => _copyText(
-                  '${example.englishSentence}\n${example.arabicSentence}',
+                  HighlightedMarkupText.stripMarkers(
+                    '${example.englishSentence}\n${example.arabicSentence}',
+                  ),
                   l10n.copiedToClipboard,
                 ),
               ),
@@ -416,7 +347,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           ),
           if (example.arabicSentence.trim().isNotEmpty) ...[
             context.verticalSpace(8),
-            Text(
+            HighlightedMarkupText(
               example.arabicSentence,
               textDirection: TextDirection.rtl,
               style: textTheme.bodyMedium?.copyWith(
@@ -441,8 +372,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
         idiom.arabicNotes != null && idiom.arabicNotes!.trim().isNotEmpty;
 
     return MyCard.filled(
-      color: colorScheme.surfaceContainerLow,
-      borderRadius: context.brM,
+      borderRadius: context.brXl,
       padding: context.insetsAllM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -502,31 +432,89 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     ToastHelper.show(msg: toastMessage, status: ToastStatus.success);
   }
 
-  String _formatShareText(IdiomDetailEntity idiom) {
-    final buffer = StringBuffer()
-      ..writeln(idiom.englishText)
-      ..writeln(idiom.arabicText);
-
-    if (idiom.definitions.isNotEmpty) {
-      buffer.writeln();
-      for (final def in idiom.definitions) {
-        buffer.writeln('- ${def.englishMeaning}');
-        if (def.arabicMeaning.trim().isNotEmpty) {
-          buffer.writeln('  ${def.arabicMeaning}');
-        }
-      }
+  Future<void> _handleFlashcardAction(
+    BuildContext context,
+    IdiomDetailState state,
+    IdiomDetailEntity idiom,
+    AppLocalizations l10n,
+  ) async {
+    final cubit = context.read<IdiomDetailCubit>();
+    if (state.flashcardGroups.isNotEmpty) {
+      await _showChangeGroupSheet(
+        context,
+        cubit: cubit,
+        currentGroup: state.flashcardGroups.first,
+        l10n: l10n,
+      );
+      return;
     }
 
-    if (idiom.examples.isNotEmpty) {
-      buffer.writeln();
-      for (final ex in idiom.examples) {
-        buffer.writeln('• ${ex.englishSentence}');
-        if (ex.arabicSentence.trim().isNotEmpty) {
-          buffer.writeln('  ${ex.arabicSentence}');
-        }
-      }
-    }
+    final isArabic = Directionality.of(context) == TextDirection.rtl;
+    final firstCategory = idiom.categories.firstOrNull;
+    final defaultGroupName =
+        firstCategory?.localizedName(isArabic: isArabic) ?? l10n.generalGroup;
 
-    return buffer.toString().trim();
+    final result = await cubit.saveToDefaultFlashcardGroup(
+      groupName: defaultGroupName,
+      categoryId: firstCategory?.id,
+    );
+    if (result == null || !context.mounted) return;
+
+    SnackBarHelper.show(
+      msg: l10n.savedToGroup(result.group.name),
+      status: SnackBarStatus.success,
+      actionText: l10n.changeGroup,
+      onAction: () {
+        if (!context.mounted) return;
+        _showChangeGroupSheet(
+          context,
+          cubit: cubit,
+          currentGroup: result.group,
+          l10n: l10n,
+        );
+      },
+    );
+  }
+
+  Future<void> _showChangeGroupSheet(
+    BuildContext context, {
+    required IdiomDetailCubit cubit,
+    required FlashcardGroupEntity currentGroup,
+    required AppLocalizations l10n,
+  }) {
+    final allGroups = cubit.state.allFlashcardGroups;
+    return FlashcardGroupPickerSheet.show(
+      context: context,
+      title: l10n.chooseFlashcardGroup,
+      groups: allGroups.isEmpty ? [currentGroup] : allGroups,
+      selectedGroup: currentGroup,
+      onGroupSelected: (targetGroup) async {
+        if (targetGroup.id == currentGroup.id) return;
+        await cubit.moveToFlashcardGroup(
+          fromGroupId: currentGroup.id,
+          toGroupId: targetGroup.id,
+        );
+        ToastHelper.show(
+          msg: l10n.movedToGroup(targetGroup.name),
+          status: ToastStatus.success,
+        );
+      },
+      onCreateGroupAndSelect: (newGroupName) async {
+        final created = await cubit.createAndMoveToFlashcardGroup(
+          fromGroupId: currentGroup.id,
+          newGroupName: newGroupName,
+        );
+        if (created != null) {
+          ToastHelper.show(
+            msg: l10n.movedToGroup(created.name),
+            status: ToastStatus.success,
+          );
+        }
+      },
+      onRemoveFromGroup: () async {
+        await cubit.removeFromFlashcardGroup(currentGroup.id);
+        ToastHelper.show(msg: l10n.removedFromGroup, status: ToastStatus.info);
+      },
+    );
   }
 }

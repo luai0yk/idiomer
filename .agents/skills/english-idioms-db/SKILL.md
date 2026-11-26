@@ -144,6 +144,7 @@ GROUP BY language_code;
 - Do not use `INSERT OR REPLACE` for relational records: SQLite `REPLACE` may delete the conflicting row before inserting, activating foreign-key cascades. Prefer a deliberate `UPDATE` or `INSERT ... ON CONFLICT DO UPDATE` where appropriate.
 - Do not assume that `id` values are contiguous or that `MAX(id)` equals the row count.
 - Preserve Arabic text exactly, including diacritics and punctuation, unless editing it is part of the task.
+- Definition meanings (`definition_translations.meaning`) and example sentences (`example_translations.sentence`) use inline `**...**` markdown-style markers around the target idiom or highlighted phrase (for example: `We had to **bite the bullet** and cut our marketing budget this quarter.`). Preserve or apply `**...**` markup consistently when inserting or updating definitions/examples, strip markers (`HighlightedMarkupText.stripMarkers`) for plain-text copy/share, and account for `**` markers when running substring matching or length checks.
 - Use parameterized SQL for all user-provided values. Never build SQL by interpolating untrusted text.
 
 ## Important limitations

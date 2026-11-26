@@ -104,5 +104,202 @@
   "removedFromFavorites": "Removed from favorites",
   "clearFavoritesTitle": "Clear All Favorites?",
   "clearFavoritesMessage": "Are you sure you want to remove all saved idioms from your favorites?",
-  "favoritesCleared": "All favorites cleared"
+  "favoritesCleared": "All favorites cleared",
+  "shareIdiom": "Share Idiom",
+  "shareViaWhatsApp": "WhatsApp",
+  "saveAsImage": "Save Image",
+  "shareAsImage": "Share Image",
+  "shareAsText": "Share Text",
+  "shareOther": "Other",
+  "imageSaved": "Image saved successfully",
+  "failedToSaveImage": "Could not save image",
+  "failedToShare": "Failed to share",
+  "whatsappUnavailable": "WhatsApp is not available on this device",
+  "home": "Home",
+  "explore": "Explore",
+  "goodMorning": "Good morning",
+  "goodAfternoon": "Good afternoon",
+  "goodEvening": "Good evening",
+  "homeMotivationalSubtitle": "Master a new English idiom every day",
+  "idiomOfTheDay": "Idiom of the Day",
+  "dailyQuizTitle": "Idiom Quiz",
+  "quizFirstTimeSubtitle": "Test yourself with 8 idioms in 2 minutes",
+  "quizOverviewSubtitle": "{count} quizzes completed • Avg {avg}%",
+  "@quizOverviewSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "avg": {
+        "type": "int"
+      }
+    }
+  },
+  "startQuiz": "Start Quiz",
+  "viewProgress": "View Progress",
+  "selectCategory": "Select Category",
+  "filterByCategory": "Filter by category",
+  "quizOverview": "Quiz Overview",
+  "totalQuizzes": "Total Quizzes",
+  "averageScore": "Average Score",
+  "quizHistory": "Quiz History",
+  "newQuiz": "New Quiz",
+  "scoreOutOf": "{correct} / {total}",
+  "@scoreOutOf": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizAttemptSubtitle": "{correct} out of {total} in {duration}",
+  "@quizAttemptSubtitle": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "secondsCount": "{count, plural, =1{1 second} other{{count} seconds}}",
+  "@secondsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesCount": "{count, plural, =1{1 minute} other{{count} minutes}}",
+  "@minutesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "questionProgress": "Question {current} of {total}",
+  "@questionProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "previous": "Previous",
+  "next": "Next",
+  "submitQuiz": "Submit Quiz",
+  "quizQuestionPrompt": "Which idiom matches this definition?",
+  "quizCompletedTitle": "Quiz Completed!",
+  "timeUpTitle": "Time's Up!",
+  "completionTime": "Completion Time",
+  "yourScore": "Your Score",
+  "tryAgain": "Try Again",
+  "backToOverview": "View Overview",
+  "backToHome": "Back to Home",
+  "exitQuizTitle": "Leave Quiz?",
+  "exitQuizMessage": "Your current quiz progress will be lost.",
+  "leave": "Leave",
+  "stay": "Stay",
+  "notEnoughIdiomsForQuiz": "Not enough idioms available to start a quiz.",
+  "noQuizzesYet": "No Quizzes Completed Yet",
+  "noQuizzesSubtitle": "Take your first 8-question quiz to track your progress here.",
+  "reviewAnswers": "Review Answers",
+  "unanswered": "Unanswered",
+  "correctAnswerLabel": "Correct: {answer}",
+  "@correctAnswerLabel": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "addToFlashcards": "Add to Flashcards",
+  "savedToGroup": "Saved to \"{group}\"",
+  "@savedToGroup": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "alreadyInGroup": "Already in \"{group}\"",
+  "@alreadyInGroup": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "changeGroup": "Change",
+  "chooseFlashcardGroup": "Choose Flashcard Group",
+  "moveToGroup": "Move to Group",
+  "movedToGroup": "Moved to \"{group}\"",
+  "@movedToGroup": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "removeFromGroup": "Remove from Group",
+  "removedFromGroup": "Removed from group",
+  "createGroup": "Create Group",
+  "newGroup": "New Group",
+  "renameGroup": "Rename Group",
+  "deleteGroup": "Delete Group",
+  "deleteGroupTitle": "Delete Group?",
+  "deleteGroupMessage": "Are you sure you want to delete \"{group}\" and remove its cards?",
+  "clearFlashcardsTitle": "Clear All Flashcards?",
+  "clearFlashcardsMessage": "Are you sure you want to delete all flashcard groups and their cards?",
+  "flashcardsCleared": "All flashcards cleared",
+  "@deleteGroupMessage": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "groupName": "Group Name",
+  "groupNameHint": "Enter group name...",
+  "groupAlreadyExists": "A group with this name already exists",
+  "groupCreated": "Group created",
+  "groupRenamed": "Group renamed",
+  "groupDeleted": "Group deleted",
+  "idiomsCount": "{count, plural, =0{0 idioms} =1{1 idiom} other{{count} idioms}}",
+  "@idiomsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyFlashcards": "Study",
+  "tapCardToFlip": "Tap card to reveal translation & meaning",
+  "noOtherGroups": "No other groups available",
+  "noGroupIdiomsTitle": "No Idioms in This Group",
+  "noGroupIdiomsSubtitle": "Add idioms from Idiom Details or move idioms from another group.",
+  "generalGroup": "General",
+  "viewDetails": "View Details",
+  "save": "Save",
+  "delete": "Delete",
+  "rename": "Rename",
+  "create": "Create",
+  "flipCard": "Flip Card",
+  "shuffle": "Shuffle",
+  "imageSavedToDownloads": "Saved to Downloads/Idiomer",
+  "readOnlyReview": "Review Only",
+  "reviewQuizNotFound": "Quiz attempt not found",
+  "takeQuiz": "Take Quiz",
+  "showIdiomsList": "Show Idioms"
 }

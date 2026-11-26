@@ -292,4 +292,19 @@ void main() {
     final afterClear = await dataSource.watchIdioms(favoritesOnly: true).first;
     expect(afterClear, isEmpty);
   });
+
+  test(
+    'watchIdiomOfTheDay returns deterministic idiom and updates favorite',
+    () async {
+      final day1 = DateTime(2026, 11, 25);
+      final first = await dataSource.watchIdiomOfTheDay(date: day1).first;
+      final repeat = await dataSource.watchIdiomOfTheDay(date: day1).first;
+      expect(first, isNotNull);
+      expect(first!.id, repeat!.id);
+
+      await dataSource.toggleFavorite(first.id);
+      final updated = await dataSource.watchIdiomOfTheDay(date: day1).first;
+      expect(updated?.isFavorite, isTrue);
+    },
+  );
 }

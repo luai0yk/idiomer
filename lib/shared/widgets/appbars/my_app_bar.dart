@@ -88,12 +88,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       bottom: bottom,
       leading: withLeading
           ? Center(
-              child: MyIconButton.solid(
+              child: MyIconButton.ghost(
                 icon: AppIcons.arrowBack(context),
                 iconColor: leadingIconColor,
                 tooltip: context.l10n.back,
-                backgroundColor: leadingBackgroundColor,
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.maybePop(context),
               ),
             )
           : null,

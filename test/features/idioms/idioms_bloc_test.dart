@@ -32,7 +32,7 @@ void main() {
   });
 
   blocTest<IdiomsBloc, IdiomsState>(
-    'IdiomsBloc loads categories and idioms, filters, expands, and toggles favorite',
+    'IdiomsBloc loads categories and idioms, filters, and toggles favorite',
     build: () => IdiomsBloc(
       watchIdioms: WatchIdiomsUseCase(repository),
       watchCategories: WatchCategoriesUseCase(repository),
@@ -41,7 +41,6 @@ void main() {
     act: (bloc) async {
       bloc.add(const IdiomsStarted());
       await Future<void>.delayed(const Duration(milliseconds: 50));
-      bloc.add(const IdiomsCategoryExpandToggled());
       bloc.add(const IdiomsCategorySelected('business'));
       await Future<void>.delayed(const Duration(milliseconds: 50));
       bloc.add(const IdiomsFavoriteToggled(2));
@@ -50,7 +49,6 @@ void main() {
     verify: (bloc) {
       expect(bloc.state.status, IdiomsStatus.loaded);
       expect(bloc.state.categories.length, 2);
-      expect(bloc.state.isCategoriesExpanded, isTrue);
       expect(bloc.state.selectedCategoryId, 'business');
       expect(bloc.state.idioms.length, 1);
       expect(bloc.state.idioms.first.id, 2);
@@ -77,6 +75,33 @@ void main() {
     verify: (bloc) {
       expect(bloc.state.status, IdiomsStatus.loaded);
       expect(bloc.state.idioms, isEmpty);
+    },
+  );
+
+  blocTest<FavoritesBloc, IdiomsState>(
+    'FavoritesBloc marks isApplyingFilter during clear filters until stream refreshes',
+    build: () => FavoritesBloc(
+      watchIdioms: WatchIdiomsUseCase(repository),
+      watchCategories: WatchCategoriesUseCase(repository),
+      toggleFavorite: ToggleFavoriteUseCase(repository),
+      clearAllFavorites: ClearAllFavoritesUseCase(repository),
+    ),
+    act: (bloc) async {
+      await repository.setFavorite(1, isFavorite: true);
+      bloc.add(const IdiomsStarted());
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      bloc.add(const IdiomsSearchChanged('no_match_query'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      expect(bloc.state.idioms, isEmpty);
+      expect(bloc.state.hasActiveFilters, isTrue);
+
+      bloc.add(const IdiomsFiltersCleared());
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    },
+    verify: (bloc) {
+      expect(bloc.state.hasActiveFilters, isFalse);
+      expect(bloc.state.isApplyingFilter, isFalse);
+      expect(bloc.state.idioms.length, 1);
     },
   );
 }

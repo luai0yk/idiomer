@@ -69,6 +69,7 @@ class AppIcons {
 
   // Communication
   static const message = Iconsax.messages_1_copy;
+  static const whatsapp = Iconsax.whatsapp_copy;
   static const phone = Iconsax.call_copy;
   static const call = Iconsax.call_copy;
 
@@ -135,4 +136,7 @@ class AppIcons {
   static const card = Iconsax.card_copy;
   static const receipt = Iconsax.receipt_2_1_copy;
   static const googlePlay = Iconsax.google_play;
+  static const quoteUp = Iconsax.quote_up;
+  static const quoteDown = Iconsax.quote_down;
+  static const shuffle = Iconsax.shuffle_copy;
 }

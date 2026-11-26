@@ -33,7 +33,12 @@ class AppShellPage extends StatelessWidget {
         selectedForegroundColor: colorScheme.primary,
         items: [
           MyBottomNavigationBarItem(
-            title: l10n.idioms,
+            title: l10n.home,
+            icon: const Icon(AppIcons.home),
+            selectedIcon: const Icon(AppIcons.homeFilled),
+          ),
+          MyBottomNavigationBarItem(
+            title: l10n.explore,
             icon: const Icon(AppIcons.idioms),
             selectedIcon: const Icon(AppIcons.idiomsFilled),
           ),
@@ -46,11 +51,6 @@ class AppShellPage extends StatelessWidget {
             title: l10n.flashcards,
             icon: const Icon(AppIcons.flashcards),
             selectedIcon: const Icon(AppIcons.flashcardsFilled),
-          ),
-          MyBottomNavigationBarItem(
-            title: l10n.settings,
-            icon: const Icon(AppIcons.settings),
-            selectedIcon: const Icon(AppIcons.settingsFilled),
           ),
         ],
         currentIndex: navigationShell.currentIndex,

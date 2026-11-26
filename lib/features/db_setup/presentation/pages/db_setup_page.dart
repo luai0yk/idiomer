@@ -49,7 +49,7 @@ class _DbSetupPageState extends State<DbSetupPage> {
         listenWhen: (prev, curr) =>
             prev.stage != curr.stage && curr.stage == DbSetupStage.ready,
         listener: (context, state) {
-          context.go(AppRoutes.idioms);
+          context.go(AppRoutes.home);
         },
         builder: (context, state) {
           return SafeArea(

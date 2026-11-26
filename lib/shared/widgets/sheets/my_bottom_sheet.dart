@@ -154,8 +154,8 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
             minHeight: context.screenHeight * 0.3,
           ),
           borderRadius: BorderRadius.only(
-            topLeft: .circular(context.radiusL),
-            topRight: .circular(context.radiusL),
+            topLeft: .circular(context.radiusXl),
+            topRight: .circular(context.radiusXl),
           ),
           padding: EdgeInsets.only(top: widget.hideHandle ? context.spaceM : 0),
           color: colors.surface,
@@ -227,7 +227,7 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                             SizedBox(
                               height: context.setSize(32),
                               width: context.setSize(32),
-                              child: MyIconButton.solid(
+                              child: MyIconButton.ghost(
                                 icon: AppIcons.close,
                                 tooltip: context.l10n.close,
                                 iconSize: context.setSize(18),

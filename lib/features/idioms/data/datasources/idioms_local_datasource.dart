@@ -16,6 +16,8 @@ abstract class IdiomsLocalDataSource {
 
   Stream<IdiomDetailEntity?> watchIdiomDetail(int idiomId);
 
+  Stream<IdiomDetailEntity?> watchIdiomOfTheDay({DateTime? date});
+
   Future<void> toggleFavorite(int idiomId);
 
   Future<void> setFavorite(int idiomId, {required bool isFavorite});
@@ -311,6 +313,35 @@ class IdiomsLocalDataSourceImpl implements IdiomsLocalDataSource {
         arabicDescription: ar?.description,
       );
     }).toList();
+  }
+
+  @override
+  Stream<IdiomDetailEntity?> watchIdiomOfTheDay({DateTime? date}) async* {
+    final rows =
+        await (_db.selectOnly(_db.idioms)
+              ..addColumns([_db.idioms.id])
+              ..orderBy([OrderingTerm.asc(_db.idioms.id)]))
+            .get();
+
+    final ids = rows
+        .map((row) => row.read(_db.idioms.id))
+        .whereType<int>()
+        .toList();
+
+    if (ids.isEmpty) {
+      yield null;
+      return;
+    }
+
+    final targetDate = date ?? DateTime.now();
+    final daySeed = DateTime.utc(
+      targetDate.year,
+      targetDate.month,
+      targetDate.day,
+    ).difference(DateTime.utc(2024, 1, 1)).inDays.abs();
+
+    final pickedId = ids[daySeed % ids.length];
+    yield* watchIdiomDetail(pickedId);
   }
 
   @override

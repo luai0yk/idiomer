@@ -306,7 +306,7 @@ class _MyIconButtonState extends State<MyIconButton> {
       height: finalSize,
       decoration: BoxDecoration(
         color: finalBg,
-        borderRadius: BorderRadius.circular(context.radiusM),
+        borderRadius: BorderRadius.circular(context.radiusCircular),
         border: finalBorder.style != BorderStyle.none
             ? Border.fromBorderSide(finalBorder)
             : null,
@@ -316,7 +316,7 @@ class _MyIconButtonState extends State<MyIconButton> {
         child: InkWell(
           // Disable interaction dynamically if loading or if no callback was provided
           onTap: isEffectivelyDisabled ? null : _handlePressed,
-          borderRadius: BorderRadius.circular(context.radiusM),
+          borderRadius: BorderRadius.circular(context.radiusCircular),
           splashColor:
               (widget.iconColor ??
                       (widget.isSelected ? colors.primary : null) ??

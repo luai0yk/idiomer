@@ -130,7 +130,7 @@ class _MyDialogState extends State<MyDialog> {
 
     return AlertDialog(
       backgroundColor: colors.surface,
-      shape: RoundedRectangleBorder(borderRadius: context.brL),
+      shape: RoundedRectangleBorder(borderRadius: context.brXl),
       titlePadding: _titlePadding(context),
       contentPadding: widget.content != null
           ? _contentPadding(context)
@@ -142,18 +142,28 @@ class _MyDialogState extends State<MyDialog> {
               children: [
                 if (displayIcon != null) ...[
                   Container(
-                    padding: EdgeInsets.all(context.setSize(16)),
+                    width: context.setSize(80),
+                    height: context.setSize(80),
                     decoration: BoxDecoration(
-                      color: finalIconColor.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: AlignmentDirectional.topStart,
+                        end: AlignmentDirectional.bottomEnd,
+                        colors: [
+                          finalIconColor.withValues(alpha: 0.18),
+                          finalIconColor.withValues(alpha: 0.06),
+                        ],
+                      ),
+                      borderRadius: context.brXl,
                     ),
-                    child: MyIcon(
-                      icon: displayIcon,
-                      color: finalIconColor,
-                      size: context.setSize(36),
+                    child: Center(
+                      child: MyIcon(
+                        icon: displayIcon,
+                        color: finalIconColor,
+                        size: context.setSize(42),
+                      ),
                     ),
                   ),
-                  SizedBox(height: context.setSize(16)),
+                  context.verticalSpace(16),
                 ],
                 if (widget.title != null)
                   Text(
@@ -169,7 +179,7 @@ class _MyDialogState extends State<MyDialog> {
           : null,
       content: widget.content != null || widget.customContent != null
           ? SizedBox(
-              width: context.screenWidth * .75,
+              width: context.screenWidth * .90,
               height: widget.height,
               child:
                   widget.customContent ??
@@ -192,7 +202,6 @@ class _MyDialogState extends State<MyDialog> {
             if (widget.primaryButton != null) ...[
               MyButton.primary(
                 onPressed: _handlePrimaryPressed,
-                height: context.setSize(48),
                 text: widget.primaryButton!.text,
                 prefixIcon: widget.primaryButton!.prefixIcon,
                 suffixIcon: widget.primaryButton!.suffixIcon,
@@ -205,7 +214,6 @@ class _MyDialogState extends State<MyDialog> {
             if (widget.secondaryButton != null) ...[
               MyButton.outlinedNeutral(
                 onPressed: _handleSecondaryPressed,
-                height: context.setSize(48),
                 padding: EdgeInsets.zero,
                 text: widget.secondaryButton!.text,
                 prefixIcon: widget.secondaryButton!.prefixIcon,

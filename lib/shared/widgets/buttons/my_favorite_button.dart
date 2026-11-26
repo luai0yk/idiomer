@@ -6,11 +6,13 @@ import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 class MyFavoriteButton extends StatefulWidget {
   final bool initialIsFavorite;
   final ValueChanged<bool>? onChanged;
+  final Color? iconColor;
 
   const MyFavoriteButton({
     super.key,
     this.initialIsFavorite = false,
     this.onChanged,
+    this.iconColor,
   });
 
   @override
@@ -43,9 +45,9 @@ class _MyFavoriteButtonState extends State<MyFavoriteButton> {
 
   @override
   Widget build(BuildContext context) {
-    return MyIconButton.solid(
+    return MyIconButton.ghost(
       icon: _isFavorite ? AppIcons.favoriteFilled : AppIcons.favorite,
-      iconColor: context.extendedColors.danger.color,
+      iconColor: widget.iconColor ?? context.extendedColors.danger.color,
       tooltip: _isFavorite
           ? context.l10n.removeFavorite
           : context.l10n.setAsFavorite,

@@ -3,7 +3,6 @@ import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
-import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
 
 class MyPopupMenuItem<T> {
@@ -12,6 +11,7 @@ class MyPopupMenuItem<T> {
   final IconData? icon;
   final Color? color;
   final VoidCallback? onTap;
+  final bool enabled;
 
   const MyPopupMenuItem({
     this.value,
@@ -19,6 +19,7 @@ class MyPopupMenuItem<T> {
     this.icon,
     this.color,
     this.onTap,
+    this.enabled = true,
   });
 }
 
@@ -49,10 +50,18 @@ class MyPopupMenu<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<T>(
-      icon: MyCard.filled(
-        padding: context.insetsAllS,
-        child: MyIcon(icon: icon ?? AppIcons.more, color: iconColor),
+      icon: MyIcon(icon: icon ?? AppIcons.more, color: iconColor),
+      style: ButtonStyle(
+        // backgroundColor: WidgetStatePropertyAll(
+        //   context.colorScheme.surfaceContainer,
+        // ),
+        splashFactory: InkRipple.splashFactory,
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: context.brCircular),
+        ),
+        padding: WidgetStatePropertyAll(EdgeInsets.zero),
       ),
+
       tooltip: tooltip,
       offset: offset,
       shape:
@@ -71,10 +80,13 @@ class MyPopupMenu<T> extends StatelessWidget {
       },
       itemBuilder: (BuildContext context) {
         return items.map((MyPopupMenuItem<T> item) {
-          final itemColor = item.color ?? context.colorScheme.onSurface;
+          final itemColor = item.enabled
+              ? (item.color ?? context.colorScheme.onSurface)
+              : context.colorScheme.onSurface.withValues(alpha: 0.38);
           return PopupMenuItem<T>(
             value: item.value,
-            onTap: item.onTap,
+            enabled: item.enabled,
+            onTap: item.enabled ? item.onTap : null,
             child: Row(
               children: [
                 if (item.icon != null) ...[
@@ -88,9 +100,8 @@ class MyPopupMenu<T> extends StatelessWidget {
                 Expanded(
                   child: Text(
                     item.label,
-                    style: TextStyle(
+                    style: context.textTheme.bodyMedium?.copyWith(
                       color: itemColor,
-                      fontSize: context.setSize(14),
                     ),
                   ),
                 ),

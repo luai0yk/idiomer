@@ -333,4 +333,346 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favoritesCleared => 'All favorites cleared';
+
+  @override
+  String get shareIdiom => 'Share Idiom';
+
+  @override
+  String get shareViaWhatsApp => 'WhatsApp';
+
+  @override
+  String get saveAsImage => 'Save Image';
+
+  @override
+  String get shareAsImage => 'Share Image';
+
+  @override
+  String get shareAsText => 'Share Text';
+
+  @override
+  String get shareOther => 'Other';
+
+  @override
+  String get imageSaved => 'Image saved successfully';
+
+  @override
+  String get failedToSaveImage => 'Could not save image';
+
+  @override
+  String get failedToShare => 'Failed to share';
+
+  @override
+  String get whatsappUnavailable => 'WhatsApp is not available on this device';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get explore => 'Explore';
+
+  @override
+  String get goodMorning => 'Good morning';
+
+  @override
+  String get goodAfternoon => 'Good afternoon';
+
+  @override
+  String get goodEvening => 'Good evening';
+
+  @override
+  String get homeMotivationalSubtitle => 'Master a new English idiom every day';
+
+  @override
+  String get idiomOfTheDay => 'Idiom of the Day';
+
+  @override
+  String get dailyQuizTitle => 'Idiom Quiz';
+
+  @override
+  String get quizFirstTimeSubtitle =>
+      'Test yourself with 8 idioms in 2 minutes';
+
+  @override
+  String quizOverviewSubtitle(int count, int avg) {
+    return '$count quizzes completed • Avg $avg%';
+  }
+
+  @override
+  String get startQuiz => 'Start Quiz';
+
+  @override
+  String get viewProgress => 'View Progress';
+
+  @override
+  String get selectCategory => 'Select Category';
+
+  @override
+  String get filterByCategory => 'Filter by category';
+
+  @override
+  String get quizOverview => 'Quiz Overview';
+
+  @override
+  String get totalQuizzes => 'Total Quizzes';
+
+  @override
+  String get averageScore => 'Average Score';
+
+  @override
+  String get quizHistory => 'Quiz History';
+
+  @override
+  String get newQuiz => 'New Quiz';
+
+  @override
+  String scoreOutOf(int correct, int total) {
+    return '$correct / $total';
+  }
+
+  @override
+  String quizAttemptSubtitle(int correct, int total, String duration) {
+    return '$correct out of $total in $duration';
+  }
+
+  @override
+  String secondsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seconds',
+      one: '1 second',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String minutesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes',
+      one: '1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String questionProgress(int current, int total) {
+    return 'Question $current of $total';
+  }
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get submitQuiz => 'Submit Quiz';
+
+  @override
+  String get quizQuestionPrompt => 'Which idiom matches this definition?';
+
+  @override
+  String get quizCompletedTitle => 'Quiz Completed!';
+
+  @override
+  String get timeUpTitle => 'Time\'s Up!';
+
+  @override
+  String get completionTime => 'Completion Time';
+
+  @override
+  String get yourScore => 'Your Score';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get backToOverview => 'View Overview';
+
+  @override
+  String get backToHome => 'Back to Home';
+
+  @override
+  String get exitQuizTitle => 'Leave Quiz?';
+
+  @override
+  String get exitQuizMessage => 'Your current quiz progress will be lost.';
+
+  @override
+  String get leave => 'Leave';
+
+  @override
+  String get stay => 'Stay';
+
+  @override
+  String get notEnoughIdiomsForQuiz =>
+      'Not enough idioms available to start a quiz.';
+
+  @override
+  String get noQuizzesYet => 'No Quizzes Completed Yet';
+
+  @override
+  String get noQuizzesSubtitle =>
+      'Take your first 8-question quiz to track your progress here.';
+
+  @override
+  String get reviewAnswers => 'Review Answers';
+
+  @override
+  String get unanswered => 'Unanswered';
+
+  @override
+  String correctAnswerLabel(String answer) {
+    return 'Correct: $answer';
+  }
+
+  @override
+  String get addToFlashcards => 'Add to Flashcards';
+
+  @override
+  String savedToGroup(String group) {
+    return 'Saved to \"$group\"';
+  }
+
+  @override
+  String alreadyInGroup(String group) {
+    return 'Already in \"$group\"';
+  }
+
+  @override
+  String get changeGroup => 'Change';
+
+  @override
+  String get chooseFlashcardGroup => 'Choose Flashcard Group';
+
+  @override
+  String get moveToGroup => 'Move to Group';
+
+  @override
+  String movedToGroup(String group) {
+    return 'Moved to \"$group\"';
+  }
+
+  @override
+  String get removeFromGroup => 'Remove from Group';
+
+  @override
+  String get removedFromGroup => 'Removed from group';
+
+  @override
+  String get createGroup => 'Create Group';
+
+  @override
+  String get newGroup => 'New Group';
+
+  @override
+  String get renameGroup => 'Rename Group';
+
+  @override
+  String get deleteGroup => 'Delete Group';
+
+  @override
+  String get deleteGroupTitle => 'Delete Group?';
+
+  @override
+  String deleteGroupMessage(String group) {
+    return 'Are you sure you want to delete \"$group\" and remove its cards?';
+  }
+
+  @override
+  String get clearFlashcardsTitle => 'Clear All Flashcards?';
+
+  @override
+  String get clearFlashcardsMessage =>
+      'Are you sure you want to delete all flashcard groups and their cards?';
+
+  @override
+  String get flashcardsCleared => 'All flashcards cleared';
+
+  @override
+  String get groupName => 'Group Name';
+
+  @override
+  String get groupNameHint => 'Enter group name...';
+
+  @override
+  String get groupAlreadyExists => 'A group with this name already exists';
+
+  @override
+  String get groupCreated => 'Group created';
+
+  @override
+  String get groupRenamed => 'Group renamed';
+
+  @override
+  String get groupDeleted => 'Group deleted';
+
+  @override
+  String idiomsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count idioms',
+      one: '1 idiom',
+      zero: '0 idioms',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyFlashcards => 'Study';
+
+  @override
+  String get tapCardToFlip => 'Tap card to reveal translation & meaning';
+
+  @override
+  String get noOtherGroups => 'No other groups available';
+
+  @override
+  String get noGroupIdiomsTitle => 'No Idioms in This Group';
+
+  @override
+  String get noGroupIdiomsSubtitle =>
+      'Add idioms from Idiom Details or move idioms from another group.';
+
+  @override
+  String get generalGroup => 'General';
+
+  @override
+  String get viewDetails => 'View Details';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get flipCard => 'Flip Card';
+
+  @override
+  String get shuffle => 'Shuffle';
+
+  @override
+  String get imageSavedToDownloads => 'Saved to Downloads/Idiomer';
+
+  @override
+  String get readOnlyReview => 'Review Only';
+
+  @override
+  String get reviewQuizNotFound => 'Quiz attempt not found';
+
+  @override
+  String get takeQuiz => 'Take Quiz';
+
+  @override
+  String get showIdiomsList => 'Show Idioms';
 }

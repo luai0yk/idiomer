@@ -44,6 +44,13 @@ class SelectableList<T> extends StatefulWidget {
   final TextDirection? subtitleDirection;
   final bool Function(T item)? canSelectItem;
   final void Function(T item)? onRestrictedItemTap;
+  final Widget Function(
+    BuildContext context,
+    T item,
+    bool isSelected,
+    VoidCallback onTap,
+  )?
+  itemBuilder;
 
   // ignore: unintended_html_in_doc_comment
   /// Optional tag to prevent GetX controllers collision if multiple lists of the same type <T> are on screen.
@@ -79,6 +86,7 @@ class SelectableList<T> extends StatefulWidget {
     this.subtitleDirection,
     this.canSelectItem,
     this.onRestrictedItemTap,
+    this.itemBuilder,
   }) : _type = type;
 
   /// Creates a list where only one item can be selected at a time.
@@ -110,6 +118,13 @@ class SelectableList<T> extends StatefulWidget {
     TextDirection? subtitleDirection,
     bool Function(T item)? canSelectItem,
     void Function(T item)? onRestrictedItemTap,
+    Widget Function(
+      BuildContext context,
+      T item,
+      bool isSelected,
+      VoidCallback onTap,
+    )?
+    itemBuilder,
   }) {
     return SelectableList._(
       key: key,
@@ -139,6 +154,7 @@ class SelectableList<T> extends StatefulWidget {
       subtitleDirection: subtitleDirection,
       canSelectItem: canSelectItem,
       onRestrictedItemTap: onRestrictedItemTap,
+      itemBuilder: itemBuilder,
     );
   }
 
@@ -169,6 +185,13 @@ class SelectableList<T> extends StatefulWidget {
     BorderRadius? itemBorderRadius,
     String? controllerTag,
     TextDirection? subtitleDirection,
+    Widget Function(
+      BuildContext context,
+      T item,
+      bool isSelected,
+      VoidCallback onTap,
+    )?
+    itemBuilder,
   }) {
     return SelectableList._(
       key: key,
@@ -196,6 +219,7 @@ class SelectableList<T> extends StatefulWidget {
       itemBorderRadius: itemBorderRadius,
       controllerTag: controllerTag,
       subtitleDirection: subtitleDirection,
+      itemBuilder: itemBuilder,
     );
   }
 
@@ -412,6 +436,28 @@ class _SelectableListState<T> extends State<SelectableList<T>> {
   ) {
     final isSelected = controller.isSelected(item);
 
+    void handleTap() {
+      if (widget.canSelectItem != null && !widget.canSelectItem!(item)) {
+        widget.onRestrictedItemTap?.call(item);
+        return;
+      }
+
+      controller.toggleItem(item);
+
+      // Fire the appropriate callback based on the type
+      if (widget._type == SelectableListType.single) {
+        widget.onSingleChanged?.call(item);
+      } else {
+        widget.onMultiChanged?.call(controller.multiSelectedItems);
+      }
+
+      widget.onTap?.call(item, index);
+    }
+
+    if (widget.itemBuilder != null) {
+      return widget.itemBuilder!(context, item, isSelected, handleTap);
+    }
+
     Widget? trailingContent;
     final customTrailing = widget.itemTrailing?.call(item);
     final checkmark = MyAnimatedScaleSwitcher(
@@ -455,23 +501,7 @@ class _SelectableListState<T> extends State<SelectableList<T>> {
       ),
       selected: isSelected,
       trailing: trailingContent,
-      onTap: () {
-        if (widget.canSelectItem != null && !widget.canSelectItem!(item)) {
-          widget.onRestrictedItemTap?.call(item);
-          return;
-        }
-
-        controller.toggleItem(item);
-
-        // Fire the appropriate callback based on the type
-        if (widget._type == SelectableListType.single) {
-          widget.onSingleChanged?.call(item);
-        } else {
-          widget.onMultiChanged?.call(controller.multiSelectedItems);
-        }
-
-        widget.onTap?.call(item, index);
-      },
+      onTap: handleTap,
     );
   }
 }

@@ -1,12 +1,15 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:idiomer/core/database/database_paths.dart';
+import 'package:idiomer/core/database/tables/flashcard_tables.dart';
 import 'package:idiomer/core/database/tables/idiom_tables.dart';
+import 'package:idiomer/core/database/tables/quiz_tables.dart';
 
 part 'app_database.g.dart';
 
 /// Main Drift database managing the pre-populated English–Arabic idioms
-/// schema alongside user-local tables such as [FavoriteIdioms].
+/// schema alongside user-local tables such as [FavoriteIdioms],
+/// [FlashcardGroups], [FlashcardGroupItems], and [QuizAttempts].
 @DriftDatabase(
   tables: [
     Languages,
@@ -20,6 +23,10 @@ part 'app_database.g.dart';
     ExampleTranslations,
     IdiomCategories,
     FavoriteIdioms,
+    FlashcardGroups,
+    FlashcardGroupItems,
+    QuizAttempts,
+    QuizAttemptAnswers,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -40,7 +47,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -56,17 +63,47 @@ class AppDatabase extends _$AppDatabase {
         return;
       }
 
-      final existingFavTable = await customSelect(
-        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'favorite_idioms'",
-      ).get();
-      if (existingFavTable.isEmpty) {
-        await m.createTable(favoriteIdioms);
+      await _ensureLocalTablesCreated(m);
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      if (from < 3) {
+        await _ensureLocalTablesCreated(m);
       }
     },
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     },
   );
+
+  Future<void> _ensureLocalTablesCreated(Migrator m) async {
+    final existingTables = await customSelect(
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN "
+      "('favorite_idioms', 'flashcard_groups', 'flashcard_group_items', 'quiz_attempts', 'quiz_attempt_answers')",
+    ).get();
+    final tableNames = existingTables
+        .map((row) => row.read<String>('name'))
+        .toSet();
+
+    if (!tableNames.contains('favorite_idioms')) {
+      await m.createTable(favoriteIdioms);
+    }
+    if (!tableNames.contains('flashcard_groups')) {
+      await m.createTable(flashcardGroups);
+    }
+    if (!tableNames.contains('flashcard_group_items')) {
+      await m.createTable(flashcardGroupItems);
+      await m.createIndex(flashcardGroupItemsGroupIdx);
+      await m.createIndex(flashcardGroupItemsIdiomIdx);
+    }
+    if (!tableNames.contains('quiz_attempts')) {
+      await m.createTable(quizAttempts);
+      await m.createIndex(quizAttemptsCompletedAtIdx);
+    }
+    if (!tableNames.contains('quiz_attempt_answers')) {
+      await m.createTable(quizAttemptAnswers);
+      await m.createIndex(quizAttemptAnswersAttemptIdx);
+    }
+  }
 
   /// Verifies that the database is readable, contains the core schema,
   /// and has at least one idiom record.
@@ -76,10 +113,11 @@ class AppDatabase extends _$AppDatabase {
         "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN "
         "('idioms', 'idiom_translations', 'categories', 'category_translations', "
         "'definitions', 'definition_translations', 'examples', 'example_translations', "
-        "'idiom_categories', 'favorite_idioms')",
+        "'idiom_categories', 'favorite_idioms', 'flashcard_groups', "
+        "'flashcard_group_items', 'quiz_attempts', 'quiz_attempt_answers')",
       ).get();
 
-      if (tables.length < 10) return false;
+      if (tables.length < 14) return false;
 
       final countExpr = idioms.id.count();
       final count = await (selectOnly(idioms)..addColumns([countExpr]))

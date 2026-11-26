@@ -10,6 +10,8 @@ class AppConstants {
   static const int maxNotesLength = 200;
   static const int maxPriceLength = 15;
 
+  static const int quizQuestionCount = 8;
+
   static const String dbLink =
       'https://idiomer-dev-luai0yk.web.app/english_idioms.7z';
 }

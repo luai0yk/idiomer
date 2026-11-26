@@ -31,10 +31,6 @@ final class IdiomsCategorySelected extends IdiomsEvent {
   List<Object?> get props => [categoryId];
 }
 
-final class IdiomsCategoryExpandToggled extends IdiomsEvent {
-  const IdiomsCategoryExpandToggled();
-}
-
 final class IdiomsLoadMoreRequested extends IdiomsEvent {
   const IdiomsLoadMoreRequested();
 }

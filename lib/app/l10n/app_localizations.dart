@@ -727,6 +727,594 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All favorites cleared'**
   String get favoritesCleared;
+
+  /// No description provided for @shareIdiom.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Idiom'**
+  String get shareIdiom;
+
+  /// No description provided for @shareViaWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get shareViaWhatsApp;
+
+  /// No description provided for @saveAsImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Image'**
+  String get saveAsImage;
+
+  /// No description provided for @shareAsImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Image'**
+  String get shareAsImage;
+
+  /// No description provided for @shareAsText.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Text'**
+  String get shareAsText;
+
+  /// No description provided for @shareOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get shareOther;
+
+  /// No description provided for @imageSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Image saved successfully'**
+  String get imageSaved;
+
+  /// No description provided for @failedToSaveImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save image'**
+  String get failedToSaveImage;
+
+  /// No description provided for @failedToShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to share'**
+  String get failedToShare;
+
+  /// No description provided for @whatsappUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp is not available on this device'**
+  String get whatsappUnavailable;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @explore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get explore;
+
+  /// No description provided for @goodMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning'**
+  String get goodMorning;
+
+  /// No description provided for @goodAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get goodAfternoon;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get goodEvening;
+
+  /// No description provided for @homeMotivationalSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Master a new English idiom every day'**
+  String get homeMotivationalSubtitle;
+
+  /// No description provided for @idiomOfTheDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom of the Day'**
+  String get idiomOfTheDay;
+
+  /// No description provided for @dailyQuizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom Quiz'**
+  String get dailyQuizTitle;
+
+  /// No description provided for @quizFirstTimeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test yourself with 8 idioms in 2 minutes'**
+  String get quizFirstTimeSubtitle;
+
+  /// No description provided for @quizOverviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} quizzes completed • Avg {avg}%'**
+  String quizOverviewSubtitle(int count, int avg);
+
+  /// No description provided for @startQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Quiz'**
+  String get startQuiz;
+
+  /// No description provided for @viewProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'View Progress'**
+  String get viewProgress;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get selectCategory;
+
+  /// No description provided for @filterByCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by category'**
+  String get filterByCategory;
+
+  /// No description provided for @quizOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz Overview'**
+  String get quizOverview;
+
+  /// No description provided for @totalQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Quizzes'**
+  String get totalQuizzes;
+
+  /// No description provided for @averageScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Score'**
+  String get averageScore;
+
+  /// No description provided for @quizHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz History'**
+  String get quizHistory;
+
+  /// No description provided for @newQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'New Quiz'**
+  String get newQuiz;
+
+  /// No description provided for @scoreOutOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{correct} / {total}'**
+  String scoreOutOf(int correct, int total);
+
+  /// No description provided for @quizAttemptSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{correct} out of {total} in {duration}'**
+  String quizAttemptSubtitle(int correct, int total, String duration);
+
+  /// No description provided for @secondsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 second} other{{count} seconds}}'**
+  String secondsCount(int count);
+
+  /// No description provided for @minutesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 minute} other{{count} minutes}}'**
+  String minutesCount(int count);
+
+  /// No description provided for @questionProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current} of {total}'**
+  String questionProgress(int current, int total);
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @submitQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Quiz'**
+  String get submitQuiz;
+
+  /// No description provided for @quizQuestionPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Which idiom matches this definition?'**
+  String get quizQuestionPrompt;
+
+  /// No description provided for @quizCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz Completed!'**
+  String get quizCompletedTitle;
+
+  /// No description provided for @timeUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s Up!'**
+  String get timeUpTitle;
+
+  /// No description provided for @completionTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion Time'**
+  String get completionTime;
+
+  /// No description provided for @yourScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Score'**
+  String get yourScore;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @backToOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'View Overview'**
+  String get backToOverview;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
+
+  /// No description provided for @exitQuizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Quiz?'**
+  String get exitQuizTitle;
+
+  /// No description provided for @exitQuizMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current quiz progress will be lost.'**
+  String get exitQuizMessage;
+
+  /// No description provided for @leave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get leave;
+
+  /// No description provided for @stay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get stay;
+
+  /// No description provided for @notEnoughIdiomsForQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough idioms available to start a quiz.'**
+  String get notEnoughIdiomsForQuiz;
+
+  /// No description provided for @noQuizzesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Quizzes Completed Yet'**
+  String get noQuizzesYet;
+
+  /// No description provided for @noQuizzesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take your first 8-question quiz to track your progress here.'**
+  String get noQuizzesSubtitle;
+
+  /// No description provided for @reviewAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Answers'**
+  String get reviewAnswers;
+
+  /// No description provided for @unanswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Unanswered'**
+  String get unanswered;
+
+  /// No description provided for @correctAnswerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct: {answer}'**
+  String correctAnswerLabel(String answer);
+
+  /// No description provided for @addToFlashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Flashcards'**
+  String get addToFlashcards;
+
+  /// No description provided for @savedToGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to \"{group}\"'**
+  String savedToGroup(String group);
+
+  /// No description provided for @alreadyInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Already in \"{group}\"'**
+  String alreadyInGroup(String group);
+
+  /// No description provided for @changeGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get changeGroup;
+
+  /// No description provided for @chooseFlashcardGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Flashcard Group'**
+  String get chooseFlashcardGroup;
+
+  /// No description provided for @moveToGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to Group'**
+  String get moveToGroup;
+
+  /// No description provided for @movedToGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved to \"{group}\"'**
+  String movedToGroup(String group);
+
+  /// No description provided for @removeFromGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Group'**
+  String get removeFromGroup;
+
+  /// No description provided for @removedFromGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from group'**
+  String get removedFromGroup;
+
+  /// No description provided for @createGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Group'**
+  String get createGroup;
+
+  /// No description provided for @newGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'New Group'**
+  String get newGroup;
+
+  /// No description provided for @renameGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename Group'**
+  String get renameGroup;
+
+  /// No description provided for @deleteGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Group'**
+  String get deleteGroup;
+
+  /// No description provided for @deleteGroupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Group?'**
+  String get deleteGroupTitle;
+
+  /// No description provided for @deleteGroupMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{group}\" and remove its cards?'**
+  String deleteGroupMessage(String group);
+
+  /// No description provided for @clearFlashcardsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All Flashcards?'**
+  String get clearFlashcardsTitle;
+
+  /// No description provided for @clearFlashcardsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all flashcard groups and their cards?'**
+  String get clearFlashcardsMessage;
+
+  /// No description provided for @flashcardsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'All flashcards cleared'**
+  String get flashcardsCleared;
+
+  /// No description provided for @groupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group Name'**
+  String get groupName;
+
+  /// No description provided for @groupNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter group name...'**
+  String get groupNameHint;
+
+  /// No description provided for @groupAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'A group with this name already exists'**
+  String get groupAlreadyExists;
+
+  /// No description provided for @groupCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Group created'**
+  String get groupCreated;
+
+  /// No description provided for @groupRenamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Group renamed'**
+  String get groupRenamed;
+
+  /// No description provided for @groupDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Group deleted'**
+  String get groupDeleted;
+
+  /// No description provided for @idiomsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{0 idioms} =1{1 idiom} other{{count} idioms}}'**
+  String idiomsCount(int count);
+
+  /// No description provided for @studyFlashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get studyFlashcards;
+
+  /// No description provided for @tapCardToFlip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap card to reveal translation & meaning'**
+  String get tapCardToFlip;
+
+  /// No description provided for @noOtherGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'No other groups available'**
+  String get noOtherGroups;
+
+  /// No description provided for @noGroupIdiomsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No Idioms in This Group'**
+  String get noGroupIdiomsTitle;
+
+  /// No description provided for @noGroupIdiomsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add idioms from Idiom Details or move idioms from another group.'**
+  String get noGroupIdiomsSubtitle;
+
+  /// No description provided for @generalGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get generalGroup;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get viewDetails;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @flipCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Flip Card'**
+  String get flipCard;
+
+  /// No description provided for @shuffle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle'**
+  String get shuffle;
+
+  /// No description provided for @imageSavedToDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to Downloads/Idiomer'**
+  String get imageSavedToDownloads;
+
+  /// No description provided for @readOnlyReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Only'**
+  String get readOnlyReview;
+
+  /// No description provided for @reviewQuizNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz attempt not found'**
+  String get reviewQuizNotFound;
+
+  /// No description provided for @takeQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Quiz'**
+  String get takeQuiz;
+
+  /// No description provided for @showIdiomsList.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Idioms'**
+  String get showIdiomsList;
 }
 
 class _AppLocalizationsDelegate

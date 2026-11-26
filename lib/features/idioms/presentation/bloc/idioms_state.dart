@@ -10,9 +10,9 @@ class IdiomsState extends Equatable {
   final List<CategoryEntity> categories;
   final String query;
   final String? selectedCategoryId;
-  final bool isCategoriesExpanded;
   final bool hasMore;
   final bool isLoadingMore;
+  final bool isApplyingFilter;
   final String? errorMessage;
 
   const IdiomsState({
@@ -21,9 +21,9 @@ class IdiomsState extends Equatable {
     this.categories = const [],
     this.query = '',
     this.selectedCategoryId,
-    this.isCategoriesExpanded = false,
     this.hasMore = false,
     this.isLoadingMore = false,
+    this.isApplyingFilter = false,
     this.errorMessage,
   });
 
@@ -38,9 +38,9 @@ class IdiomsState extends Equatable {
     List<CategoryEntity>? categories,
     String? query,
     Object? selectedCategoryId = _unset,
-    bool? isCategoriesExpanded,
     bool? hasMore,
     bool? isLoadingMore,
+    bool? isApplyingFilter,
     Object? errorMessage = _unset,
   }) {
     return IdiomsState(
@@ -51,9 +51,9 @@ class IdiomsState extends Equatable {
       selectedCategoryId: selectedCategoryId == _unset
           ? this.selectedCategoryId
           : selectedCategoryId as String?,
-      isCategoriesExpanded: isCategoriesExpanded ?? this.isCategoriesExpanded,
       hasMore: hasMore ?? this.hasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      isApplyingFilter: isApplyingFilter ?? this.isApplyingFilter,
       errorMessage: errorMessage == _unset
           ? this.errorMessage
           : errorMessage as String?,
@@ -67,9 +67,9 @@ class IdiomsState extends Equatable {
     categories,
     query,
     selectedCategoryId,
-    isCategoriesExpanded,
     hasMore,
     isLoadingMore,
+    isApplyingFilter,
     errorMessage,
   ];
 }

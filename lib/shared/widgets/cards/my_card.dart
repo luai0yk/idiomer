@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 
 enum _MyCardType { elevated, outlined, filled, bordered }
@@ -272,10 +273,17 @@ class MyCard extends StatelessWidget {
     switch (_type) {
       case _MyCardType.elevated:
         bgColor = color ?? colors.surfaceContainer;
-        final double shadowElevation = elevation ?? context.elevationL;
+        final double shadowElevation = elevation ?? context.elevationM;
         shadows =
             customShadow ??
-            [BoxShadow(blurRadius: shadowElevation, color: Colors.black12)];
+            [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: shadowElevation,
+                spreadRadius: 0,
+                offset: const Offset(0, 3),
+              ),
+            ];
         break;
 
       case _MyCardType.outlined:
@@ -296,8 +304,8 @@ class MyCard extends StatelessWidget {
       case _MyCardType.bordered:
         bgColor = color ?? colors.surfaceContainer;
         border = Border.all(
-          color: borderColor ?? colors.outlineVariant,
-          width: borderWidth ?? 1.0,
+          color: borderColor ?? colors.outlineVariant.withValues(alpha: 0.5),
+          width: borderWidth ?? context.setSize(0.5),
         );
         break;
     }

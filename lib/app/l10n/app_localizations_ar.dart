@@ -332,4 +332,354 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get favoritesCleared => 'تم مسح جميع المفضلات';
+
+  @override
+  String get shareIdiom => 'مشاركة التعبير';
+
+  @override
+  String get shareViaWhatsApp => 'واتساب';
+
+  @override
+  String get saveAsImage => 'حفظ كصورة';
+
+  @override
+  String get shareAsImage => 'مشاركة كصورة';
+
+  @override
+  String get shareAsText => 'مشاركة كنص';
+
+  @override
+  String get shareOther => 'أخرى';
+
+  @override
+  String get imageSaved => 'تم حفظ الصورة بنجاح';
+
+  @override
+  String get failedToSaveImage => 'تعذّر حفظ الصورة';
+
+  @override
+  String get failedToShare => 'فشلت المشاركة';
+
+  @override
+  String get whatsappUnavailable => 'تطبيق واتساب غير متوفر على هذا الجهاز';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get explore => 'استكشف';
+
+  @override
+  String get goodMorning => 'صباح الخير';
+
+  @override
+  String get goodAfternoon => 'مساء الخير';
+
+  @override
+  String get goodEvening => 'مساء الخير';
+
+  @override
+  String get homeMotivationalSubtitle => 'أتقن تعبيراً إنجليزياً جديداً كل يوم';
+
+  @override
+  String get idiomOfTheDay => 'تعبير اليوم';
+
+  @override
+  String get dailyQuizTitle => 'اختبار التعابير';
+
+  @override
+  String get quizFirstTimeSubtitle => 'اختبر نفسك في 8 تعابير خلال دقيقتين';
+
+  @override
+  String quizOverviewSubtitle(int count, int avg) {
+    return 'تم إكمال $count اختبارات • المتوسط $avg%';
+  }
+
+  @override
+  String get startQuiz => 'ابدأ الاختبار';
+
+  @override
+  String get viewProgress => 'عرض التقدم';
+
+  @override
+  String get selectCategory => 'اختر التصنيف';
+
+  @override
+  String get filterByCategory => 'تصفية حسب التصنيف';
+
+  @override
+  String get quizOverview => 'ملخص الاختبارات';
+
+  @override
+  String get totalQuizzes => 'إجمالي الاختبارات';
+
+  @override
+  String get averageScore => 'متوسط الدرجات';
+
+  @override
+  String get quizHistory => 'سجل الاختبارات';
+
+  @override
+  String get newQuiz => 'اختبار جديد';
+
+  @override
+  String scoreOutOf(int correct, int total) {
+    return '$correct / $total';
+  }
+
+  @override
+  String quizAttemptSubtitle(int correct, int total, String duration) {
+    return '$correct من $total في $duration';
+  }
+
+  @override
+  String secondsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ثانية',
+      many: '$count ثانية',
+      few: '$count ثوانٍ',
+      two: 'ثانيتان',
+      one: 'ثانية واحدة',
+      zero: '0 ثانية',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String minutesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دقيقة',
+      many: '$count دقيقة',
+      few: '$count دقائق',
+      two: 'دقيقتان',
+      one: 'دقيقة واحدة',
+      zero: '0 دقيقة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String questionProgress(int current, int total) {
+    return 'السؤال $current من $total';
+  }
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get submitQuiz => 'إرسال الاختبار';
+
+  @override
+  String get quizQuestionPrompt => 'أي تعبير يطابق هذا التعريف؟';
+
+  @override
+  String get quizCompletedTitle => 'تم إكمال الاختبار!';
+
+  @override
+  String get timeUpTitle => 'انتهى الوقت!';
+
+  @override
+  String get completionTime => 'وقت الإنجاز';
+
+  @override
+  String get yourScore => 'نتيجتك';
+
+  @override
+  String get tryAgain => 'حاول مرة أخرى';
+
+  @override
+  String get backToOverview => 'عرض الملخص';
+
+  @override
+  String get backToHome => 'العودة للرئيسية';
+
+  @override
+  String get exitQuizTitle => 'مغادرة الاختبار؟';
+
+  @override
+  String get exitQuizMessage => 'سيتم فقدان تقدمك الحالي في الاختبار.';
+
+  @override
+  String get leave => 'مغادرة';
+
+  @override
+  String get stay => 'البقاء';
+
+  @override
+  String get notEnoughIdiomsForQuiz => 'لا توجد تعابير كافية لبدء الاختبار.';
+
+  @override
+  String get noQuizzesYet => 'لم تكمل أي اختبار بعد';
+
+  @override
+  String get noQuizzesSubtitle => 'خض أول اختبار من 8 أسئلة لمتابعة تقدمك هنا.';
+
+  @override
+  String get reviewAnswers => 'مراجعة الإجابات';
+
+  @override
+  String get unanswered => 'لم تتم الإجابة';
+
+  @override
+  String correctAnswerLabel(String answer) {
+    return 'الصحيح: $answer';
+  }
+
+  @override
+  String get addToFlashcards => 'إضافة إلى البطاقات';
+
+  @override
+  String savedToGroup(String group) {
+    return 'تم الحفظ في \"$group\"';
+  }
+
+  @override
+  String alreadyInGroup(String group) {
+    return 'موجود بالفعل في \"$group\"';
+  }
+
+  @override
+  String get changeGroup => 'تغيير';
+
+  @override
+  String get chooseFlashcardGroup => 'اختر مجموعة البطاقات';
+
+  @override
+  String get moveToGroup => 'نقل إلى مجموعة';
+
+  @override
+  String movedToGroup(String group) {
+    return 'تم النقل إلى \"$group\"';
+  }
+
+  @override
+  String get removeFromGroup => 'إزالة من المجموعة';
+
+  @override
+  String get removedFromGroup => 'تمت الإزالة من المجموعة';
+
+  @override
+  String get createGroup => 'إنشاء مجموعة';
+
+  @override
+  String get newGroup => 'مجموعة جديدة';
+
+  @override
+  String get renameGroup => 'إعادة تسمية المجموعة';
+
+  @override
+  String get deleteGroup => 'حذف المجموعة';
+
+  @override
+  String get deleteGroupTitle => 'حذف المجموعة؟';
+
+  @override
+  String deleteGroupMessage(String group) {
+    return 'هل أنت متأكد من حذف \"$group\" وإزالة بطاقاتها؟';
+  }
+
+  @override
+  String get clearFlashcardsTitle => 'مسح جميع البطاقات؟';
+
+  @override
+  String get clearFlashcardsMessage =>
+      'هل أنت متأكد من حذف جميع مجموعات البطاقات وبطاقاتها؟';
+
+  @override
+  String get flashcardsCleared => 'تم مسح جميع البطاقات';
+
+  @override
+  String get groupName => 'اسم المجموعة';
+
+  @override
+  String get groupNameHint => 'أدخل اسم المجموعة...';
+
+  @override
+  String get groupAlreadyExists => 'توجد مجموعة بهذا الاسم بالفعل';
+
+  @override
+  String get groupCreated => 'تم إنشاء المجموعة';
+
+  @override
+  String get groupRenamed => 'تمت إعادة تسمية المجموعة';
+
+  @override
+  String get groupDeleted => 'تم حذف المجموعة';
+
+  @override
+  String idiomsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تعبير',
+      many: '$count تعبيراً',
+      few: '$count تعابير',
+      two: 'تعبيران',
+      one: 'تعبير واحد',
+      zero: '0 تعابير',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get studyFlashcards => 'دراسة';
+
+  @override
+  String get tapCardToFlip => 'اضغط على البطاقة لإظهار الترجمة والمعنى';
+
+  @override
+  String get noOtherGroups => 'لا توجد مجموعات أخرى';
+
+  @override
+  String get noGroupIdiomsTitle => 'لا توجد تعابير في هذه المجموعة';
+
+  @override
+  String get noGroupIdiomsSubtitle =>
+      'أضف تعابير من صفحة التفاصيل أو انقل تعابير من مجموعة أخرى.';
+
+  @override
+  String get generalGroup => 'عام';
+
+  @override
+  String get viewDetails => 'عرض التفاصيل';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get rename => 'إعادة تسمية';
+
+  @override
+  String get create => 'إنشاء';
+
+  @override
+  String get flipCard => 'اقلب البطاقة';
+
+  @override
+  String get shuffle => 'خلط';
+
+  @override
+  String get imageSavedToDownloads => 'تم الحفظ في Downloads/Idiomer';
+
+  @override
+  String get readOnlyReview => 'للمراجعة فقط';
+
+  @override
+  String get reviewQuizNotFound => 'لم يتم العثور على الاختبار';
+
+  @override
+  String get takeQuiz => 'إجراء اختبار';
+
+  @override
+  String get showIdiomsList => 'عرض التعبيرات';
 }

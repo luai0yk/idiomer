@@ -14,6 +14,8 @@ abstract class IdiomsRepository {
 
   Stream<IdiomDetailEntity?> watchIdiomDetail(int idiomId);
 
+  Stream<IdiomDetailEntity?> watchIdiomOfTheDay({DateTime? date});
+
   Future<void> toggleFavorite(int idiomId);
 
   Future<void> setFavorite(int idiomId, {required bool isFavorite});

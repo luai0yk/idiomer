@@ -27,90 +27,75 @@ class MyEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isSmall = size == MyEmptyStateSize.small;
+    final textTheme = context.textTheme;
+    final colorScheme = context.colorScheme;
+    final primary = colorScheme.primary;
+    final isSmall = size == MyEmptyStateSize.small;
 
-    final double horizontalPadding = context.setSize(isSmall ? 16 : 20);
-
-    final double verticalPadding = context.setSize(isSmall ? 16 : 20);
-
-    final double iconContainerSize = context.setSize(isSmall ? 56 : 76);
-
-    final double iconSize = context.setSize(isSmall ? 26 : 40);
-
-    final double iconPadding = context.setSize(isSmall ? 12 : 16);
-
-    final double titleSize = context.setSize(isSmall ? 14 : 16);
-
-    final double subtitleSize = context.setSize(isSmall ? 11 : 12);
-
-    final double iconSpacing = context.setSize(isSmall ? 10 : 14);
-
-    final double textSpacing = context.setSize(isSmall ? 4 : 6);
+    final badgeSize = context.setSize(isSmall ? 64 : 92);
+    final iconSize = context.setSize(isSmall ? 30 : 44);
+    final badgeRadius = isSmall ? context.brL : context.brXl;
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: verticalPadding,
+        horizontal: context.setSize(isSmall ? 16 : 24),
+        vertical: context.setSize(isSmall ? 16 : 24),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: iconContainerSize,
-            height: iconContainerSize,
-            padding: EdgeInsets.all(iconPadding),
+            width: badgeSize,
+            height: badgeSize,
             decoration: BoxDecoration(
-              color: context.colorScheme.surfaceContainer,
-              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: AlignmentDirectional.topStart,
+                end: AlignmentDirectional.bottomEnd,
+                colors: [
+                  primary.withValues(alpha: 0.16),
+                  colorScheme.tertiary.withValues(alpha: 0.08),
+                ],
+              ),
+              borderRadius: badgeRadius,
             ),
-            child: MyIcon(
-              icon: icon,
-              size: iconSize,
-              color: context.colorScheme.primary,
+            child: Center(
+              child: MyIcon(icon: icon, size: iconSize, color: primary),
             ),
           ),
-
-          SizedBox(height: iconSpacing),
-
+          context.verticalSpace(isSmall ? 12 : 18),
           Text(
             title,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: context.textTheme.titleMedium?.copyWith(
-              fontSize: titleSize,
-              fontWeight: FontWeight.w700,
-              height: 1.2,
-              color: context.colorScheme.onSurface,
-            ),
+            style: (isSmall ? textTheme.titleSmall : textTheme.titleLarge)
+                ?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  height: 1.25,
+                  color: colorScheme.onSurface,
+                ),
           ),
-
-          SizedBox(height: textSpacing),
-
+          context.verticalSpace(isSmall ? 4 : 6),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: context.setSize(340)),
+            constraints: BoxConstraints(maxWidth: context.screenWidth * 0.65),
             child: Text(
               subtitle,
               textAlign: TextAlign.center,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: context.textTheme.bodySmall?.copyWith(
-                fontSize: subtitleSize,
-                height: 1.4,
-                color: context.colorScheme.onSurfaceVariant,
-              ),
+              style: (isSmall ? textTheme.bodySmall : textTheme.bodyMedium)
+                  ?.copyWith(height: 1.45, color: colorScheme.onSurfaceVariant),
             ),
           ),
-
           if (actionText != null && onAction != null) ...[
-            context.verticalSpace(
-              isSmall ? context.setSize(3) : context.setSize(6),
-            ),
-            MyButton.text(
+            context.verticalSpace(isSmall ? 12 : 20),
+            MyButton.primary(
               text: actionText!,
-              height: isSmall ? context.setSize(30) : context.setSize(36),
-              fontSize: context.setSize(isSmall ? 13 : 15),
-              borderRadius: context.brS,
+              width: 0,
+              height: context.setSize(isSmall ? 36 : 42),
+              fontSize: context.setSize(isSmall ? 12 : 13),
+              padding: EdgeInsets.symmetric(horizontal: context.spaceL),
+              borderRadius: context.brL,
               onPressed: onAction,
             ),
           ],

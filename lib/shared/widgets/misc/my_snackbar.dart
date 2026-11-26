@@ -76,7 +76,7 @@ class MySnackBar extends SnackBar {
       ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: context.brM,
+        borderRadius: context.brXl * 0.9,
         boxShadow: [
           BoxShadow(
             color: Colors.black12,

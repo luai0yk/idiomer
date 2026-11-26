@@ -203,42 +203,53 @@ class MyTextField extends StatelessWidget {
             final ColorScheme colors = context.colorScheme;
 
             final BorderRadius resolvedRadius =
-                borderRadius ?? BorderRadius.circular(context.radiusM);
+                borderRadius ??
+                (isSearch
+                    ? context.brCircular
+                    : BorderRadius.circular(context.radiusM));
 
             // Resolve border styles based on variant
             final InputBorder baseBorder = _type == _MyTextFieldType.standard
                 ? OutlineInputBorder(
                     borderRadius: resolvedRadius,
-                    borderSide: isSearch
-                        ? BorderSide.none
-                        : BorderSide(
-                            color: colors.outlineVariant,
-                            width: context.setSize(1),
-                          ),
+                    borderSide: BorderSide(
+                      color: isSearch
+                          ? colors.outlineVariant.withValues(alpha: 0.5)
+                          : colors.outlineVariant,
+                      width: context.setSize(isSearch ? 0.5 : 1),
+                    ),
                   )
                 : InputBorder.none;
 
             final InputBorder focusedBorder = _type == _MyTextFieldType.standard
                 ? OutlineInputBorder(
                     borderRadius: resolvedRadius,
-                    borderSide: isSearch
-                        ? BorderSide.none
-                        : BorderSide(
-                            color: context.colorScheme.primary,
-                            width: context.setSize(1.5),
-                          ),
+                    borderSide: BorderSide(
+                      color: isSearch
+                          ? colors.primary.withValues(alpha: 0.65)
+                          : colors.primary,
+                      width: context.setSize(isSearch ? 1 : 1.5),
+                    ),
                   )
                 : InputBorder.none;
 
             final InputBorder errorBorder = _type == _MyTextFieldType.standard
                 ? OutlineInputBorder(
                     borderRadius: resolvedRadius,
-                    borderSide: isSearch
-                        ? BorderSide.none
-                        : BorderSide(
-                            color: context.extendedColors.danger.color,
-                            width: context.setSize(1),
-                          ),
+                    borderSide: BorderSide(
+                      color: context.extendedColors.danger.color,
+                      width: context.setSize(1),
+                    ),
+                  )
+                : InputBorder.none;
+
+            final InputBorder disabledBorder = _type == _MyTextFieldType.standard
+                ? OutlineInputBorder(
+                    borderRadius: resolvedRadius,
+                    borderSide: BorderSide(
+                      color: colors.outlineVariant.withValues(alpha: 0.25),
+                      width: context.setSize(isSearch ? 0.5 : 1),
+                    ),
                   )
                 : InputBorder.none;
 
@@ -247,7 +258,9 @@ class MyTextField extends StatelessWidget {
             if (fillColor != null) {
               resolvedFillColor = fillColor;
             } else if (_type == _MyTextFieldType.standard) {
-              resolvedFillColor = colors.surfaceContainer;
+              resolvedFillColor = enabled
+                  ? colors.surfaceContainer
+                  : colors.surfaceContainer.withValues(alpha: 0.55);
             } else {
               resolvedFillColor = Colors.transparent;
             }
@@ -308,21 +321,40 @@ class MyTextField extends StatelessWidget {
                 hintText: hintText,
                 counterText:
                     '', // Hides the character counter when maxLength is set
-                hintStyle: context.textTheme.bodyMedium?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
+                hintStyle:
+                    (isSearch
+                            ? context.textTheme.bodyLarge
+                            : context.textTheme.bodyMedium)
+                        ?.copyWith(
+                          color: enabled
+                              ? colors.onSurfaceVariant
+                              : colors.onSurfaceVariant.withValues(alpha: 0.45),
+                        ),
                 label: _buildLabel(context),
                 prefixIcon:
                     prefixWidget ??
                     (prefixIcon != null
                         ? MyIcon(
                             icon: prefixIcon!,
-                            color: colors.onSurfaceVariant,
+                            color: enabled
+                                ? colors.onSurfaceVariant
+                                : colors.onSurfaceVariant.withValues(
+                                    alpha: 0.45,
+                                  ),
                           )
                         : (isSearch
-                              ? MyIcon(
-                                  icon: AppIcons.search,
-                                  color: colors.onSurfaceVariant,
+                              ? Padding(
+                                  padding: EdgeInsetsDirectional.only(
+                                    start: context.spaceS,
+                                  ),
+                                  child: MyIcon(
+                                    icon: AppIcons.search,
+                                    color: enabled
+                                        ? colors.onSurfaceVariant
+                                        : colors.onSurfaceVariant.withValues(
+                                            alpha: 0.45,
+                                          ),
+                                  ),
                                 )
                               : null)),
                 suffixIcon: obscureText
@@ -336,36 +368,11 @@ class MyTextField extends StatelessWidget {
                         ),
                       )
                     : (isSearch
-                          ? MyAnimatedScaleFadeSwitcher(
-                              child: hasText
-                                  ? MyIconButton.ghost(
-                                      key: const ValueKey('clear_btn'),
-                                      tooltip: context.l10n.clear,
-                                      icon: AppIcons.close,
-                                      onPressed: () {
-                                        effectiveController.clear();
-                                        onChanged?.call('');
-                                      },
-                                    )
-                                  : (suffixWidget != null
-                                        ? KeyedSubtree(
-                                            key: const ValueKey(
-                                              'suffix_widget',
-                                            ),
-                                            child: suffixWidget!,
-                                          )
-                                        : (suffixIcon != null
-                                              ? MyIcon(
-                                                  key: const ValueKey(
-                                                    'suffix_icon',
-                                                  ),
-                                                  icon: suffixIcon!,
-                                                  color:
-                                                      colors.onSurfaceVariant,
-                                                )
-                                              : const SizedBox.shrink(
-                                                  key: ValueKey('empty'),
-                                                ))),
+                          ? _buildSearchSuffix(
+                              context,
+                              colors,
+                              effectiveController,
+                              hasText,
                             )
                           : (suffixWidget ??
                                 (suffixIcon != null
@@ -380,9 +387,11 @@ class MyTextField extends StatelessWidget {
                     contentPadding ??
                     (_type == _MyTextFieldType.standard
                         ? EdgeInsets.symmetric(
-                            horizontal: context.spaceM,
+                            horizontal: isSearch
+                                ? context.spaceL
+                                : context.spaceM,
                             vertical: isSearch
-                                ? context.spaceS
+                                ? context.setSize(14)
                                 : context.spaceL,
                           )
                         : EdgeInsets.zero),
@@ -390,11 +399,55 @@ class MyTextField extends StatelessWidget {
                 enabledBorder: baseBorder,
                 focusedBorder: focusedBorder,
                 errorBorder: errorBorder,
-                disabledBorder: baseBorder,
+                disabledBorder: disabledBorder,
                 focusedErrorBorder: errorBorder,
               ),
             );
           },
+    );
+  }
+
+  /// Builds the trailing icon(s) for a search field, keeping any custom
+  /// suffix visible alongside the clear button when text is entered.
+  Widget _buildSearchSuffix(
+    BuildContext context,
+    ColorScheme colors,
+    TextEditingController effectiveController,
+    bool hasText,
+  ) {
+    final clearButton = MyAnimatedScaleFadeSwitcher(
+      child: hasText
+          ? MyIconButton.ghost(
+              key: const ValueKey('clear_btn'),
+              tooltip: context.l10n.clear,
+              icon: AppIcons.close,
+              onPressed: () {
+                effectiveController.clear();
+                onChanged?.call('');
+              },
+            )
+          : const SizedBox.shrink(key: ValueKey('empty')),
+    );
+
+    if (suffixWidget == null && suffixIcon == null) {
+      return clearButton;
+    }
+
+    return Padding(
+      padding: EdgeInsetsDirectional.only(end: context.spaceXs),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (hasText) clearButton,
+          if (suffixWidget != null)
+            suffixWidget!
+          else if (suffixIcon != null)
+            Padding(
+              padding: EdgeInsetsDirectional.only(end: context.spaceS),
+              child: MyIcon(icon: suffixIcon!, color: colors.onSurfaceVariant),
+            ),
+        ],
+      ),
     );
   }
 
