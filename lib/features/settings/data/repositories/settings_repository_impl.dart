@@ -16,6 +16,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
     return AppSettings(
       themeMode: _localDataSource.getThemeMode(),
       langCode: _localDataSource.getLanguage(),
+      showTranslation: _localDataSource.getShowTranslation(),
+      idiomTapAction: _localDataSource.getIdiomTapAction(),
+      defaultTab: _localDataSource.getDefaultTab(),
     );
   }
 
@@ -27,5 +30,20 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<void> saveLanguage(LangCode langCode) {
     return _localDataSource.saveLanguage(langCode);
+  }
+
+  @override
+  Future<void> saveShowTranslation(bool showTranslation) {
+    return _localDataSource.saveShowTranslation(showTranslation);
+  }
+
+  @override
+  Future<void> saveIdiomTapAction(IdiomTapAction action) {
+    return _localDataSource.saveIdiomTapAction(action);
+  }
+
+  @override
+  Future<void> saveDefaultTab(DefaultAppTab tab) {
+    return _localDataSource.saveDefaultTab(tab);
   }
 }

@@ -10,6 +10,7 @@ import 'package:idiomer/features/idioms/domain/entities/category_entity.dart';
 import 'package:idiomer/features/idioms/presentation/bloc/idioms_bloc.dart';
 import 'package:idiomer/features/idioms/presentation/bloc/idioms_event.dart';
 import 'package:idiomer/features/idioms/presentation/bloc/idioms_state.dart';
+import 'package:idiomer/features/idioms/presentation/utils/idiom_tap_helper.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/explore_header.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_card.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
@@ -227,7 +228,8 @@ class _IdiomsPageState extends State<IdiomsPage> {
           final idiom = state.idioms[index];
           return IdiomCard(
             idiom: idiom,
-            onTap: () => context.push(AppRoutes.idiomDetailPath(idiom.id)),
+            onTap: () =>
+                IdiomTapHelper.handleIdiomTap(context, idiomId: idiom.id),
           );
         },
       ),

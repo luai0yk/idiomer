@@ -119,10 +119,12 @@ class AppIcons {
   static const unlock = Iconsax.unlock_copy;
   static const fingerprint = Iconsax.finger_cricle_copy;
   static const brightness = Icons.brightness_4_outlined;
+  static const sun = Iconsax.sun_1_copy;
+  static const moon = Iconsax.moon_copy;
   static const translate = Iconsax.translate_copy;
   static const eye = Iconsax.eye_copy;
   static const eyeSlash = Iconsax.eye_slash_copy;
-  static const prefs = Iconsax.setting_4_copy;
+  static const auto = Iconsax.autobrightness_copy;
 
   // Misc
   static const notifications = Iconsax.notification_copy;

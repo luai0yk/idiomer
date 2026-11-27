@@ -705,4 +705,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get browseCategories => 'Browse Categories';
+
+  @override
+  String get behaviorSettings => 'Content & Behavior';
+
+  @override
+  String get showTranslation => 'Show Translation';
+
+  @override
+  String get showTranslationSubtitle =>
+      'Display Arabic translations across idioms and examples';
+
+  @override
+  String get idiomTapAction => 'When Tapping an Idiom';
+
+  @override
+  String get shareSheetOption => 'Share Sheet';
+
+  @override
+  String get defaultTab => 'Default Tab';
 }

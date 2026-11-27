@@ -6,4 +6,7 @@ abstract interface class SettingsRepository {
   AppSettings getSettings();
   Future<void> saveThemeMode(ThemeMode themeMode);
   Future<void> saveLanguage(LangCode langCode);
+  Future<void> saveShowTranslation(bool showTranslation);
+  Future<void> saveIdiomTapAction(IdiomTapAction action);
+  Future<void> saveDefaultTab(DefaultAppTab tab);
 }

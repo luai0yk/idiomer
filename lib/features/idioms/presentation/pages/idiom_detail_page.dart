@@ -5,6 +5,7 @@ import 'package:idiomer/app/l10n/app_localizations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/snackbar_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/toast_helper.dart';
 import 'package:idiomer/features/flashcards/domain/entities/flashcard_group_entity.dart';
@@ -138,6 +139,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
 
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
 
     return SelectionArea(
       child: ListView(
@@ -151,7 +153,9 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           IdiomDetailHeroCard(
             idiom: idiom,
             onCopy: () => _copyText(
-              '${idiom.englishText}\n${idiom.arabicText}',
+              showTranslation && idiom.arabicText.trim().isNotEmpty
+                  ? '${idiom.englishText}\n${idiom.arabicText}'
+                  : idiom.englishText,
               l10n.copiedToClipboard,
             ),
           ),
@@ -167,7 +171,14 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
               colorScheme,
             ),
             context.verticalSpace(8),
-            ..._buildDefinitions(context, idiom, textTheme, colorScheme, l10n),
+            ..._buildDefinitions(
+              context,
+              idiom,
+              textTheme,
+              colorScheme,
+              l10n,
+              showTranslation: showTranslation,
+            ),
           ],
           if (idiom.examples.isNotEmpty) ...[
             context.verticalSpace(20),
@@ -181,9 +192,16 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
               colorScheme,
             ),
             context.verticalSpace(8),
-            ..._buildExamples(context, idiom, textTheme, colorScheme, l10n),
+            ..._buildExamples(
+              context,
+              idiom,
+              textTheme,
+              colorScheme,
+              l10n,
+              showTranslation: showTranslation,
+            ),
           ],
-          if (_hasNotes(idiom)) ...[
+          if (_hasNotes(idiom, showTranslation: showTranslation)) ...[
             context.verticalSpace(20),
             _buildSectionTitle(
               context,
@@ -193,7 +211,13 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
               colorScheme,
             ),
             context.verticalSpace(8),
-            _buildNotesCard(context, idiom, textTheme, colorScheme),
+            _buildNotesCard(
+              context,
+              idiom,
+              textTheme,
+              colorScheme,
+              showTranslation: showTranslation,
+            ),
           ],
         ],
       ),
@@ -205,8 +229,9 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     IdiomDetailEntity idiom,
     TextTheme textTheme,
     ColorScheme colorScheme,
-    AppLocalizations l10n,
-  ) {
+    AppLocalizations l10n, {
+    required bool showTranslation,
+  }) {
     return [
       for (int i = 0; i < idiom.definitions.length; i++) ...[
         if (i > 0) context.verticalSpace(8),
@@ -218,6 +243,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           textTheme: textTheme,
           colorScheme: colorScheme,
           l10n: l10n,
+          showTranslation: showTranslation,
         ),
       ],
     ];
@@ -231,7 +257,11 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     required TextTheme textTheme,
     required ColorScheme colorScheme,
     required AppLocalizations l10n,
+    required bool showTranslation,
   }) {
+    final hasArabicMeaning =
+        showTranslation && definition.arabicMeaning.trim().isNotEmpty;
+
     return MyCard.filled(
       borderRadius: context.brXl,
       padding: context.insetsAllM,
@@ -258,14 +288,16 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                 tooltip: l10n.copy,
                 onPressed: () => _copyText(
                   HighlightedMarkupText.stripMarkers(
-                    '${definition.englishMeaning}\n${definition.arabicMeaning}',
+                    hasArabicMeaning
+                        ? '${definition.englishMeaning}\n${definition.arabicMeaning}'
+                        : definition.englishMeaning,
                   ),
                   l10n.copiedToClipboard,
                 ),
               ),
             ],
           ),
-          if (definition.arabicMeaning.trim().isNotEmpty) ...[
+          if (hasArabicMeaning) ...[
             context.verticalSpace(8),
             HighlightedMarkupText(
               definition.arabicMeaning,
@@ -285,8 +317,9 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     IdiomDetailEntity idiom,
     TextTheme textTheme,
     ColorScheme colorScheme,
-    AppLocalizations l10n,
-  ) {
+    AppLocalizations l10n, {
+    required bool showTranslation,
+  }) {
     return [
       for (int i = 0; i < idiom.examples.length; i++) ...[
         if (i > 0) context.verticalSpace(8),
@@ -298,6 +331,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           textTheme: textTheme,
           colorScheme: colorScheme,
           l10n: l10n,
+          showTranslation: showTranslation,
         ),
       ],
     ];
@@ -311,7 +345,11 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     required TextTheme textTheme,
     required ColorScheme colorScheme,
     required AppLocalizations l10n,
+    required bool showTranslation,
   }) {
+    final hasArabicSentence =
+        showTranslation && example.arabicSentence.trim().isNotEmpty;
+
     return MyCard.filled(
       borderRadius: context.brXl,
       padding: context.insetsAllM,
@@ -338,14 +376,16 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                 tooltip: l10n.copy,
                 onPressed: () => _copyText(
                   HighlightedMarkupText.stripMarkers(
-                    '${example.englishSentence}\n${example.arabicSentence}',
+                    hasArabicSentence
+                        ? '${example.englishSentence}\n${example.arabicSentence}'
+                        : example.englishSentence,
                   ),
                   l10n.copiedToClipboard,
                 ),
               ),
             ],
           ),
-          if (example.arabicSentence.trim().isNotEmpty) ...[
+          if (hasArabicSentence) ...[
             context.verticalSpace(8),
             HighlightedMarkupText(
               example.arabicSentence,
@@ -364,12 +404,15 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     BuildContext context,
     IdiomDetailEntity idiom,
     TextTheme textTheme,
-    ColorScheme colorScheme,
-  ) {
+    ColorScheme colorScheme, {
+    required bool showTranslation,
+  }) {
     final hasEn =
         idiom.englishNotes != null && idiom.englishNotes!.trim().isNotEmpty;
     final hasAr =
-        idiom.arabicNotes != null && idiom.arabicNotes!.trim().isNotEmpty;
+        showTranslation &&
+        idiom.arabicNotes != null &&
+        idiom.arabicNotes!.trim().isNotEmpty;
 
     return MyCard.filled(
       borderRadius: context.brXl,
@@ -421,10 +464,12 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     );
   }
 
-  bool _hasNotes(IdiomDetailEntity idiom) {
+  bool _hasNotes(IdiomDetailEntity idiom, {required bool showTranslation}) {
     return (idiom.englishNotes != null &&
             idiom.englishNotes!.trim().isNotEmpty) ||
-        (idiom.arabicNotes != null && idiom.arabicNotes!.trim().isNotEmpty);
+        (showTranslation &&
+            idiom.arabicNotes != null &&
+            idiom.arabicNotes!.trim().isNotEmpty);
   }
 
   Future<void> _copyText(String text, String toastMessage) async {

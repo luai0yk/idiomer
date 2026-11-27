@@ -13,6 +13,7 @@ import 'package:idiomer/features/home/presentation/widgets/home_flashcards_secti
 import 'package:idiomer/features/home/presentation/widgets/home_quiz_card.dart';
 import 'package:idiomer/features/home/presentation/widgets/home_welcome_header.dart';
 import 'package:idiomer/features/home/presentation/widgets/idiom_of_the_day_card.dart';
+import 'package:idiomer/features/idioms/presentation/utils/idiom_tap_helper.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
@@ -70,8 +71,10 @@ class HomePage extends StatelessWidget {
                     if (state.idiomOfTheDay != null) ...[
                       IdiomOfTheDayCard(
                         idiom: state.idiomOfTheDay!,
-                        onTap: () => context.push(
-                          AppRoutes.idiomDetailPath(state.idiomOfTheDay!.id),
+                        onTap: () => IdiomTapHelper.handleIdiomTap(
+                          context,
+                          idiomId: state.idiomOfTheDay!.id,
+                          detail: state.idiomOfTheDay!,
                         ),
                         onToggleFavorite: () => context
                             .read<HomeCubit>()

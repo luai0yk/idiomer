@@ -67,14 +67,15 @@ class MyPopupMenu<T> extends StatelessWidget {
       shape:
           shape ??
           RoundedRectangleBorder(
-            borderRadius: context.brM,
+            borderRadius: context.brXl,
             side: BorderSide(
               width: context.setSize(0.4),
               color: context.colorScheme.outlineVariant,
             ),
           ),
       color: color ?? context.colorScheme.surface,
-      elevation: elevation ?? context.elevationS,
+      elevation: elevation ?? context.elevationXl,
+      shadowColor: Colors.black.withValues(alpha: 0.3),
       onSelected: (value) {
         onSelected?.call(value);
       },

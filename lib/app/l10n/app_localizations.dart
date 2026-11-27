@@ -1375,6 +1375,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse Categories'**
   String get browseCategories;
+
+  /// No description provided for @behaviorSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Content & Behavior'**
+  String get behaviorSettings;
+
+  /// No description provided for @showTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Translation'**
+  String get showTranslation;
+
+  /// No description provided for @showTranslationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Arabic translations across idioms and examples'**
+  String get showTranslationSubtitle;
+
+  /// No description provided for @idiomTapAction.
+  ///
+  /// In en, this message translates to:
+  /// **'When Tapping an Idiom'**
+  String get idiomTapAction;
+
+  /// No description provided for @shareSheetOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Sheet'**
+  String get shareSheetOption;
+
+  /// No description provided for @defaultTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Tab'**
+  String get defaultTab;
 }
 
 class _AppLocalizationsDelegate

@@ -311,5 +311,11 @@
   "loadingQuizOverview": "Loading quizzes...",
   "loadingQuizReview": "Loading review...",
   "continueStudying": "Continue Studying",
-  "browseCategories": "Browse Categories"
+  "browseCategories": "Browse Categories",
+  "behaviorSettings": "Content & Behavior",
+  "showTranslation": "Show Translation",
+  "showTranslationSubtitle": "Display Arabic translations across idioms and examples",
+  "idiomTapAction": "When Tapping an Idiom",
+  "shareSheetOption": "Share Sheet",
+  "defaultTab": "Default Tab"
 }

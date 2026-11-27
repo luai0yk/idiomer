@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/texts/highlighted_markup_text.dart';
@@ -14,6 +15,7 @@ class FlashcardBackCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
     final meaning = card.definitions.firstOrNull;
     final example = card.examples.firstOrNull;
 
@@ -39,16 +41,18 @@ class FlashcardBackCard extends StatelessWidget {
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              context.verticalSpace(12),
-              Text(
-                card.arabicText,
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.rtl,
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: colorScheme.primary,
+              if (showTranslation && card.arabicText.trim().isNotEmpty) ...[
+                context.verticalSpace(12),
+                Text(
+                  card.arabicText,
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.rtl,
+                  style: textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: colorScheme.primary,
+                  ),
                 ),
-              ),
+              ],
               if (meaning != null) ...[
                 context.verticalSpace(20),
                 Divider(
@@ -62,7 +66,8 @@ class FlashcardBackCard extends StatelessWidget {
                     color: colorScheme.onSurface,
                   ),
                 ),
-                if (meaning.arabicMeaning.trim().isNotEmpty) ...[
+                if (showTranslation &&
+                    meaning.arabicMeaning.trim().isNotEmpty) ...[
                   context.verticalSpace(6),
                   HighlightedMarkupText(
                     meaning.arabicMeaning,
@@ -95,7 +100,8 @@ class FlashcardBackCard extends StatelessWidget {
                           color: colorScheme.primary,
                         ),
                       ),
-                      if (example.arabicSentence.trim().isNotEmpty) ...[
+                      if (showTranslation &&
+                          example.arabicSentence.trim().isNotEmpty) ...[
                         context.verticalSpace(4),
                         HighlightedMarkupText(
                           example.arabicSentence,

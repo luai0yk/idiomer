@@ -3,6 +3,7 @@ import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
@@ -26,6 +27,7 @@ class IdiomDetailHeroCard extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final l10n = context.l10n;
     final isArabic = Directionality.of(context) == TextDirection.rtl;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
 
     final primary = colorScheme.primary;
     final tertiary = colorScheme.tertiary;
@@ -117,15 +119,17 @@ class IdiomDetailHeroCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                context.verticalSpace(4),
-                Text(
-                  idiom.arabicText,
-                  textDirection: TextDirection.rtl,
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: onPrimary.withValues(alpha: 0.94),
+                if (showTranslation && idiom.arabicText.trim().isNotEmpty) ...[
+                  context.verticalSpace(4),
+                  Text(
+                    idiom.arabicText,
+                    textDirection: TextDirection.rtl,
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: onPrimary.withValues(alpha: 0.94),
+                    ),
                   ),
-                ),
+                ],
                 if (idiom.categories.isNotEmpty) ...[
                   context.verticalSpace(14),
                   Wrap(

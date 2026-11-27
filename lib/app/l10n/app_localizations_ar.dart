@@ -712,4 +712,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get browseCategories => 'تصفح التصنيفات';
+
+  @override
+  String get behaviorSettings => 'المحتوى والسلوك';
+
+  @override
+  String get showTranslation => 'إظهار الترجمة';
+
+  @override
+  String get showTranslationSubtitle =>
+      'عرض الترجمة العربية للتعابير والأمثلة في التطبيق';
+
+  @override
+  String get idiomTapAction => 'عند الضغط على تعبير';
+
+  @override
+  String get shareSheetOption => 'نافذة المشاركة';
+
+  @override
+  String get defaultTab => 'التبويب الافتراضي';
 }

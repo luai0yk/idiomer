@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idiomer/app/l10n/app_localizations.dart';
-import 'package:idiomer/app/routes/app_routes.dart';
 import 'package:idiomer/core/constants/app_durations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/features/db_setup/domain/entities/db_setup_progress.dart';
 import 'package:idiomer/features/db_setup/presentation/cubit/db_setup_cubit.dart';
 import 'package:idiomer/features/db_setup/presentation/cubit/db_setup_state.dart';
@@ -44,7 +44,8 @@ class _DbSetupPageState extends State<DbSetupPage> {
         listenWhen: (prev, curr) =>
             prev.stage != curr.stage && curr.stage == DbSetupStage.ready,
         listener: (context, state) {
-          context.go(AppRoutes.home);
+          final defaultTab = SettingsHelper.readDefaultTab(context);
+          context.go(SettingsHelper.routeForDefaultTab(defaultTab));
         },
         builder: (context, state) {
           return Center(

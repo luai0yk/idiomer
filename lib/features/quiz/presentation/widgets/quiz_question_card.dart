@@ -13,12 +13,14 @@ class QuizQuestionCard extends StatelessWidget {
   final String prompt;
   final String englishMeaning;
   final String? questionCounterLabel;
+  final EdgeInsetsGeometry? padding;
 
   const QuizQuestionCard({
     super.key,
     required this.prompt,
     required this.englishMeaning,
     this.questionCounterLabel,
+    this.padding,
   });
 
   @override
@@ -89,11 +91,14 @@ class QuizQuestionCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.spaceL,
-              vertical: context.setSize(20),
-            ),
+            padding:
+                padding ??
+                EdgeInsets.symmetric(
+                  horizontal: context.spaceL,
+                  vertical: context.setSize(20),
+                ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(

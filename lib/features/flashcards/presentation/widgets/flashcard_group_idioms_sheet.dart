@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/bottom_sheet_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
@@ -45,6 +46,7 @@ class FlashcardGroupIdiomsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
     final enableSearch = cards.length > 6;
     final initialSelected =
         (currentIndex >= 0 && currentIndex < cards.length)
@@ -63,7 +65,7 @@ class FlashcardGroupIdiomsSheet extends StatelessWidget {
         enableSearch: enableSearch,
         searchFilter: (card, query) =>
             card.englishText.toLowerCase().contains(query) ||
-            card.arabicText.toLowerCase().contains(query),
+            (showTranslation && card.arabicText.toLowerCase().contains(query)),
         separatorHeight: context.spaceS,
         padding: enableSearch
             ? null
@@ -80,6 +82,7 @@ class FlashcardGroupIdiomsSheet extends StatelessWidget {
             index: index,
             card: card,
             isSelected: isSelected,
+            showTranslation: showTranslation,
             textTheme: textTheme,
             colorScheme: colorScheme,
             onTap: onTap,
@@ -101,6 +104,7 @@ class _IdiomSheetCard extends StatelessWidget {
   final int index;
   final IdiomDetailEntity card;
   final bool isSelected;
+  final bool showTranslation;
   final TextTheme textTheme;
   final ColorScheme colorScheme;
   final VoidCallback onTap;
@@ -109,6 +113,7 @@ class _IdiomSheetCard extends StatelessWidget {
     required this.index,
     required this.card,
     required this.isSelected,
+    required this.showTranslation,
     required this.textTheme,
     required this.colorScheme,
     required this.onTap,
@@ -160,7 +165,7 @@ class _IdiomSheetCard extends StatelessWidget {
                     color: isSelected ? primary : colorScheme.onSurface,
                   ),
                 ),
-                if (card.arabicText.trim().isNotEmpty) ...[
+                if (showTranslation && card.arabicText.trim().isNotEmpty) ...[
                   context.verticalSpace(2),
                   Text(
                     card.arabicText,

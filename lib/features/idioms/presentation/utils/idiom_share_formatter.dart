@@ -5,10 +5,14 @@ import 'package:idiomer/shared/widgets/texts/highlighted_markup_text.dart';
 class IdiomShareFormatter {
   IdiomShareFormatter._();
 
-  static String format(IdiomDetailEntity idiom) {
-    final buffer = StringBuffer()
-      ..writeln(idiom.englishText)
-      ..writeln(idiom.arabicText);
+  static String format(
+    IdiomDetailEntity idiom, {
+    bool includeTranslation = true,
+  }) {
+    final buffer = StringBuffer()..writeln(idiom.englishText);
+    if (includeTranslation && idiom.arabicText.trim().isNotEmpty) {
+      buffer.writeln(idiom.arabicText);
+    }
 
     if (idiom.definitions.isNotEmpty) {
       buffer.writeln();
@@ -18,7 +22,7 @@ class IdiomShareFormatter {
         );
         final arMeaning = HighlightedMarkupText.stripMarkers(def.arabicMeaning);
         buffer.writeln('- $enMeaning');
-        if (arMeaning.trim().isNotEmpty) {
+        if (includeTranslation && arMeaning.trim().isNotEmpty) {
           buffer.writeln('  $arMeaning');
         }
       }
@@ -34,7 +38,7 @@ class IdiomShareFormatter {
           ex.arabicSentence,
         );
         buffer.writeln('• $enSentence');
-        if (arSentence.trim().isNotEmpty) {
+        if (includeTranslation && arSentence.trim().isNotEmpty) {
           buffer.writeln('  $arSentence');
         }
       }

@@ -15,6 +15,7 @@ class QuizOptionCard extends StatelessWidget {
   final bool isSelected;
   final TextDirection textDirection;
   final VoidCallback onTap;
+  final EdgeInsetsGeometry? padding;
 
   const QuizOptionCard({
     super.key,
@@ -22,6 +23,7 @@ class QuizOptionCard extends StatelessWidget {
     required this.isSelected,
     required this.textDirection,
     required this.onTap,
+    this.padding,
   });
 
   @override
@@ -37,7 +39,7 @@ class QuizOptionCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppDurations.fast,
         curve: Curves.easeOutCubic,
-        padding: context.insetsAllL,
+        padding: padding ?? context.insetsAllL,
         decoration: BoxDecoration(
           color: isSelected
               ? colorScheme.primary.withValues(alpha: 0.14)

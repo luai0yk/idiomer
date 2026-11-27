@@ -99,64 +99,61 @@ class _SelectCategorySheetState extends State<SelectCategorySheet> {
           ),
         ],
         Flexible(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: context.screenHeight * 0.65),
-            child: filteredItems.isEmpty
-                ? Padding(
-                    padding: context.insetsAllL,
-                    child: MyEmptyState(
-                      icon: AppIcons.searchOff,
-                      title: l10n.noResultsFound,
-                      subtitle: l10n.tryAdjustingSearch,
-                    ),
-                  )
-                : GridView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.fromLTRB(
-                      context.spaceM,
-                      context.spaceS,
-                      context.spaceM,
-                      context.spaceL,
-                    ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: context.spaceS,
-                      crossAxisSpacing: context.spaceS,
-                      mainAxisExtent: context.setSize(90),
-                    ),
-                    itemCount: filteredItems.length,
-                    itemBuilder: (context, index) {
-                      final category = filteredItems[index];
-                      final isSelected =
-                          widget.selectedCategoryId == category?.id;
-                      final title = category == null
-                          ? l10n.allCategories
-                          : category.localizedName(isArabic: isArabic);
-                      final rawDescription = category == null
-                          ? null
-                          : (isArabic
-                                ? category.arabicDescription
-                                : category.englishDescription);
-                      final subtitle =
-                          (rawDescription != null &&
-                              rawDescription.trim().isNotEmpty)
-                          ? rawDescription.trim()
-                          : null;
-
-                      return _CategoryGridCard(
-                        title: title,
-                        subtitle: subtitle,
-                        isSelected: isSelected,
-                        textTheme: textTheme,
-                        colorScheme: colorScheme,
-                        onTap: () {
-                          widget.onCategorySelected(category?.id);
-                          BottomSheetHelper.dismiss();
-                        },
-                      );
-                    },
+          child: filteredItems.isEmpty
+              ? Padding(
+                  padding: context.insetsAllL,
+                  child: MyEmptyState(
+                    icon: AppIcons.searchOff,
+                    title: l10n.noResultsFound,
+                    subtitle: l10n.tryAdjustingSearch,
                   ),
-          ),
+                )
+              : GridView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.fromLTRB(
+                    context.spaceM,
+                    context.spaceS,
+                    context.spaceM,
+                    context.spaceL,
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: context.spaceS,
+                    crossAxisSpacing: context.spaceS,
+                    mainAxisExtent: context.setSize(90),
+                  ),
+                  itemCount: filteredItems.length,
+                  itemBuilder: (context, index) {
+                    final category = filteredItems[index];
+                    final isSelected =
+                        widget.selectedCategoryId == category?.id;
+                    final title = category == null
+                        ? l10n.allCategories
+                        : category.localizedName(isArabic: isArabic);
+                    final rawDescription = category == null
+                        ? null
+                        : (isArabic
+                              ? category.arabicDescription
+                              : category.englishDescription);
+                    final subtitle =
+                        (rawDescription != null &&
+                            rawDescription.trim().isNotEmpty)
+                        ? rawDescription.trim()
+                        : null;
+
+                    return _CategoryGridCard(
+                      title: title,
+                      subtitle: subtitle,
+                      isSelected: isSelected,
+                      textTheme: textTheme,
+                      colorScheme: colorScheme,
+                      onTap: () {
+                        widget.onCategorySelected(category?.id);
+                        BottomSheetHelper.dismiss();
+                      },
+                    );
+                  },
+                ),
         ),
       ],
     );
@@ -189,7 +186,7 @@ class _CategoryGridCard extends StatelessWidget {
       borderColor: isSelected
           ? colorScheme.primary.withValues(alpha: 0.4)
           : Colors.transparent,
-      borderRadius: context.brL,
+      borderRadius: context.brXl,
       padding: context.insetsAllM,
       onTap: onTap,
       child: Column(

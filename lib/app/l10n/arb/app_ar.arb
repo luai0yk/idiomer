@@ -212,5 +212,11 @@
   "loadingQuizOverview": "جارٍ تحميل الاختبارات...",
   "loadingQuizReview": "جارٍ تحميل المراجعة...",
   "continueStudying": "مواصلة الدراسة",
-  "browseCategories": "تصفح التصنيفات"
+  "browseCategories": "تصفح التصنيفات",
+  "behaviorSettings": "المحتوى والسلوك",
+  "showTranslation": "إظهار الترجمة",
+  "showTranslationSubtitle": "عرض الترجمة العربية للتعابير والأمثلة في التطبيق",
+  "idiomTapAction": "عند الضغط على تعبير",
+  "shareSheetOption": "نافذة المشاركة",
+  "defaultTab": "التبويب الافتراضي"
 }

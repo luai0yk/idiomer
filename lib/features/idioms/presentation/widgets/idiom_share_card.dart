@@ -4,6 +4,7 @@ import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
@@ -31,6 +32,7 @@ class IdiomShareCard extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final l10n = context.l10n;
     final isArabic = Directionality.of(context) == TextDirection.rtl;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
 
     final cardWidth = maxWidth ?? context.setSize(360);
     final primary = colorScheme.primary;
@@ -94,15 +96,17 @@ class IdiomShareCard extends StatelessWidget {
                     height: 1.25,
                   ),
                 ),
-                context.verticalSpace(6),
-                Text(
-                  idiom.arabicText,
-                  textDirection: TextDirection.rtl,
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: onPrimary.withValues(alpha: 0.9),
+                if (showTranslation && idiom.arabicText.trim().isNotEmpty) ...[
+                  context.verticalSpace(6),
+                  Text(
+                    idiom.arabicText,
+                    textDirection: TextDirection.rtl,
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: onPrimary.withValues(alpha: 0.9),
+                    ),
                   ),
-                ),
+                ],
                 if (primaryDefinition != null) ...[
                   context.verticalSpace(16),
                   _buildDefinitionPanel(
@@ -111,6 +115,7 @@ class IdiomShareCard extends StatelessWidget {
                     textTheme,
                     onPrimary,
                     l10n,
+                    showTranslation: showTranslation,
                   ),
                 ],
                 if (primaryExample != null) ...[
@@ -121,6 +126,7 @@ class IdiomShareCard extends StatelessWidget {
                     textTheme,
                     onPrimary,
                     l10n,
+                    showTranslation: showTranslation,
                   ),
                 ],
               ],
@@ -218,8 +224,9 @@ class IdiomShareCard extends StatelessWidget {
     IdiomDefinitionEntity definition,
     TextTheme textTheme,
     Color onPrimary,
-    AppLocalizations l10n,
-  ) {
+    AppLocalizations l10n, {
+    required bool showTranslation,
+  }) {
     return MyCard.filled(
       color: onPrimary.withValues(alpha: 0.13),
       borderRadius: context.brL,
@@ -262,7 +269,8 @@ class IdiomShareCard extends StatelessWidget {
               height: 1.4,
             ),
           ),
-          if (definition.arabicMeaning.trim().isNotEmpty) ...[
+          if (showTranslation &&
+              definition.arabicMeaning.trim().isNotEmpty) ...[
             context.verticalSpace(4),
             HighlightedMarkupText(
               definition.arabicMeaning,
@@ -292,8 +300,9 @@ class IdiomShareCard extends StatelessWidget {
     IdiomExampleEntity example,
     TextTheme textTheme,
     Color onPrimary,
-    AppLocalizations l10n,
-  ) {
+    AppLocalizations l10n, {
+    required bool showTranslation,
+  }) {
     return MyCard.bordered(
       color: onPrimary.withValues(alpha: 0.08),
       borderColor: onPrimary.withValues(alpha: 0.16),
@@ -339,7 +348,8 @@ class IdiomShareCard extends StatelessWidget {
               height: 1.4,
             ),
           ),
-          if (example.arabicSentence.trim().isNotEmpty) ...[
+          if (showTranslation &&
+              example.arabicSentence.trim().isNotEmpty) ...[
             context.verticalSpace(4),
             HighlightedMarkupText(
               example.arabicSentence,

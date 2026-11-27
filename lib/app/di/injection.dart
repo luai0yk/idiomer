@@ -54,7 +54,10 @@ import 'package:idiomer/features/settings/data/datasources/settings_local_data_s
 import 'package:idiomer/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:idiomer/features/settings/domain/repositories/settings_repository.dart';
 import 'package:idiomer/features/settings/domain/usecases/get_settings_usecase.dart';
+import 'package:idiomer/features/settings/domain/usecases/update_default_tab_usecase.dart';
+import 'package:idiomer/features/settings/domain/usecases/update_idiom_tap_action_usecase.dart';
 import 'package:idiomer/features/settings/domain/usecases/update_language_usecase.dart';
+import 'package:idiomer/features/settings/domain/usecases/update_show_translation_usecase.dart';
 import 'package:idiomer/features/settings/domain/usecases/update_theme_mode_usecase.dart';
 import 'package:idiomer/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,11 +114,23 @@ void _initSettings() {
     ..registerLazySingleton<UpdateLanguageUseCase>(
       () => UpdateLanguageUseCase(sl()),
     )
+    ..registerLazySingleton<UpdateShowTranslationUseCase>(
+      () => UpdateShowTranslationUseCase(sl()),
+    )
+    ..registerLazySingleton<UpdateIdiomTapActionUseCase>(
+      () => UpdateIdiomTapActionUseCase(sl()),
+    )
+    ..registerLazySingleton<UpdateDefaultTabUseCase>(
+      () => UpdateDefaultTabUseCase(sl()),
+    )
     ..registerFactory<SettingsCubit>(
       () => SettingsCubit(
         getSettings: sl(),
         updateThemeMode: sl(),
         updateLanguage: sl(),
+        updateShowTranslation: sl(),
+        updateIdiomTapAction: sl(),
+        updateDefaultTab: sl(),
       ),
     );
 }

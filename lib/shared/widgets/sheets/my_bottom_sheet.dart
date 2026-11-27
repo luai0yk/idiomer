@@ -174,8 +174,8 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
                         padding: EdgeInsets.only(top: context.setSize(8)),
                         child: Center(
                           child: MyCard.filled(
-                            height: context.setSize(4),
-                            width: context.setSize(50),
+                            height: context.setSize(6),
+                            width: context.setSize(45),
                             margin: EdgeInsets.zero,
                             color: colors.outlineVariant,
                             child: const SizedBox(),

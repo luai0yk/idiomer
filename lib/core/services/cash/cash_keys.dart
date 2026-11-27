@@ -4,5 +4,8 @@ class CashKeys {
   // Setting Keys
   static const String themeMode = 'theme_mode';
   static const String languageCode = 'language_code';
+  static const String showTranslation = 'show_translation';
+  static const String idiomTapAction = 'idiom_tap_action';
+  static const String defaultTab = 'default_tab';
   static const String recentColors = 'recent_colors';
 }

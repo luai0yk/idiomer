@@ -10,6 +10,7 @@ import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 import 'package:idiomer/core/utils/helpers/misc/idiom_image_saver.dart';
 import 'package:idiomer/core/utils/helpers/misc/share_helper.dart';
 import 'package:idiomer/core/utils/helpers/misc/url_helper.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/toast_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/widget_capture_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
@@ -73,7 +74,10 @@ class IdiomShareSheet extends StatefulWidget {
 class _IdiomShareSheetState extends State<IdiomShareSheet> {
   final GlobalKey _cardKey = GlobalKey();
 
-  String get _formattedText => IdiomShareFormatter.format(widget.idiom);
+  String get _formattedText => IdiomShareFormatter.format(
+    widget.idiom,
+    includeTranslation: SettingsHelper.watchShowTranslation(context),
+  );
 
   Future<void> _handleWhatsApp(BuildContext context) async {
     final l10n = context.l10n;

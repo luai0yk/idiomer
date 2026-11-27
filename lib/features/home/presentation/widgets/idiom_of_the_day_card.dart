@@ -4,7 +4,9 @@ import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
+import 'package:idiomer/features/settings/domain/entities/app_settings.dart';
 import 'package:idiomer/shared/widgets/buttons/my_favorite_button.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
@@ -29,6 +31,8 @@ class IdiomOfTheDayCard extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final l10n = context.l10n;
     final isArabic = Directionality.of(context) == TextDirection.rtl;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
+    final tapAction = SettingsHelper.watchIdiomTapAction(context);
 
     final primary = colorScheme.primary;
     final tertiary = colorScheme.tertiary;
@@ -121,15 +125,17 @@ class IdiomOfTheDayCard extends StatelessWidget {
                     height: 1.25,
                   ),
                 ),
-                context.verticalSpace(4),
-                Text(
-                  idiom.arabicText,
-                  textDirection: TextDirection.rtl,
-                  style: textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: onPrimary.withValues(alpha: 0.88),
+                if (showTranslation && idiom.arabicText.trim().isNotEmpty) ...[
+                  context.verticalSpace(4),
+                  Text(
+                    idiom.arabicText,
+                    textDirection: TextDirection.rtl,
+                    style: textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: onPrimary.withValues(alpha: 0.88),
+                    ),
                   ),
-                ),
+                ],
                 if (primaryExample != null) ...[
                   context.verticalSpace(14),
                   _buildExamplePanel(
@@ -156,6 +162,7 @@ class IdiomOfTheDayCard extends StatelessWidget {
                   textTheme,
                   onPrimary,
                   categoryName,
+                  tapAction,
                 ),
               ],
             ),
@@ -280,7 +287,9 @@ class IdiomOfTheDayCard extends StatelessWidget {
     TextTheme textTheme,
     Color onPrimary,
     String? categoryName,
+    IdiomTapAction tapAction,
   ) {
+    final isShareAction = tapAction == IdiomTapAction.share;
     return Row(
       children: [
         if (categoryName != null)
@@ -313,7 +322,7 @@ class IdiomOfTheDayCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              l10n.viewDetails,
+              isShareAction ? l10n.shareIdiom : l10n.viewDetails,
               style: textTheme.labelMedium?.copyWith(
                 color: onPrimary.withValues(alpha: 0.95),
                 fontWeight: FontWeight.w700,
@@ -321,7 +330,9 @@ class IdiomOfTheDayCard extends StatelessWidget {
             ),
             context.horizontalSpace(4),
             MyIcon(
-              icon: AppIcons.arrowForward(context),
+              icon: isShareAction
+                  ? AppIcons.share
+                  : AppIcons.arrowForward(context),
               size: context.iconXs,
               color: onPrimary.withValues(alpha: 0.95),
             ),

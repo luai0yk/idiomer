@@ -12,18 +12,46 @@ class MyExpansionTile extends StatefulWidget {
   /// The subtitle of the expansion tile.
   final String? subtitle;
 
+  /// Optional leading widget displayed before [title].
+  final Widget? leading;
+
   /// The children displayed when expanded.
   final List<Widget> children;
 
   /// Initial expansion state.
   final bool initiallyExpanded;
 
+  /// Background color when expanded. Defaults to [ColorScheme.surface].
+  final Color? backgroundColor;
+
+  /// Background color when collapsed. Defaults to [ColorScheme.surfaceContainer].
+  final Color? collapsedBackgroundColor;
+
+  /// Corner radius for both collapsed and expanded shapes. Defaults to [context.brM].
+  final BorderRadius? borderRadius;
+
+  /// Padding around the header tile.
+  final EdgeInsetsGeometry? tilePadding;
+
+  /// Padding around [children].
+  final EdgeInsetsGeometry? childrenPadding;
+
+  /// Optional override style for [subtitle].
+  final TextStyle? subtitleStyle;
+
   const MyExpansionTile({
     super.key,
     required this.title,
     this.subtitle,
+    this.leading,
     required this.children,
     this.initiallyExpanded = false,
+    this.backgroundColor,
+    this.collapsedBackgroundColor,
+    this.borderRadius,
+    this.tilePadding,
+    this.childrenPadding,
+    this.subtitleStyle,
   });
 
   @override
@@ -41,23 +69,28 @@ class _MyExpansionTileState extends State<MyExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = context.colorScheme;
+    final colors = context.colorScheme;
+    final textTheme = context.textTheme;
+    final radius = widget.borderRadius ?? context.brM;
+    final tileShape = RoundedRectangleBorder(
+      borderRadius: radius,
+      side: BorderSide.none,
+    );
 
     return ExpansionTile(
       initiallyExpanded: widget.initiallyExpanded,
       onExpansionChanged: (value) {
         setState(() => _isExpanded = value);
       },
-      backgroundColor: colors.surface,
-      collapsedBackgroundColor: colors.surfaceContainer,
-      shape: RoundedRectangleBorder(
-        borderRadius: context.brM,
-        side: BorderSide.none,
-      ),
-      collapsedShape: RoundedRectangleBorder(
-        borderRadius: context.brM,
-        side: BorderSide.none,
-      ),
+      clipBehavior: Clip.antiAlias,
+      backgroundColor: widget.backgroundColor ?? colors.surface,
+      collapsedBackgroundColor:
+          widget.collapsedBackgroundColor ?? colors.surfaceContainer,
+      shape: tileShape,
+      collapsedShape: tileShape,
+      tilePadding: widget.tilePadding ?? context.insetsHorizontalM,
+      childrenPadding: widget.childrenPadding ?? EdgeInsets.zero,
+      leading: widget.leading,
       trailing: AnimatedRotation(
         turns: _isExpanded ? 0.5 : 0,
         duration: AppDurations.fast,
@@ -70,14 +103,16 @@ class _MyExpansionTileState extends State<MyExpansionTile> {
       ),
       title: Text(
         widget.title,
-        style: context.textTheme.titleMedium?.copyWith(color: colors.onSurface),
+        style: textTheme.titleMedium?.copyWith(color: colors.onSurface),
       ),
       subtitle: widget.subtitle != null
           ? Text(
               widget.subtitle!,
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: colors.onSurfaceVariant,
-              ),
+              style:
+                  widget.subtitleStyle ??
+                  textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
             )
           : null,
       children: widget.children,

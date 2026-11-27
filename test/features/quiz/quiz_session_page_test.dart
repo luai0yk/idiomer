@@ -63,6 +63,10 @@ void main() {
       expect(find.widgetWithText(MyButton, 'Next'), findsNothing);
       expect(find.text('1 / 8'), findsNothing);
       expect(find.byType(PageView), findsOneWidget);
+      final verticalScrollables = tester
+          .widgetList<Scrollable>(find.byType(Scrollable))
+          .where((s) => s.axis == Axis.vertical);
+      expect(verticalScrollables, isEmpty);
       expect(find.byTooltip('Previous'), findsOneWidget);
       expect(find.byTooltip('Next'), findsOneWidget);
       expect(

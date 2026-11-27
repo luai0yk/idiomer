@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
+import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_entity.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
@@ -20,6 +21,7 @@ class IdiomCard extends StatelessWidget {
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
     final extendedColors = context.extendedColors;
+    final showTranslation = SettingsHelper.watchShowTranslation(context);
 
     final example = idiom.englishExample?.trim();
     final hasExample = example != null && example.isNotEmpty;
@@ -58,15 +60,17 @@ class IdiomCard extends StatelessWidget {
                     ],
                   ],
                 ),
-                context.verticalSpace(4),
-                Text(
-                  idiom.arabicText,
-                  textDirection: TextDirection.rtl,
-                  style: textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.primary,
+                if (showTranslation && idiom.arabicText.trim().isNotEmpty) ...[
+                  context.verticalSpace(4),
+                  Text(
+                    idiom.arabicText,
+                    textDirection: TextDirection.rtl,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.primary,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
             if (hasExample) ...[

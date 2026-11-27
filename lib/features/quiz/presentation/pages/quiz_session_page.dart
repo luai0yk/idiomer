@@ -390,54 +390,92 @@ class _QuestionSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: const ClampingScrollPhysics(),
-      slivers: [
-        SliverPadding(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxHeight < context.setSize(460);
+        final effectiveBottomSpacing = isCompact
+            ? context.spaceS
+            : bottomSpacing;
+        final preNavSpace = isCompact ? 8.0 : 16.0;
+        final postNavSpace = isCompact ? 8.0 : 12.0;
+        final optionSpace = isCompact ? 6.0 : 10.0;
+        final questionPadding = isCompact
+            ? EdgeInsets.symmetric(
+                horizontal: context.spaceL,
+                vertical: context.spaceM,
+              )
+            : null;
+        final optionPadding = isCompact
+            ? EdgeInsets.symmetric(
+                horizontal: context.spaceL,
+                vertical: context.spaceS,
+              )
+            : null;
+
+        return Padding(
           padding: EdgeInsets.fromLTRB(
             context.spaceM,
             0,
             context.spaceM,
-            bottomSpacing,
+            effectiveBottomSpacing,
           ),
-          sliver: SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                QuizQuestionCard(
-                  prompt: l10n.quizQuestionPrompt,
-                  englishMeaning: question.englishMeaning,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, cardConstraints) {
+                    return Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: cardConstraints.maxHeight,
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: cardConstraints.maxWidth,
+                            child: QuizQuestionCard(
+                              prompt: l10n.quizQuestionPrompt,
+                              englishMeaning: question.englishMeaning,
+                              padding: questionPadding,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                const Spacer(),
-                context.verticalSpace(16),
-                _QuestionNavRow(
-                  questionNumber: questionNumber,
-                  totalQuestions: totalQuestions,
-                  canGoPrevious: canGoPrevious,
-                  canGoNext: canGoNext,
-                  isSubmitting: isSubmitting,
-                  l10n: l10n,
-                  colorScheme: colorScheme,
-                  textTheme: textTheme,
-                  onPrevious: onPrevious,
-                  onNext: onNext,
+              ),
+              context.verticalSpace(preNavSpace),
+              _QuestionNavRow(
+                questionNumber: questionNumber,
+                totalQuestions: totalQuestions,
+                canGoPrevious: canGoPrevious,
+                canGoNext: canGoNext,
+                isSubmitting: isSubmitting,
+                l10n: l10n,
+                colorScheme: colorScheme,
+                textTheme: textTheme,
+                onPrevious: onPrevious,
+                onNext: onNext,
+              ),
+              context.verticalSpace(postNavSpace),
+              for (int i = 0; i < question.options.length; i++) ...[
+                if (i > 0) context.verticalSpace(optionSpace),
+                QuizOptionCard(
+                  text: question.options[i].englishText,
+                  isSelected: selectedOptionId == question.options[i].idiomId,
+                  textDirection: TextDirection.ltr,
+                  padding: optionPadding,
+                  onTap: () => onSelectOption(question.options[i].idiomId),
                 ),
-                context.verticalSpace(12),
-                for (int i = 0; i < question.options.length; i++) ...[
-                  if (i > 0) context.verticalSpace(10),
-                  QuizOptionCard(
-                    text: question.options[i].englishText,
-                    isSelected: selectedOptionId == question.options[i].idiomId,
-                    textDirection: TextDirection.ltr,
-                    onTap: () => onSelectOption(question.options[i].idiomId),
-                  ),
-                ],
               ],
-            ),
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

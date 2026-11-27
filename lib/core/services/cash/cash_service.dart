@@ -9,7 +9,9 @@ class CashService {
 
   factory CashService() => instance;
 
-  late SharedPreferences _prefs;
+  SharedPreferences? _prefs;
+
+  bool get isInitialized => _prefs != null;
 
   /// Initialize the CashService.
   /// Optionally accepts [SharedPreferences] for testing/mocking.
@@ -20,84 +22,84 @@ class CashService {
 
   /// Check if key exists
   bool contains(String key) {
-    return _prefs.containsKey(key);
+    return _prefs?.containsKey(key) ?? false;
   }
 
   /// Reload values from native storage
   Future<void> reload() async {
-    await _prefs.reload();
+    await _prefs?.reload();
   }
 
   /// Remove value
-  Future<bool> remove(String key) {
-    return _prefs.remove(key);
+  Future<bool> remove(String key) async {
+    return await _prefs?.remove(key) ?? false;
   }
 
   /// Clear all values
-  Future<bool> clear() {
-    return _prefs.clear();
+  Future<bool> clear() async {
+    return await _prefs?.clear() ?? false;
   }
 
   /// Set string value
-  Future<bool> setString(String key, String value) {
-    return _prefs.setString(key, value);
+  Future<bool> setString(String key, String value) async {
+    return await _prefs?.setString(key, value) ?? false;
   }
 
   /// Get string value
   String? getString(String key) {
-    return _prefs.getString(key);
+    return _prefs?.getString(key);
   }
 
   /// Set bool value
-  Future<bool> setBool(String key, bool value) {
-    return _prefs.setBool(key, value);
+  Future<bool> setBool(String key, bool value) async {
+    return await _prefs?.setBool(key, value) ?? false;
   }
 
   /// Get bool value
   bool getBool(String key, {bool defaultValue = false}) {
-    return _prefs.getBool(key) ?? defaultValue;
+    return _prefs?.getBool(key) ?? defaultValue;
   }
 
   /// Set int value
-  Future<bool> setInt(String key, int value) {
-    return _prefs.setInt(key, value);
+  Future<bool> setInt(String key, int value) async {
+    return await _prefs?.setInt(key, value) ?? false;
   }
 
   /// Get int value
   int? getInt(String key) {
-    return _prefs.getInt(key);
+    return _prefs?.getInt(key);
   }
 
   /// Set double value
-  Future<bool> setDouble(String key, double value) {
-    return _prefs.setDouble(key, value);
+  Future<bool> setDouble(String key, double value) async {
+    return await _prefs?.setDouble(key, value) ?? false;
   }
 
   /// Get double value
   double? getDouble(String key) {
-    return _prefs.getDouble(key);
+    return _prefs?.getDouble(key);
   }
 
   /// Set string list value
-  Future<bool> setStringList(String key, List<String> value) {
-    return _prefs.setStringList(key, value);
+  Future<bool> setStringList(String key, List<String> value) async {
+    return await _prefs?.setStringList(key, value) ?? false;
   }
 
   /// Get string list value
   List<String>? getStringList(String key) {
-    return _prefs.getStringList(key);
+    return _prefs?.getStringList(key);
   }
 
   /// Save json model
-  Future<bool> setModel(String key, Map<String, dynamic> json) {
+  Future<bool> setModel(String key, Map<String, dynamic> json) async {
     final jsonString = jsonEncode(json);
 
-    return _prefs.setString(key, jsonString);
+    return await _prefs?.setString(key, jsonString) ?? false;
   }
 
   /// Get json model
   T? getModel<T>(String key, T Function(Map<String, dynamic> json) fromJson) {
-    final jsonString = _prefs.getString(key);
+    final jsonString = _prefs?.getString(key);
 
     if (jsonString == null) {
       return null;
