@@ -786,4 +786,139 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sharedByIdiomer => 'تمت المشاركة عبر تطبيق Idiomer';
+
+  @override
+  String get idiomReminder => 'تذكير التعابير';
+
+  @override
+  String get idiomReminderSubtitle =>
+      'احصل على إشعارات مجدولة لتعابير من التصنيف الذي تختاره';
+
+  @override
+  String get remindersSectionTitle => 'الإشعارات والتذكيرات';
+
+  @override
+  String get reminderOff => 'متوقف';
+
+  @override
+  String get enableReminder => 'تفعيل التذكير';
+
+  @override
+  String get enableReminderSubtitle => 'استلام إشعارات التعابير حسب جدولك';
+
+  @override
+  String get reminderCategoryTitle => 'التصنيف';
+
+  @override
+  String get reminderCategoryRequiredHint => 'اختر تصنيفاً (مطلوب)';
+
+  @override
+  String get reminderCategoryRequiredError =>
+      'يرجى اختيار تصنيف لإشعارات التذكير';
+
+  @override
+  String get reminderFrequencyTitle => 'التكرار';
+
+  @override
+  String get daily => 'يومياً';
+
+  @override
+  String get weekly => 'أسبوعياً';
+
+  @override
+  String get timesPerDay => 'مرات في اليوم';
+
+  @override
+  String get timesPerWeek => 'مرات في الأسبوع';
+
+  @override
+  String get once => 'مرة واحدة';
+
+  @override
+  String get twice => 'مرتين';
+
+  @override
+  String get threeTimes => '3 مرات';
+
+  @override
+  String selectWeekdaysCount(int count, int selected) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count يوماً',
+      few: '$count أيام',
+      two: 'يومين',
+      one: 'يوماً واحداً',
+    );
+    return 'اختر $_temp0 ($selected/$count)';
+  }
+
+  @override
+  String reminderWeekdaysRequiredError(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count يوماً',
+      few: '$count أيام',
+      two: 'يومين',
+      one: 'يوم واحد',
+    );
+    return 'يرجى اختيار $_temp0 للجدول الأسبوعي';
+  }
+
+  @override
+  String get reminderTime => 'وقت التذكير';
+
+  @override
+  String get firstReminderTime => 'التذكير الأول';
+
+  @override
+  String get secondReminderTime => 'التذكير الثاني';
+
+  @override
+  String get reminderDuplicateTimesError =>
+      'يرجى اختيار وقتين مختلفين للتذكير اليومي';
+
+  @override
+  String get reminderScheduleSummaryTitle => 'ملخص الجدول';
+
+  @override
+  String get saveReminder => 'حفظ التذكير';
+
+  @override
+  String get reminderSaved => 'تمت جدولة تذكير التعابير';
+
+  @override
+  String get reminderDisabledMessage => 'تم إيقاف تذكير التعابير';
+
+  @override
+  String get reminderPermissionDenied => 'مطلوب إذن الإشعارات لجدولة التذكيرات';
+
+  @override
+  String get reminderNoIdiomsInCategory =>
+      'لم يتم العثور على تعابير في التصنيف المحدد';
+
+  @override
+  String get reminderChannelName => 'تذكيرات التعابير';
+
+  @override
+  String get reminderChannelDescription =>
+      'تذكيرات مجدولة لتعلّم التعابير الإنجليزية والعربية';
+
+  @override
+  String get reminderDisabledSummary => 'فعّل التذكير واختر تصنيفاً للبدء';
+
+  @override
+  String reminderDailySummary(
+    String countLabel,
+    String times,
+    String category,
+  ) {
+    return '$countLabel • $times • $category';
+  }
+
+  @override
+  String reminderWeeklySummary(String days, String time, String category) {
+    return '$days الساعة $time • $category';
+  }
 }

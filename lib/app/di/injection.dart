@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:idiomer/core/database/app_database.dart';
 import 'package:idiomer/core/database/database_paths.dart';
 import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/services/notifications/notification_service.dart';
 import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/features/db_setup/data/datasources/db_setup_local_datasource.dart';
 import 'package:idiomer/features/db_setup/data/datasources/db_setup_remote_datasource.dart';
@@ -52,6 +53,13 @@ import 'package:idiomer/features/quiz/domain/usecases/watch_quiz_stats_usecase.d
 import 'package:idiomer/features/quiz/presentation/cubit/quiz_overview_cubit.dart';
 import 'package:idiomer/features/quiz/presentation/cubit/quiz_review_cubit.dart';
 import 'package:idiomer/features/quiz/presentation/cubit/quiz_session_cubit.dart';
+import 'package:idiomer/features/reminders/data/datasources/reminders_local_datasource.dart';
+import 'package:idiomer/features/reminders/data/repositories/reminders_repository_impl.dart';
+import 'package:idiomer/features/reminders/domain/repositories/reminders_repository.dart';
+import 'package:idiomer/features/reminders/domain/usecases/get_reminder_settings_usecase.dart';
+import 'package:idiomer/features/reminders/domain/usecases/save_and_schedule_reminder_usecase.dart';
+import 'package:idiomer/features/reminders/domain/usecases/sync_reminder_notifications_usecase.dart';
+import 'package:idiomer/features/reminders/presentation/cubit/idiom_reminder_cubit.dart';
 import 'package:idiomer/features/settings/data/datasources/settings_local_data_source.dart';
 import 'package:idiomer/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:idiomer/features/settings/domain/repositories/settings_repository.dart';
@@ -82,6 +90,7 @@ Future<void> initDependencies({
   _initIdioms();
   _initFlashcards();
   _initQuiz();
+  _initReminders();
   _initHome();
 }
 
@@ -96,6 +105,12 @@ void _initCore({AppDatabase? database}) {
     sl.registerLazySingleton<TtsService>(
       () => TtsService(),
       dispose: (tts) => tts.dispose(),
+    );
+  }
+  if (!sl.isRegistered<NotificationService>()) {
+    sl.registerLazySingleton<NotificationService>(
+      () => LocalNotificationService(),
+      dispose: (service) => service.dispose(),
     );
   }
   if (!sl.isRegistered<AppDatabase>()) {
@@ -332,6 +347,35 @@ void _initQuiz() {
     )
     ..registerFactory<QuizReviewCubit>(
       () => QuizReviewCubit(getQuizAttemptReview: sl()),
+    );
+}
+
+void _initReminders() {
+  sl
+    ..registerLazySingleton<RemindersLocalDataSource>(
+      () => RemindersLocalDataSourceImpl(cashService: sl(), database: sl()),
+    )
+    ..registerLazySingleton<RemindersRepository>(
+      () => RemindersRepositoryImpl(
+        localDataSource: sl(),
+        notificationService: sl(),
+      ),
+    )
+    ..registerLazySingleton<GetReminderSettingsUseCase>(
+      () => GetReminderSettingsUseCase(sl()),
+    )
+    ..registerLazySingleton<SaveAndScheduleReminderUseCase>(
+      () => SaveAndScheduleReminderUseCase(sl()),
+    )
+    ..registerLazySingleton<SyncReminderNotificationsUseCase>(
+      () => SyncReminderNotificationsUseCase(sl()),
+    )
+    ..registerFactory<IdiomReminderCubit>(
+      () => IdiomReminderCubit(
+        getSettings: sl(),
+        saveAndSchedule: sl(),
+        watchCategories: sl(),
+      ),
     );
 }
 

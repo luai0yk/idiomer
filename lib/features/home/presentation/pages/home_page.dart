@@ -59,6 +59,7 @@ class HomePage extends StatelessWidget {
               HomeWelcomeHeader(
                 greeting: _greetingForHour(DateTime.now().hour, l10n),
                 subtitle: l10n.homeMotivationalSubtitle,
+                onOpenReminder: () => context.push(AppRoutes.reminder),
                 onOpenSettings: () => context.push(AppRoutes.settings),
               ),
               context.verticalSpace(6),

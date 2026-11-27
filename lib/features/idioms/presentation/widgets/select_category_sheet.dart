@@ -14,12 +14,14 @@ class SelectCategorySheet extends StatefulWidget {
   final List<CategoryEntity> categories;
   final String? selectedCategoryId;
   final ValueChanged<String?> onCategorySelected;
+  final bool includeAllOption;
 
   const SelectCategorySheet({
     super.key,
     required this.categories,
     required this.selectedCategoryId,
     required this.onCategorySelected,
+    this.includeAllOption = true,
   });
 
   static Future<void> show(
@@ -27,6 +29,7 @@ class SelectCategorySheet extends StatefulWidget {
     required List<CategoryEntity> categories,
     required String? selectedCategoryId,
     required ValueChanged<String?> onCategorySelected,
+    bool includeAllOption = true,
   }) {
     final l10n = context.l10n;
     return BottomSheetHelper.show<void>(
@@ -37,6 +40,7 @@ class SelectCategorySheet extends StatefulWidget {
           categories: categories,
           selectedCategoryId: selectedCategoryId,
           onCategorySelected: onCategorySelected,
+          includeAllOption: includeAllOption,
         ),
       ),
     );
@@ -63,7 +67,10 @@ class _SelectCategorySheetState extends State<SelectCategorySheet> {
     final colorScheme = context.colorScheme;
     final isArabic = Directionality.of(context) == TextDirection.rtl;
 
-    final items = <CategoryEntity?>[null, ...widget.categories];
+    final items = <CategoryEntity?>[
+      if (widget.includeAllOption) null,
+      ...widget.categories,
+    ];
     final normalizedQuery = _query.trim().toLowerCase();
     final filteredItems = normalizedQuery.isEmpty
         ? items

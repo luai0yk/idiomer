@@ -8,12 +8,14 @@ class HomeWelcomeHeader extends StatelessWidget {
   final String greeting;
   final String subtitle;
   final VoidCallback onOpenSettings;
+  final VoidCallback? onOpenReminder;
 
   const HomeWelcomeHeader({
     super.key,
     required this.greeting,
     required this.subtitle,
     required this.onOpenSettings,
+    this.onOpenReminder,
   });
 
   @override
@@ -73,6 +75,15 @@ class HomeWelcomeHeader extends StatelessWidget {
               ),
             ),
             context.horizontalSpace(10),
+            if (onOpenReminder != null) ...[
+              MyIconButton.ghost(
+                icon: AppIcons.notifications,
+                tooltip: l10n.idiomReminder,
+                iconColor: primary,
+                onPressed: onOpenReminder!,
+              ),
+              context.horizontalSpace(4),
+            ],
             MyIconButton.ghost(
               icon: AppIcons.settings,
               tooltip: l10n.settings,

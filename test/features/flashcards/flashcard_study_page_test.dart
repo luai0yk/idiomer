@@ -2,7 +2,9 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:idiomer/app/l10n/app_localizations.dart';
+import 'package:idiomer/app/routes/app_routes.dart';
 import 'package:idiomer/app/theme/material_theme.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/database/app_database.dart';
@@ -359,6 +361,104 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(pickedGroup, equals(group2));
+    },
+  );
+
+  testWidgets(
+    'FlashcardsPage shows settings icon in both empty and non-empty states and navigates to settings',
+    (tester) async {
+      final emptyRepo = _StubFlashcardsRepository(const []);
+      final emptyCubit = FlashcardsCubit(
+        watchGroups: WatchFlashcardGroupsUseCase(emptyRepo),
+        createGroup: CreateFlashcardGroupUseCase(emptyRepo),
+        renameGroup: RenameFlashcardGroupUseCase(emptyRepo),
+        deleteGroup: DeleteFlashcardGroupUseCase(emptyRepo),
+        clearAllGroups: ClearAllFlashcardGroupsUseCase(emptyRepo),
+      );
+      addTearDown(emptyCubit.close);
+
+      final emptyRouter = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (_, _) => BlocProvider.value(
+              value: emptyCubit..watchAll(),
+              child: const FlashcardsPage(),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.settings,
+            builder: (_, _) => const Scaffold(body: Text('Settings Target')),
+          ),
+        ],
+      );
+      addTearDown(emptyRouter.dispose);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          theme: const MaterialTheme().light(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: emptyRouter,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(AppIcons.settings), findsOneWidget);
+      expect(find.byIcon(AppIcons.clear), findsNothing);
+
+      final groupRepo = _StubFlashcardsRepository([
+        FlashcardGroupEntity(
+          id: 1,
+          name: 'Travel Idioms',
+          idiomCount: 2,
+          createdAt: DateTime(2026),
+          updatedAt: DateTime(2026),
+        ),
+      ]);
+      final groupCubit = FlashcardsCubit(
+        watchGroups: WatchFlashcardGroupsUseCase(groupRepo),
+        createGroup: CreateFlashcardGroupUseCase(groupRepo),
+        renameGroup: RenameFlashcardGroupUseCase(groupRepo),
+        deleteGroup: DeleteFlashcardGroupUseCase(groupRepo),
+        clearAllGroups: ClearAllFlashcardGroupsUseCase(groupRepo),
+      );
+      addTearDown(groupCubit.close);
+
+      final groupRouter = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (_, _) => BlocProvider.value(
+              value: groupCubit..watchAll(),
+              child: const FlashcardsPage(),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.settings,
+            builder: (_, _) => const Scaffold(body: Text('Settings Target')),
+          ),
+        ],
+      );
+      addTearDown(groupRouter.dispose);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          theme: const MaterialTheme().light(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: groupRouter,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(AppIcons.clear), findsOneWidget);
+      expect(find.byIcon(AppIcons.settings), findsOneWidget);
+
+      await tester.tap(find.byIcon(AppIcons.settings));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Settings Target'), findsOneWidget);
     },
   );
 }

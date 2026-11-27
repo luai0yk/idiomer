@@ -5,6 +5,7 @@ class FlashcardsHeader extends StatelessWidget {
   final String title;
   final bool withLeading;
   final Widget? trailing;
+  final List<Widget> actions;
   final bool showBottomBorder;
 
   const FlashcardsHeader({
@@ -12,6 +13,7 @@ class FlashcardsHeader extends StatelessWidget {
     required this.title,
     this.withLeading = false,
     this.trailing,
+    this.actions = const [],
     this.showBottomBorder = false,
   });
 
@@ -21,7 +23,7 @@ class FlashcardsHeader extends StatelessWidget {
       title: title,
       withLeading: withLeading,
       showBottomBorder: showBottomBorder,
-      actions: trailing != null ? [trailing!] : const [],
+      actions: [?trailing, ...actions],
     );
   }
 }

@@ -55,14 +55,21 @@ class FlashcardsPage extends StatelessWidget {
                 return FlashcardsHeader(
                   title: l10n.flashcards,
                   showBottomBorder: showBottomBorder,
-                  trailing: hasGroups
-                      ? MyIconButton.ghost(
-                          icon: AppIcons.clear,
-                          iconColor: colorScheme.primary,
-                          tooltip: l10n.clearAll,
-                          onPressed: () => _confirmClearAll(context, l10n),
-                        )
-                      : null,
+                  actions: [
+                    if (hasGroups)
+                      MyIconButton.ghost(
+                        icon: AppIcons.clear,
+                        iconColor: colorScheme.primary,
+                        tooltip: l10n.clearAll,
+                        onPressed: () => _confirmClearAll(context, l10n),
+                      ),
+                    MyIconButton.ghost(
+                      icon: AppIcons.settings,
+                      tooltip: l10n.settings,
+                      iconColor: colorScheme.primary,
+                      onPressed: () => context.push(AppRoutes.settings),
+                    ),
+                  ],
                 );
               },
             ),

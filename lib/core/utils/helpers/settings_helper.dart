@@ -143,6 +143,14 @@ class SettingsHelper {
     return context.select((SettingsCubit cubit) => cubit.state.showTranslation);
   }
 
+  static bool readShowTranslation(BuildContext context) {
+    if (context.findAncestorWidgetOfExactType<BlocProvider<SettingsCubit>>() ==
+        null) {
+      return showTranslation;
+    }
+    return context.read<SettingsCubit>().state.showTranslation;
+  }
+
   static IdiomTapAction watchIdiomTapAction(BuildContext context) {
     if (context.findAncestorWidgetOfExactType<BlocProvider<SettingsCubit>>() ==
         null) {

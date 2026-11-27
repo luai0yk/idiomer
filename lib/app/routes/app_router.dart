@@ -25,6 +25,8 @@ import 'package:idiomer/features/quiz/presentation/cubit/quiz_session_cubit.dart
 import 'package:idiomer/features/quiz/presentation/pages/quiz_overview_page.dart';
 import 'package:idiomer/features/quiz/presentation/pages/quiz_review_page.dart';
 import 'package:idiomer/features/quiz/presentation/pages/quiz_session_page.dart';
+import 'package:idiomer/features/reminders/presentation/cubit/idiom_reminder_cubit.dart';
+import 'package:idiomer/features/reminders/presentation/pages/idiom_reminder_page.dart';
 import 'package:idiomer/features/settings/presentation/pages/settings_page.dart';
 
 import 'app_routes.dart';
@@ -113,6 +115,14 @@ class AppRouter {
           path: AppRoutes.settings,
           name: AppRoutes.settings,
           builder: (context, state) => const SettingsPage(withLeading: true),
+        ),
+        GoRoute(
+          path: AppRoutes.reminder,
+          name: AppRoutes.reminder,
+          builder: (context, state) => BlocProvider(
+            create: (_) => sl<IdiomReminderCubit>()..load(),
+            child: const IdiomReminderPage(),
+          ),
         ),
         GoRoute(
           path: '${AppRoutes.idiomDetail}/:id',

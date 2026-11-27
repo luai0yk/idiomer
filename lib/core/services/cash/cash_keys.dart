@@ -12,4 +12,5 @@ class CashKeys {
   static const String ttsVoiceLocale = 'tts_voice_locale';
   static const String ttsSpeechRate = 'tts_speech_rate';
   static const String recentColors = 'recent_colors';
+  static const String idiomReminder = 'idiom_reminder';
 }

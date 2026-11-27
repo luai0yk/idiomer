@@ -11,6 +11,7 @@ class AppRoutes {
   static const String quizSession = '/quiz/session';
   static const String quizReview = '/quiz/review';
   static const String settings = '/settings';
+  static const String reminder = '/reminder';
   static const String idiomDetail = '/idiom';
 
   static String idiomDetailPath(int id) => '$idiomDetail/$id';

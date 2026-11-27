@@ -1513,6 +1513,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shared via Idiomer app'**
   String get sharedByIdiomer;
+
+  /// No description provided for @idiomReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom Reminder'**
+  String get idiomReminder;
+
+  /// No description provided for @idiomReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get scheduled idiom notifications from your chosen category'**
+  String get idiomReminderSubtitle;
+
+  /// No description provided for @remindersSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications & Reminders'**
+  String get remindersSectionTitle;
+
+  /// No description provided for @reminderOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get reminderOff;
+
+  /// No description provided for @enableReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Reminder'**
+  String get enableReminder;
+
+  /// No description provided for @enableReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive idiom notifications on your schedule'**
+  String get enableReminderSubtitle;
+
+  /// No description provided for @reminderCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get reminderCategoryTitle;
+
+  /// No description provided for @reminderCategoryRequiredHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category (Required)'**
+  String get reminderCategoryRequiredHint;
+
+  /// No description provided for @reminderCategoryRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a category for your reminder notifications'**
+  String get reminderCategoryRequiredError;
+
+  /// No description provided for @reminderFrequencyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get reminderFrequencyTitle;
+
+  /// No description provided for @daily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get daily;
+
+  /// No description provided for @weekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// No description provided for @timesPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Times per Day'**
+  String get timesPerDay;
+
+  /// No description provided for @timesPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Times per Week'**
+  String get timesPerWeek;
+
+  /// No description provided for @once.
+  ///
+  /// In en, this message translates to:
+  /// **'Once'**
+  String get once;
+
+  /// No description provided for @twice.
+  ///
+  /// In en, this message translates to:
+  /// **'Twice'**
+  String get twice;
+
+  /// No description provided for @threeTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Times'**
+  String get threeTimes;
+
+  /// No description provided for @selectWeekdaysCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Select {count, plural, =1{1 day} other{{count} days}} ({selected}/{count})'**
+  String selectWeekdaysCount(int count, int selected);
+
+  /// No description provided for @reminderWeekdaysRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select {count, plural, =1{1 day} other{{count} days}} for your weekly schedule'**
+  String reminderWeekdaysRequiredError(int count);
+
+  /// No description provided for @reminderTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Time'**
+  String get reminderTime;
+
+  /// No description provided for @firstReminderTime.
+  ///
+  /// In en, this message translates to:
+  /// **'First Reminder'**
+  String get firstReminderTime;
+
+  /// No description provided for @secondReminderTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Second Reminder'**
+  String get secondReminderTime;
+
+  /// No description provided for @reminderDuplicateTimesError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose two different times for daily reminders'**
+  String get reminderDuplicateTimesError;
+
+  /// No description provided for @reminderScheduleSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule Summary'**
+  String get reminderScheduleSummaryTitle;
+
+  /// No description provided for @saveReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Reminder'**
+  String get saveReminder;
+
+  /// No description provided for @reminderSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom reminder scheduled'**
+  String get reminderSaved;
+
+  /// No description provided for @reminderDisabledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom reminder turned off'**
+  String get reminderDisabledMessage;
+
+  /// No description provided for @reminderPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is required to schedule reminders'**
+  String get reminderPermissionDenied;
+
+  /// No description provided for @reminderNoIdiomsInCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No idioms found in the selected category'**
+  String get reminderNoIdiomsInCategory;
+
+  /// No description provided for @reminderChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Idiom Reminders'**
+  String get reminderChannelName;
+
+  /// No description provided for @reminderChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled English–Arabic idiom learning reminders'**
+  String get reminderChannelDescription;
+
+  /// No description provided for @reminderDisabledSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on reminders and choose a category to get started'**
+  String get reminderDisabledSummary;
+
+  /// No description provided for @reminderDailySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{countLabel} • {times} • {category}'**
+  String reminderDailySummary(String countLabel, String times, String category);
+
+  /// No description provided for @reminderWeeklySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} at {time} • {category}'**
+  String reminderWeeklySummary(String days, String time, String category);
 }
 
 class _AppLocalizationsDelegate

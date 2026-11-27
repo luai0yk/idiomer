@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:idiomer/app/l10n/app_localizations.dart';
+import 'package:idiomer/app/routes/app_routes.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
@@ -70,14 +72,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 return ExploreFixedHeader(
                   title: l10n.favorites,
                   showBottomBorder: showBottomBorder,
-                  trailing: hasFavorites
-                      ? MyIconButton.ghost(
-                          icon: AppIcons.clear,
-                          iconColor: colorScheme.primary,
-                          tooltip: l10n.clearAll,
-                          onPressed: () => _confirmClearAll(context, l10n),
-                        )
-                      : null,
+                  actions: [
+                    if (hasFavorites)
+                      MyIconButton.ghost(
+                        icon: AppIcons.clear,
+                        iconColor: colorScheme.primary,
+                        tooltip: l10n.clearAll,
+                        onPressed: () => _confirmClearAll(context, l10n),
+                      ),
+                    MyIconButton.ghost(
+                      icon: AppIcons.settings,
+                      tooltip: l10n.settings,
+                      iconColor: colorScheme.primary,
+                      onPressed: () => context.push(AppRoutes.settings),
+                    ),
+                  ],
                 );
               },
             ),

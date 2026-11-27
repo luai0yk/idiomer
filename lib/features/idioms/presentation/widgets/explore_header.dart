@@ -15,12 +15,14 @@ import 'package:idiomer/shared/widgets/input/my_text_field.dart';
 class ExploreFixedHeader extends StatelessWidget {
   final String? title;
   final Widget? trailing;
+  final List<Widget> actions;
   final bool showBottomBorder;
 
   const ExploreFixedHeader({
     super.key,
     this.title,
     this.trailing,
+    this.actions = const [],
     this.showBottomBorder = false,
   });
 
@@ -30,7 +32,7 @@ class ExploreFixedHeader extends StatelessWidget {
     return MyGradientHeader(
       title: title ?? l10n.explore,
       showBottomBorder: showBottomBorder,
-      actions: trailing != null ? [trailing!] : const [],
+      actions: [?trailing, ...actions],
     );
   }
 }

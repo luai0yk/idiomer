@@ -779,4 +779,138 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharedByIdiomer => 'Shared via Idiomer app';
+
+  @override
+  String get idiomReminder => 'Idiom Reminder';
+
+  @override
+  String get idiomReminderSubtitle =>
+      'Get scheduled idiom notifications from your chosen category';
+
+  @override
+  String get remindersSectionTitle => 'Notifications & Reminders';
+
+  @override
+  String get reminderOff => 'Off';
+
+  @override
+  String get enableReminder => 'Enable Reminder';
+
+  @override
+  String get enableReminderSubtitle =>
+      'Receive idiom notifications on your schedule';
+
+  @override
+  String get reminderCategoryTitle => 'Category';
+
+  @override
+  String get reminderCategoryRequiredHint => 'Choose a category (Required)';
+
+  @override
+  String get reminderCategoryRequiredError =>
+      'Please choose a category for your reminder notifications';
+
+  @override
+  String get reminderFrequencyTitle => 'Repeat';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get timesPerDay => 'Times per Day';
+
+  @override
+  String get timesPerWeek => 'Times per Week';
+
+  @override
+  String get once => 'Once';
+
+  @override
+  String get twice => 'Twice';
+
+  @override
+  String get threeTimes => '3 Times';
+
+  @override
+  String selectWeekdaysCount(int count, int selected) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return 'Select $_temp0 ($selected/$count)';
+  }
+
+  @override
+  String reminderWeekdaysRequiredError(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return 'Please select $_temp0 for your weekly schedule';
+  }
+
+  @override
+  String get reminderTime => 'Reminder Time';
+
+  @override
+  String get firstReminderTime => 'First Reminder';
+
+  @override
+  String get secondReminderTime => 'Second Reminder';
+
+  @override
+  String get reminderDuplicateTimesError =>
+      'Please choose two different times for daily reminders';
+
+  @override
+  String get reminderScheduleSummaryTitle => 'Schedule Summary';
+
+  @override
+  String get saveReminder => 'Save Reminder';
+
+  @override
+  String get reminderSaved => 'Idiom reminder scheduled';
+
+  @override
+  String get reminderDisabledMessage => 'Idiom reminder turned off';
+
+  @override
+  String get reminderPermissionDenied =>
+      'Notification permission is required to schedule reminders';
+
+  @override
+  String get reminderNoIdiomsInCategory =>
+      'No idioms found in the selected category';
+
+  @override
+  String get reminderChannelName => 'Idiom Reminders';
+
+  @override
+  String get reminderChannelDescription =>
+      'Scheduled English–Arabic idiom learning reminders';
+
+  @override
+  String get reminderDisabledSummary =>
+      'Turn on reminders and choose a category to get started';
+
+  @override
+  String reminderDailySummary(
+    String countLabel,
+    String times,
+    String category,
+  ) {
+    return '$countLabel • $times • $category';
+  }
+
+  @override
+  String reminderWeeklySummary(String days, String time, String category) {
+    return '$days at $time • $category';
+  }
 }

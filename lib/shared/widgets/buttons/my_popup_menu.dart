@@ -33,6 +33,8 @@ class MyPopupMenu<T> extends StatelessWidget {
   final ShapeBorder? shape;
   final Color? color;
   final double? elevation;
+  final Clip clipBehavior;
+  final EdgeInsetsGeometry menuPadding;
 
   const MyPopupMenu({
     super.key,
@@ -45,35 +47,41 @@ class MyPopupMenu<T> extends StatelessWidget {
     this.shape,
     this.color,
     this.elevation,
+    this.clipBehavior = Clip.antiAlias,
+    this.menuPadding = EdgeInsets.zero,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
+
     return PopupMenuButton<T>(
       icon: MyIcon(icon: icon ?? AppIcons.more, color: iconColor),
       style: ButtonStyle(
         // backgroundColor: WidgetStatePropertyAll(
-        //   context.colorScheme.surfaceContainer,
+        //   colorScheme.surfaceContainer,
         // ),
         splashFactory: InkRipple.splashFactory,
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: context.brCircular),
         ),
-        padding: WidgetStatePropertyAll(EdgeInsets.zero),
+        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
       ),
-
       tooltip: tooltip,
       offset: offset,
+      clipBehavior: clipBehavior,
+      menuPadding: menuPadding,
       shape:
           shape ??
           RoundedRectangleBorder(
             borderRadius: context.brXl,
             side: BorderSide(
               width: context.setSize(0.4),
-              color: context.colorScheme.outlineVariant,
+              color: colorScheme.outlineVariant,
             ),
           ),
-      color: color ?? context.colorScheme.surface,
+      color: color ?? colorScheme.surface,
       elevation: elevation ?? context.elevationXl,
       shadowColor: Colors.black.withValues(alpha: 0.3),
       onSelected: (value) {
@@ -82,8 +90,8 @@ class MyPopupMenu<T> extends StatelessWidget {
       itemBuilder: (BuildContext context) {
         return items.map((MyPopupMenuItem<T> item) {
           final itemColor = item.enabled
-              ? (item.color ?? context.colorScheme.onSurface)
-              : context.colorScheme.onSurface.withValues(alpha: 0.38);
+              ? (item.color ?? colorScheme.onSurface)
+              : colorScheme.onSurface.withValues(alpha: 0.38);
           return PopupMenuItem<T>(
             value: item.value,
             enabled: item.enabled,
@@ -101,9 +109,7 @@ class MyPopupMenu<T> extends StatelessWidget {
                 Expanded(
                   child: Text(
                     item.label,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: itemColor,
-                    ),
+                    style: textTheme.bodyMedium?.copyWith(color: itemColor),
                   ),
                 ),
               ],

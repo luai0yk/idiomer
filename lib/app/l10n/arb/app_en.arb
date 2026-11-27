@@ -334,5 +334,82 @@
   "deviceTtsSettings": "Device TTS Settings",
   "deviceTtsSettingsSubtitle": "Manage installed voices and speech engines",
   "deviceTtsSettingsUnavailable": "Could not open device TTS settings",
-  "sharedByIdiomer": "Shared via Idiomer app"
+  "sharedByIdiomer": "Shared via Idiomer app",
+  "idiomReminder": "Idiom Reminder",
+  "idiomReminderSubtitle": "Get scheduled idiom notifications from your chosen category",
+  "remindersSectionTitle": "Notifications & Reminders",
+  "reminderOff": "Off",
+  "enableReminder": "Enable Reminder",
+  "enableReminderSubtitle": "Receive idiom notifications on your schedule",
+  "reminderCategoryTitle": "Category",
+  "reminderCategoryRequiredHint": "Choose a category (Required)",
+  "reminderCategoryRequiredError": "Please choose a category for your reminder notifications",
+  "reminderFrequencyTitle": "Repeat",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "timesPerDay": "Times per Day",
+  "timesPerWeek": "Times per Week",
+  "once": "Once",
+  "twice": "Twice",
+  "threeTimes": "3 Times",
+  "selectWeekdaysCount": "Select {count, plural, =1{1 day} other{{count} days}} ({selected}/{count})",
+  "@selectWeekdaysCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderWeekdaysRequiredError": "Please select {count, plural, =1{1 day} other{{count} days}} for your weekly schedule",
+  "@reminderWeekdaysRequiredError": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderTime": "Reminder Time",
+  "firstReminderTime": "First Reminder",
+  "secondReminderTime": "Second Reminder",
+  "reminderDuplicateTimesError": "Please choose two different times for daily reminders",
+  "reminderScheduleSummaryTitle": "Schedule Summary",
+  "saveReminder": "Save Reminder",
+  "reminderSaved": "Idiom reminder scheduled",
+  "reminderDisabledMessage": "Idiom reminder turned off",
+  "reminderPermissionDenied": "Notification permission is required to schedule reminders",
+  "reminderNoIdiomsInCategory": "No idioms found in the selected category",
+  "reminderChannelName": "Idiom Reminders",
+  "reminderChannelDescription": "Scheduled English–Arabic idiom learning reminders",
+  "reminderDisabledSummary": "Turn on reminders and choose a category to get started",
+  "reminderDailySummary": "{countLabel} • {times} • {category}",
+  "@reminderDailySummary": {
+    "placeholders": {
+      "countLabel": {
+        "type": "String"
+      },
+      "times": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderWeeklySummary": "{days} at {time} • {category}",
+  "@reminderWeeklySummary": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  }
 }
