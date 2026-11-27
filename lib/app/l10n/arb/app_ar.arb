@@ -234,5 +234,6 @@
   "stopSpeaking": "إيقاف",
   "deviceTtsSettings": "إعدادات النطق في الجهاز",
   "deviceTtsSettingsSubtitle": "إدارة الأصوات المثبّتة ومحركات النطق",
-  "deviceTtsSettingsUnavailable": "تعذّر فتح إعدادات النطق في الجهاز"
+  "deviceTtsSettingsUnavailable": "تعذّر فتح إعدادات النطق في الجهاز",
+  "sharedByIdiomer": "تمت المشاركة عبر تطبيق Idiomer"
 }

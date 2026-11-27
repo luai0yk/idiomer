@@ -776,4 +776,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deviceTtsSettingsUnavailable =>
       'Could not open device TTS settings';
+
+  @override
+  String get sharedByIdiomer => 'Shared via Idiomer app';
 }

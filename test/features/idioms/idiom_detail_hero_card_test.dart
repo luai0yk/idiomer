@@ -6,6 +6,7 @@ import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/features/idioms/domain/entities/category_entity.dart';
 import 'package:idiomer/features/idioms/domain/entities/idiom_detail_entity.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_detail_hero_card.dart';
+import 'package:idiomer/shared/widgets/cards/my_card.dart';
 
 void main() {
   testWidgets(
@@ -53,6 +54,22 @@ void main() {
       expect(find.byType(Divider), findsNothing);
       expect(find.byIcon(AppIcons.quoteUp), findsOneWidget);
       expect(find.byIcon(AppIcons.quoteDown), findsOneWidget);
+
+      final englishWidget = tester.widget<Text>(find.text('Spill the beans'));
+      final arabicWidget = tester.widget<Text>(find.text('يفشي السر'));
+      expect(englishWidget.textAlign, TextAlign.center);
+      expect(arabicWidget.textAlign, TextAlign.center);
+      expect(
+        englishWidget.style!.fontSize!,
+        greaterThan(arabicWidget.style!.fontSize!),
+      );
+
+      final chipCard = tester.widget<MyCard>(
+        find
+            .ancestor(of: find.text('Secrets'), matching: find.byType(MyCard))
+            .first,
+      );
+      expect(chipCard.borderColor, isNull);
 
       await tester.tap(find.byIcon(AppIcons.copy));
       await tester.pump();

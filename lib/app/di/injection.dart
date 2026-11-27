@@ -9,6 +9,7 @@ import 'package:idiomer/features/db_setup/data/datasources/db_setup_local_dataso
 import 'package:idiomer/features/db_setup/data/datasources/db_setup_remote_datasource.dart';
 import 'package:idiomer/features/db_setup/data/repositories/db_setup_repository_impl.dart';
 import 'package:idiomer/features/db_setup/domain/repositories/db_setup_repository.dart';
+import 'package:idiomer/features/db_setup/domain/usecases/check_database_ready_usecase.dart';
 import 'package:idiomer/features/db_setup/domain/usecases/initialize_database_usecase.dart';
 import 'package:idiomer/features/db_setup/presentation/cubit/db_setup_cubit.dart';
 import 'package:idiomer/features/favorites/presentation/bloc/favorites_bloc.dart';
@@ -177,6 +178,9 @@ void _initDbSetup({DbSetupRepository? dbSetupRepository}) {
     ..registerLazySingleton<DbSetupRepository>(
       () =>
           dbSetupRepository ?? DbSetupRepositoryImpl(local: sl(), remote: sl()),
+    )
+    ..registerLazySingleton<CheckDatabaseReadyUseCase>(
+      () => CheckDatabaseReadyUseCase(sl()),
     )
     ..registerLazySingleton<InitializeDatabaseUseCase>(
       () => InitializeDatabaseUseCase(sl()),

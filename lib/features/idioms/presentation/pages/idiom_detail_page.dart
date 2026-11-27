@@ -6,6 +6,7 @@ import 'package:idiomer/app/l10n/app_localizations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
+import 'package:idiomer/core/utils/extensions/responsive_size.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 import 'package:idiomer/core/utils/helpers/settings_helper.dart';
 import 'package:idiomer/core/utils/helpers/ui/snackbar_helper.dart';
@@ -106,12 +107,8 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                         iconColor: colorScheme.primary,
                         tooltip: l10n.addToFlashcards,
                         autoLoading: false,
-                        onPressed: () => _handleFlashcardAction(
-                          context,
-                          state,
-                          idiom,
-                          l10n,
-                        ),
+                        onPressed: () =>
+                            _handleFlashcardAction(context, state, idiom, l10n),
                       ),
                       MyIconButton.ghost(
                         icon: AppIcons.share,
@@ -322,48 +319,60 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: HighlightedMarkupText(
-                  showIndex
-                      ? '$index. ${definition.englishMeaning}'
-                      : definition.englishMeaning,
-                  textDirection: TextDirection.ltr,
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.onSurface,
+          Directionality(
+            textDirection: .ltr,
+            child: Directionality(
+              textDirection: .ltr,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: HighlightedMarkupText(
+                      showIndex
+                          ? '$index. ${definition.englishMeaning}'
+                          : definition.englishMeaning,
+                      textDirection: TextDirection.ltr,
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
                   ),
-                ),
+                  Column(
+                    children: [
+                      if (_ttsService != null)
+                        MyIconButton.ghost(
+                          icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
+                          iconSize: context.iconS,
+                          buttonSize: context.setSize(24),
+                          iconColor: isSpeaking
+                              ? colorScheme.primary
+                              : colorScheme.onSurfaceVariant,
+                          tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
+                          autoLoading: false,
+                          onPressed: () => _speakText(
+                            definition.englishMeaning,
+                            utteranceId: utteranceId,
+                          ),
+                        ),
+                      MyIconButton.ghost(
+                        icon: AppIcons.copy,
+                        iconSize: context.iconS,
+                        buttonSize: context.setSize(24),
+                        tooltip: l10n.copy,
+                        onPressed: () => _copyText(
+                          HighlightedMarkupText.stripMarkers(
+                            hasArabicMeaning
+                                ? '${definition.englishMeaning}\n${definition.arabicMeaning}'
+                                : definition.englishMeaning,
+                          ),
+                          l10n.copiedToClipboard,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              if (_ttsService != null)
-                MyIconButton.ghost(
-                  icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
-                  iconSize: context.iconS,
-                  iconColor: isSpeaking
-                      ? colorScheme.primary
-                      : colorScheme.onSurfaceVariant,
-                  tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
-                  autoLoading: false,
-                  onPressed: () => _speakText(
-                    definition.englishMeaning,
-                    utteranceId: utteranceId,
-                  ),
-                ),
-              MyIconButton.ghost(
-                icon: AppIcons.copy,
-                iconSize: context.iconS,
-                tooltip: l10n.copy,
-                onPressed: () => _copyText(
-                  HighlightedMarkupText.stripMarkers(
-                    hasArabicMeaning
-                        ? '${definition.englishMeaning}\n${definition.arabicMeaning}'
-                        : definition.englishMeaning,
-                  ),
-                  l10n.copiedToClipboard,
-                ),
-              ),
-            ],
+            ),
           ),
           if (hasArabicMeaning) ...[
             context.verticalSpace(8),
@@ -443,32 +452,38 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                   ),
                 ),
               ),
-              if (_ttsService != null)
-                MyIconButton.ghost(
-                  icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
-                  iconSize: context.iconS,
-                  iconColor: isSpeaking
-                      ? colorScheme.primary
-                      : colorScheme.onSurfaceVariant,
-                  tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
-                  autoLoading: false,
-                  onPressed: () => _speakText(
-                    example.englishSentence,
-                    utteranceId: utteranceId,
+              Column(
+                children: [
+                  if (_ttsService != null)
+                    MyIconButton.ghost(
+                      icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
+                      iconSize: context.iconS,
+                      buttonSize: context.setSize(24),
+                      iconColor: isSpeaking
+                          ? colorScheme.primary
+                          : colorScheme.onSurfaceVariant,
+                      tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
+                      autoLoading: false,
+                      onPressed: () => _speakText(
+                        example.englishSentence,
+                        utteranceId: utteranceId,
+                      ),
+                    ),
+                  MyIconButton.ghost(
+                    icon: AppIcons.copy,
+                    iconSize: context.iconS,
+                    buttonSize: context.setSize(24),
+                    tooltip: l10n.copy,
+                    onPressed: () => _copyText(
+                      HighlightedMarkupText.stripMarkers(
+                        hasArabicSentence
+                            ? '${example.englishSentence}\n${example.arabicSentence}'
+                            : example.englishSentence,
+                      ),
+                      l10n.copiedToClipboard,
+                    ),
                   ),
-                ),
-              MyIconButton.ghost(
-                icon: AppIcons.copy,
-                iconSize: context.iconS,
-                tooltip: l10n.copy,
-                onPressed: () => _copyText(
-                  HighlightedMarkupText.stripMarkers(
-                    hasArabicSentence
-                        ? '${example.englishSentence}\n${example.arabicSentence}'
-                        : example.englishSentence,
-                  ),
-                  l10n.copiedToClipboard,
-                ),
+                ],
               ),
             ],
           ),

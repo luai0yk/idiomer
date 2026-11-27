@@ -19,6 +19,9 @@ class DbSetupRepositoryImpl implements DbSetupRepository {
        _remote = remote;
 
   @override
+  Future<bool> isDatabaseReady() => _local.isDatabaseValid();
+
+  @override
   Stream<DbSetupProgress> initializeDatabase() {
     final controller = StreamController<DbSetupProgress>();
     final cancelToken = CancelToken();

@@ -783,4 +783,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get deviceTtsSettingsUnavailable =>
       'تعذّر فتح إعدادات النطق في الجهاز';
+
+  @override
+  String get sharedByIdiomer => 'تمت المشاركة عبر تطبيق Idiomer';
 }

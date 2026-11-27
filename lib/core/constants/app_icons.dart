@@ -144,6 +144,6 @@ class AppIcons {
   static const volume = Iconsax.volume_high_copy;
   static const voice = Iconsax.microphone_2_copy;
   static const play = Iconsax.play_copy;
-  static const stop = Iconsax.pause_copy;
+  static const stop = Iconsax.stop;
   static const speed = Iconsax.speedometer_copy;
 }

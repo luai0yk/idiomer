@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:idiomer/app/l10n/app_localizations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
@@ -48,10 +49,17 @@ class IdiomDetailHeroCard extends StatelessWidget {
       ],
     );
 
-    return MyCard.filled(
+    return MyCard.elevated(
       gradient: cardGradient,
       borderRadius: context.brXl,
       padding: EdgeInsets.zero,
+      customShadow: [
+        BoxShadow(
+          color: primary.withValues(alpha: 0.24),
+          blurRadius: context.setSize(22),
+          offset: Offset(0, context.setSize(10)),
+        ),
+      ],
       child: Stack(
         children: [
           PositionedDirectional(
@@ -72,7 +80,7 @@ class IdiomDetailHeroCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: context.setSize(14),
+            top: context.setSize(26),
             left: -context.setSize(12),
             child: Transform.rotate(
               angle: -0.1,
@@ -85,7 +93,7 @@ class IdiomDetailHeroCard extends StatelessWidget {
           ),
           Positioned(
             bottom: -context.setSize(14),
-            right: context.setSize(8),
+            right: context.setSize(6),
             child: Transform.rotate(
               angle: -0.08,
               child: MyIcon(
@@ -98,82 +106,108 @@ class IdiomDetailHeroCard extends StatelessWidget {
           Padding(
             padding: context.insetsAllL,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        idiom.englishText,
-                        textDirection: TextDirection.ltr,
-                        style: textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: onPrimary,
-                          height: 1.25,
-                        ),
-                      ),
-                    ),
-                    context.horizontalSpace(8),
-                    if (onSpeak != null) ...[
-                      MyIconButton.ghost(
-                        icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
-                        iconColor: onPrimary,
-                        tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
-                        autoLoading: false,
-                        onPressed: onSpeak,
-                      ),
-                      context.horizontalSpace(2),
-                    ],
-                    MyIconButton.ghost(
-                      icon: AppIcons.copy,
-                      iconColor: onPrimary,
-                      tooltip: l10n.copy,
-                      onPressed: onCopy,
-                    ),
-                  ],
+                _buildActionsRow(l10n, onPrimary, context),
+                context.verticalSpace(4),
+                Text(
+                  idiom.englishText,
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.ltr,
+                  style: textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: onPrimary,
+                    height: 1.25,
+                  ),
                 ),
                 if (showTranslation && idiom.arabicText.trim().isNotEmpty) ...[
-                  context.verticalSpace(4),
+                  context.verticalSpace(6),
                   Text(
                     idiom.arabicText,
+                    textAlign: TextAlign.center,
                     textDirection: TextDirection.rtl,
-                    style: textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: onPrimary.withValues(alpha: 0.94),
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: onPrimary.withValues(alpha: 0.9),
                     ),
                   ),
                 ],
                 if (idiom.categories.isNotEmpty) ...[
-                  context.verticalSpace(14),
-                  Wrap(
-                    spacing: context.spaceS,
-                    runSpacing: context.spaceS,
-                    children: [
-                      for (final category in idiom.categories)
-                        MyCard.filled(
-                          color: onPrimary.withValues(alpha: 0.16),
-                          borderColor: onPrimary.withValues(alpha: 0.22),
-                          borderRadius: context.brCircular,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: context.spaceM,
-                            vertical: context.spaceXs,
-                          ),
-                          child: Text(
+                  context.verticalSpace(16),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Wrap(
+                      spacing: context.spaceS,
+                      runSpacing: context.spaceS,
+                      children: [
+                        for (final category in idiom.categories)
+                          _buildCategoryChip(
+                            context,
                             category.localizedName(isArabic: isArabic),
-                            style: textTheme.labelSmall?.copyWith(
-                              color: onPrimary,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            textTheme,
+                            onPrimary,
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionsRow(
+    AppLocalizations l10n,
+    Color onPrimary,
+    BuildContext context,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if (onSpeak != null) ...[
+          MyIconButton.ghost(
+            icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
+            iconColor: onPrimary,
+            tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
+            autoLoading: false,
+            onPressed: onSpeak,
+          ),
+          context.horizontalSpace(2),
+        ],
+        MyIconButton.ghost(
+          icon: AppIcons.copy,
+          iconColor: onPrimary,
+          tooltip: l10n.copy,
+          onPressed: onCopy,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryChip(
+    BuildContext context,
+    String label,
+    TextTheme textTheme,
+    Color onPrimary,
+  ) {
+    return MyCard.filled(
+      color: onPrimary.withValues(alpha: 0.14),
+      borderRadius: context.brCircular,
+      padding: EdgeInsets.symmetric(
+        horizontal: context.spaceS,
+        vertical: context.spaceXs,
+      ),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: textTheme.labelSmall?.copyWith(
+          color: onPrimary.withValues(alpha: 0.95),
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

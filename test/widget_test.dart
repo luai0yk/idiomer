@@ -6,8 +6,11 @@ import 'package:idiomer/app/routes/app_router.dart';
 import 'package:idiomer/app/routes/app_routes.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/database/app_database.dart';
+import 'package:idiomer/core/services/cash/cash_keys.dart';
+import 'package:idiomer/core/services/cash/cash_service.dart';
 import 'package:idiomer/features/db_setup/domain/entities/db_setup_progress.dart';
 import 'package:idiomer/features/db_setup/domain/repositories/db_setup_repository.dart';
+import 'package:idiomer/features/db_setup/domain/usecases/check_database_ready_usecase.dart';
 import 'package:idiomer/features/db_setup/presentation/pages/db_setup_page.dart';
 import 'package:idiomer/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:idiomer/features/flashcards/presentation/pages/flashcard_study_page.dart';
@@ -35,8 +38,12 @@ import 'features/quiz/quiz_test.dart';
 
 class _FakeDbSetupRepository implements DbSetupRepository {
   final Stream<DbSetupProgress> Function() onInitialize;
+  final Future<bool> Function()? onCheckReady;
 
-  _FakeDbSetupRepository(this.onInitialize);
+  _FakeDbSetupRepository(this.onInitialize, {this.onCheckReady});
+
+  @override
+  Future<bool> isDatabaseReady() => onCheckReady?.call() ?? Future.value(false);
 
   @override
   Stream<DbSetupProgress> initializeDatabase() => onInitialize();
@@ -55,6 +62,65 @@ void main() {
   tearDown(() async {
     await sl.reset();
   });
+
+  testWidgets(
+    'resolveInitialLocation skips DbSetupPage and opens default tab when DB is already ready',
+    (WidgetTester tester) async {
+      final fakeRepo = _FakeDbSetupRepository(
+        () => const Stream.empty(),
+        onCheckReady: () async => true,
+      );
+      await initDependencies(database: testDb, dbSetupRepository: fakeRepo);
+      await CashService.instance.setString(CashKeys.defaultTab, 'flashcards');
+
+      final initialLocation = await resolveInitialLocation(
+        checkDatabaseReady: sl<CheckDatabaseReadyUseCase>(),
+      );
+      expect(initialLocation, AppRoutes.flashcards);
+
+      await tester.pumpWidget(MyApp(initialLocation: initialLocation));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DbSetupPage), findsNothing);
+      expect(find.byType(FlashcardsPage), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+      final resetFuture = sl.reset();
+      await tester.pump(const Duration(milliseconds: 50));
+      await resetFuture;
+    },
+  );
+
+  test(
+    'resolveInitialLocation falls back to DbSetup when DB is missing or check throws',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      await CashService.instance.init();
+
+      final notReadyRepo = _FakeDbSetupRepository(
+        () => const Stream.empty(),
+        onCheckReady: () async => false,
+      );
+      expect(
+        await resolveInitialLocation(
+          checkDatabaseReady: CheckDatabaseReadyUseCase(notReadyRepo),
+        ),
+        AppRoutes.dbSetup,
+      );
+
+      final throwingRepo = _FakeDbSetupRepository(
+        () => const Stream.empty(),
+        onCheckReady: () async => throw StateError('boom'),
+      );
+      expect(
+        await resolveInitialLocation(
+          checkDatabaseReady: CheckDatabaseReadyUseCase(throwingRepo),
+        ),
+        AppRoutes.dbSetup,
+      );
+    },
+  );
 
   testWidgets(
     'DbSetupPage shows error retry and navigates to Home tab when ready',

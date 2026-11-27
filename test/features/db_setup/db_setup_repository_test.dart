@@ -7,6 +7,7 @@ import 'package:idiomer/features/db_setup/data/datasources/db_setup_local_dataso
 import 'package:idiomer/features/db_setup/data/datasources/db_setup_remote_datasource.dart';
 import 'package:idiomer/features/db_setup/data/repositories/db_setup_repository_impl.dart';
 import 'package:idiomer/features/db_setup/domain/entities/db_setup_progress.dart';
+import 'package:idiomer/features/db_setup/domain/usecases/check_database_ready_usecase.dart';
 import 'package:idiomer/features/db_setup/domain/usecases/initialize_database_usecase.dart';
 import 'package:idiomer/features/db_setup/presentation/cubit/db_setup_cubit.dart';
 import 'package:idiomer/features/db_setup/presentation/cubit/db_setup_state.dart';
@@ -37,6 +38,16 @@ void main() {
     if (await tempDir.exists()) {
       await tempDir.delete(recursive: true);
     }
+  });
+
+  test('isDatabaseReady delegates to local data source validity check', () async {
+    final useCase = CheckDatabaseReadyUseCase(repository);
+
+    when(() => local.isDatabaseValid()).thenAnswer((_) async => true);
+    expect(await useCase(), isTrue);
+
+    when(() => local.isDatabaseValid()).thenAnswer((_) async => false);
+    expect(await useCase(), isFalse);
   });
 
   test('skips download when local database is already valid', () async {

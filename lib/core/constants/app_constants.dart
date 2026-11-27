@@ -12,6 +12,7 @@ class AppConstants {
 
   static const int quizQuestionCount = 8;
 
-  static const String dbLink =
-      'https://idiomer-dev-luai0yk.web.app/english_idioms.7z';
+  static const String appUrl = 'https://idiomer-dev-luai0yk.web.app';
+
+  static const String dbLink = '$appUrl/english_idioms.7z';
 }

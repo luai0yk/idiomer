@@ -333,5 +333,6 @@
   "stopSpeaking": "Stop",
   "deviceTtsSettings": "Device TTS Settings",
   "deviceTtsSettingsSubtitle": "Manage installed voices and speech engines",
-  "deviceTtsSettingsUnavailable": "Could not open device TTS settings"
+  "deviceTtsSettingsUnavailable": "Could not open device TTS settings",
+  "sharedByIdiomer": "Shared via Idiomer app"
 }

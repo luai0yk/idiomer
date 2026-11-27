@@ -1507,6 +1507,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not open device TTS settings'**
   String get deviceTtsSettingsUnavailable;
+
+  /// No description provided for @sharedByIdiomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared via Idiomer app'**
+  String get sharedByIdiomer;
 }
 
 class _AppLocalizationsDelegate
