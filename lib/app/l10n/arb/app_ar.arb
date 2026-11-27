@@ -210,5 +210,7 @@
   "loadingFlashcards": "جارٍ تحميل البطاقات...",
   "preparingQuiz": "جارٍ تجهيز الاختبار...",
   "loadingQuizOverview": "جارٍ تحميل الاختبارات...",
-  "loadingQuizReview": "جارٍ تحميل المراجعة..."
+  "loadingQuizReview": "جارٍ تحميل المراجعة...",
+  "continueStudying": "مواصلة الدراسة",
+  "browseCategories": "تصفح التصنيفات"
 }

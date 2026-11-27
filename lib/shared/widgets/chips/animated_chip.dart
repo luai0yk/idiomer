@@ -24,6 +24,9 @@ class AnimatedChip extends StatelessWidget {
   final IconData? suffixIcon;
   final Widget? prefix;
   final Widget? suffix;
+  final EdgeInsets? padding;
+  final double? fontSize;
+  final double? iconSize;
 
   const AnimatedChip({
     super.key,
@@ -36,23 +39,30 @@ class AnimatedChip extends StatelessWidget {
     this.suffixIcon,
     this.prefix,
     this.suffix,
+    this.padding,
+    this.fontSize,
+    this.iconSize,
   });
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = context.colorScheme;
+    final double resolvedIconSize = iconSize ?? context.setSize(14);
+    final double resolvedFontSize = fontSize ?? context.setSize(13);
 
     return MyAnimatedFadeSwitcher(
       child: MyCard.filled(
         key: ValueKey<bool>(isSelected),
-        padding: EdgeInsets.symmetric(
-          horizontal: context.spaceM,
-          vertical: context.spaceS,
-        ),
+        padding:
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: context.spaceM,
+              vertical: context.spaceS,
+            ),
         color: isSelected
             ? context.colorScheme.primary
             : colors.surfaceContainer,
-        borderRadius: borderRadius ?? context.brCircular,
+        borderRadius: borderRadius ?? context.brL,
         onTap: onTap,
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -64,34 +74,38 @@ class AnimatedChip extends StatelessWidget {
               MyIcon(
                 icon: prefixIcon!,
                 color: isSelected ? colors.onPrimary : colors.onSurface,
-                size: context.setSize(14),
+                size: resolvedIconSize,
               ),
               SizedBox(width: context.setSize(6)),
             ] else if (isSelected && showIcon) ...[
               MyIcon(
                 icon: AppIcons.checkCircle,
                 color: colors.onPrimary,
-                size: context.setSize(14),
+                size: resolvedIconSize,
               ),
               SizedBox(width: context.setSize(6)),
             ],
-            Text(
-              text,
-              style: TextStyle(
-                color: isSelected ? colors.onPrimary : colors.onSurface,
-                fontSize: context.setSize(13),
-                fontWeight: FontWeight.w500,
+            Flexible(
+              child: Text(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: isSelected ? colors.onPrimary : colors.onSurface,
+                  fontSize: resolvedFontSize,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             if (suffix != null) ...[
               SizedBox(width: context.setSize(6)),
               suffix!,
             ] else if (suffixIcon != null) ...[
-              SizedBox(width: context.setSize(6)),
+              SizedBox(width: context.setSize(4)),
               MyIcon(
                 icon: suffixIcon!,
                 color: isSelected ? colors.onPrimary : colors.onSurface,
-                size: context.setSize(14),
+                size: resolvedIconSize,
               ),
             ],
           ],

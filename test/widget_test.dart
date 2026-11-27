@@ -116,15 +116,15 @@ void main() {
       await tester.pumpWidget(MyApp(router: router));
       await tester.pumpAndSettle();
 
-      // Verify exactly 4 bottom navigation destinations: Home, Explore, Favorites, Flashcards.
+      // Verify exactly 4 bottom navigation destinations: Home, Explore, Flashcards, Favorites.
       final navBar = tester.widget<MyBottomNavigationBar>(
         find.byType(MyBottomNavigationBar),
       );
       expect(navBar.items.map((i) => i.title).toList(), [
         'Home',
         'Explore',
-        'Favorites',
         'Flashcards',
+        'Favorites',
       ]);
 
       // Settings is accessible from the Home header.

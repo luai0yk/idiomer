@@ -8,9 +8,12 @@ import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 import 'package:idiomer/features/home/presentation/cubit/home_cubit.dart';
 import 'package:idiomer/features/home/presentation/cubit/home_state.dart';
+import 'package:idiomer/features/home/presentation/widgets/home_categories_section.dart';
+import 'package:idiomer/features/home/presentation/widgets/home_flashcards_section.dart';
 import 'package:idiomer/features/home/presentation/widgets/home_quiz_card.dart';
 import 'package:idiomer/features/home/presentation/widgets/home_welcome_header.dart';
 import 'package:idiomer/features/home/presentation/widgets/idiom_of_the_day_card.dart';
+import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 
@@ -46,6 +49,8 @@ class HomePage extends StatelessWidget {
               ),
             );
           }
+
+          final studyableGroups = state.studyableFlashcardGroups;
 
           return ListView(
             padding: EdgeInsets.only(bottom: context.spaceXl),
@@ -87,6 +92,43 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+              if (studyableGroups.isNotEmpty) ...[
+                context.verticalSpace(4),
+                HomeFlashcardsSection(
+                  groups: studyableGroups,
+                  onTapGroup: (group) =>
+                      context.push(AppRoutes.flashcardStudyPath(group.id)),
+                  onViewAll: () => context.go(AppRoutes.flashcards),
+                ),
+              ],
+              if (state.categories.isNotEmpty) ...[
+                context.verticalSpace(4),
+                HomeCategoriesSection(
+                  categories: state.categories,
+                  onTapCategory: (category) => context.go(
+                    AppRoutes.idiomsCategoryPath(category.id),
+                    extra: DateTime.now().microsecondsSinceEpoch,
+                  ),
+                  onViewAll: () {
+                    SelectCategorySheet.show(
+                      context,
+                      categories: state.categories,
+                      selectedCategoryId: null,
+                      onCategorySelected: (categoryId) {
+                        final trigger = DateTime.now().microsecondsSinceEpoch;
+                        if (categoryId == null) {
+                          context.go(AppRoutes.idioms, extra: trigger);
+                        } else {
+                          context.go(
+                            AppRoutes.idiomsCategoryPath(categoryId),
+                            extra: trigger,
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+              ],
             ],
           );
         },

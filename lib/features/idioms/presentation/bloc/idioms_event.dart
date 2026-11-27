@@ -10,7 +10,12 @@ abstract class IdiomsEvent extends Equatable {
 }
 
 final class IdiomsStarted extends IdiomsEvent {
-  const IdiomsStarted();
+  final String? categoryId;
+
+  const IdiomsStarted({this.categoryId});
+
+  @override
+  List<Object?> get props => [categoryId];
 }
 
 final class IdiomsSearchChanged extends IdiomsEvent {
@@ -24,11 +29,12 @@ final class IdiomsSearchChanged extends IdiomsEvent {
 
 final class IdiomsCategorySelected extends IdiomsEvent {
   final String? categoryId;
+  final bool toggle;
 
-  const IdiomsCategorySelected(this.categoryId);
+  const IdiomsCategorySelected(this.categoryId, {this.toggle = true});
 
   @override
-  List<Object?> get props => [categoryId];
+  List<Object?> get props => [categoryId, toggle];
 }
 
 final class IdiomsLoadMoreRequested extends IdiomsEvent {

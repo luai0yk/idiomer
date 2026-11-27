@@ -9,6 +9,7 @@ import 'package:idiomer/features/quiz/domain/entities/quiz_attempt_review_entity
 import 'package:idiomer/features/quiz/presentation/cubit/quiz_review_cubit.dart';
 import 'package:idiomer/features/quiz/presentation/cubit/quiz_review_state.dart';
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_header.dart';
+import 'package:idiomer/shared/widgets/appbars/my_gradient_header.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
@@ -43,11 +44,12 @@ class _QuizReviewPageState extends State<QuizReviewPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: Column(
-        children: [
-          QuizHeader(title: l10n.reviewAnswers),
-          Expanded(
-            child: BlocBuilder<QuizReviewCubit, QuizReviewState>(
+      body: ScrollUnderHeaderColumn(
+        headerBuilder: (context, showBottomBorder) => QuizHeader(
+          title: l10n.reviewAnswers,
+          showBottomBorder: showBottomBorder,
+        ),
+        body: BlocBuilder<QuizReviewCubit, QuizReviewState>(
               builder: (context, state) {
                 if (state.status == QuizReviewStatus.initial ||
                     state.status == QuizReviewStatus.loading) {
@@ -83,8 +85,6 @@ class _QuizReviewPageState extends State<QuizReviewPage> {
                 return _buildReviewContent(context, review, l10n);
               },
             ),
-          ),
-        ],
       ),
     );
   }

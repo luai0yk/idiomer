@@ -299,6 +299,8 @@ void _initHome() {
     () => HomeCubit(
       watchIdiomOfTheDay: sl(),
       watchQuizStats: sl(),
+      watchFlashcardGroups: sl(),
+      watchCategories: sl(),
       toggleFavorite: sl(),
     ),
   );

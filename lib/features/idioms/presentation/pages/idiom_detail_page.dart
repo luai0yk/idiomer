@@ -15,6 +15,7 @@ import 'package:idiomer/features/idioms/presentation/cubit/idiom_detail_state.da
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_detail_header.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_detail_hero_card.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_share_sheet.dart';
+import 'package:idiomer/shared/widgets/appbars/my_gradient_header.dart';
 import 'package:idiomer/shared/widgets/buttons/my_favorite_button.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
@@ -56,47 +57,46 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
 
         return Scaffold(
           backgroundColor: colorScheme.surface,
-          body: Column(
-            children: [
-              IdiomDetailHeader(
-                title: l10n.idiomDetails,
-                actions: idiom == null
-                    ? const []
-                    : [
-                        MyFavoriteButton(
-                          initialIsFavorite: idiom.isFavorite,
-                          iconColor: colorScheme.primary,
-                          onChanged: (_) =>
-                              context.read<IdiomDetailCubit>().toggleFavorite(),
+          body: ScrollUnderHeaderColumn(
+            headerBuilder: (context, showBottomBorder) => IdiomDetailHeader(
+              title: l10n.idiomDetails,
+              showBottomBorder: showBottomBorder,
+              actions: idiom == null
+                  ? const []
+                  : [
+                      MyFavoriteButton(
+                        initialIsFavorite: idiom.isFavorite,
+                        iconColor: colorScheme.primary,
+                        onChanged: (_) =>
+                            context.read<IdiomDetailCubit>().toggleFavorite(),
+                      ),
+                      MyIconButton.ghost(
+                        icon: state.isInFlashcards
+                            ? AppIcons.flashcardsFilled
+                            : AppIcons.flashcards,
+                        iconColor: colorScheme.primary,
+                        tooltip: l10n.addToFlashcards,
+                        autoLoading: false,
+                        onPressed: () => _handleFlashcardAction(
+                          context,
+                          state,
+                          idiom,
+                          l10n,
                         ),
-                        MyIconButton.ghost(
-                          icon: state.isInFlashcards
-                              ? AppIcons.flashcardsFilled
-                              : AppIcons.flashcards,
-                          iconColor: colorScheme.primary,
-                          tooltip: l10n.addToFlashcards,
-                          autoLoading: false,
-                          onPressed: () => _handleFlashcardAction(
-                            context,
-                            state,
-                            idiom,
-                            l10n,
-                          ),
+                      ),
+                      MyIconButton.ghost(
+                        icon: AppIcons.share,
+                        autoLoading: false,
+                        iconColor: colorScheme.primary,
+                        tooltip: l10n.share,
+                        onPressed: () => IdiomShareSheet.show(
+                          context: context,
+                          idiom: idiom,
                         ),
-                        MyIconButton.ghost(
-                          icon: AppIcons.share,
-                          autoLoading: false,
-                          iconColor: colorScheme.primary,
-                          tooltip: l10n.share,
-                          onPressed: () => IdiomShareSheet.show(
-                            context: context,
-                            idiom: idiom,
-                          ),
-                        ),
-                      ],
-              ),
-              Expanded(child: _buildBody(context, state, l10n)),
-            ],
+                      ),
+                    ],
+            ),
+            body: _buildBody(context, state, l10n),
           ),
         );
       },

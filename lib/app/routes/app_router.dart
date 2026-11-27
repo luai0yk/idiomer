@@ -67,9 +67,29 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.idioms,
                   name: AppRoutes.idioms,
+                  builder: (context, state) {
+                    final categoryId = state.uri.queryParameters['categoryId'];
+                    return BlocProvider(
+                      create: (_) =>
+                          sl<IdiomsBloc>()
+                            ..add(IdiomsStarted(categoryId: categoryId)),
+                      child: IdiomsPage(
+                        initialCategoryId: categoryId,
+                        categoryTrigger: state.extra,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.flashcards,
+                  name: AppRoutes.flashcards,
                   builder: (context, state) => BlocProvider(
-                    create: (_) => sl<IdiomsBloc>()..add(const IdiomsStarted()),
-                    child: const IdiomsPage(),
+                    create: (_) => sl<FlashcardsCubit>()..watchAll(),
+                    child: const FlashcardsPage(),
                   ),
                 ),
               ],
@@ -83,18 +103,6 @@ class AppRouter {
                     create: (_) =>
                         sl<FavoritesBloc>()..add(const IdiomsStarted()),
                     child: const FavoritesPage(),
-                  ),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.flashcards,
-                  name: AppRoutes.flashcards,
-                  builder: (context, state) => BlocProvider(
-                    create: (_) => sl<FlashcardsCubit>()..watchAll(),
-                    child: const FlashcardsPage(),
                   ),
                 ),
               ],

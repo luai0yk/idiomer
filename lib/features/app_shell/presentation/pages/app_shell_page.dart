@@ -43,14 +43,14 @@ class AppShellPage extends StatelessWidget {
             selectedIcon: const Icon(AppIcons.idiomsFilled),
           ),
           MyBottomNavigationBarItem(
-            title: l10n.favorites,
-            icon: const Icon(AppIcons.favorite),
-            selectedIcon: const Icon(AppIcons.favoriteFilled),
-          ),
-          MyBottomNavigationBarItem(
             title: l10n.flashcards,
             icon: const Icon(AppIcons.flashcards),
             selectedIcon: const Icon(AppIcons.flashcardsFilled),
+          ),
+          MyBottomNavigationBarItem(
+            title: l10n.favorites,
+            icon: const Icon(AppIcons.favorite),
+            selectedIcon: const Icon(AppIcons.favoriteFilled),
           ),
         ],
         currentIndex: navigationShell.currentIndex,

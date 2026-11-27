@@ -309,5 +309,7 @@
   "loadingFlashcards": "Loading flashcards...",
   "preparingQuiz": "Preparing quiz...",
   "loadingQuizOverview": "Loading quizzes...",
-  "loadingQuizReview": "Loading review..."
+  "loadingQuizReview": "Loading review...",
+  "continueStudying": "Continue Studying",
+  "browseCategories": "Browse Categories"
 }

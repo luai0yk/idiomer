@@ -14,6 +14,8 @@ class AppRoutes {
   static const String idiomDetail = '/idiom';
 
   static String idiomDetailPath(int id) => '$idiomDetail/$id';
+  static String idiomsCategoryPath(String categoryId) =>
+      Uri(path: idioms, queryParameters: {'categoryId': categoryId}).toString();
   static String flashcardStudyPath(int id) => '$flashcardStudy/$id';
   static String groupQuizSessionPath(int groupId, {String? groupName}) => Uri(
     path: quizSession,

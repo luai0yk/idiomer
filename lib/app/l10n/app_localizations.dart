@@ -1363,6 +1363,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading review...'**
   String get loadingQuizReview;
+
+  /// No description provided for @continueStudying.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Studying'**
+  String get continueStudying;
+
+  /// No description provided for @browseCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse Categories'**
+  String get browseCategories;
 }
 
 class _AppLocalizationsDelegate

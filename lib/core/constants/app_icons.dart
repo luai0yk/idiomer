@@ -7,8 +7,8 @@ class AppIcons {
   // Navigation
   static const idioms = Iconsax.book_1_copy;
   static const idiomsFilled = Iconsax.book_1;
-  static const flashcards = Iconsax.cards_copy;
-  static const flashcardsFilled = Iconsax.cards;
+  static const flashcards = Iconsax.additem_copy;
+  static const flashcardsFilled = Iconsax.additem;
   static const home = Iconsax.home_2_copy;
   static const homeFilled = Iconsax.home_2;
   static const user = Iconsax.user_copy;

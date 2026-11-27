@@ -11,6 +11,7 @@ import 'package:idiomer/features/quiz/presentation/cubit/quiz_overview_state.dar
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_attempt_history_card.dart';
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_header.dart';
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_stat_card.dart';
+import 'package:idiomer/shared/widgets/appbars/my_gradient_header.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
@@ -27,11 +28,12 @@ class QuizOverviewPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: Column(
-        children: [
-          QuizHeader(title: l10n.quizOverview),
-          Expanded(
-            child: BlocBuilder<QuizOverviewCubit, QuizOverviewState>(
+      body: ScrollUnderHeaderColumn(
+        headerBuilder: (context, showBottomBorder) => QuizHeader(
+          title: l10n.quizOverview,
+          showBottomBorder: showBottomBorder,
+        ),
+        body: BlocBuilder<QuizOverviewCubit, QuizOverviewState>(
               builder: (context, state) {
                 if (state.status == QuizOverviewStatus.initial ||
                     state.status == QuizOverviewStatus.loading) {
@@ -126,8 +128,6 @@ class QuizOverviewPage extends StatelessWidget {
                 );
               },
             ),
-          ),
-        ],
       ),
     );
   }

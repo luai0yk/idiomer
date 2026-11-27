@@ -15,6 +15,7 @@ import 'package:idiomer/features/idioms/presentation/bloc/idioms_state.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/explore_header.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_card.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
+import 'package:idiomer/shared/widgets/appbars/my_gradient_header.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/dialogs/my_dialog.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
@@ -61,72 +62,93 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverToBoxAdapter(
-            child:
-                BlocSelector<
-                  FavoritesBloc,
-                  IdiomsState,
-                  ({
-                    bool hasFavorites,
-                    bool searchEnabled,
-                    List<CategoryEntity> categories,
-                    String? selectedCategoryId,
-                  })
-                >(
-                  selector: (state) => (
-                    hasFavorites: state.idioms.isNotEmpty,
-                    searchEnabled:
-                        state.status == IdiomsStatus.loaded &&
-                        (state.idioms.isNotEmpty ||
-                            state.hasActiveFilters ||
-                            state.isApplyingFilter),
-                    categories: state.categories,
-                    selectedCategoryId: state.selectedCategoryId,
-                  ),
-                  builder: (context, headerState) {
-                    return ExploreHeader(
-                      title: l10n.favorites,
-                      searchEnabled: headerState.searchEnabled,
-                      trailing: headerState.hasFavorites
-                          ? MyIconButton.ghost(
-                              icon: AppIcons.clear,
-                              iconColor: colorScheme.primary,
-                              tooltip: l10n.clearAll,
-                              onPressed: () => _confirmClearAll(context, l10n),
-                            )
-                          : null,
-                      searchController: _searchController,
-                      onSearchChanged: (value) {
+      body: ScrollUnderHeaderColumn(
+        floatingBarHeight: ExploreSearchHeader.barHeight(context),
+        headerBuilder: (context, showBottomBorder) =>
+            BlocSelector<FavoritesBloc, IdiomsState, bool>(
+              selector: (state) => state.idioms.isNotEmpty,
+              builder: (context, hasFavorites) {
+                return ExploreFixedHeader(
+                  title: l10n.favorites,
+                  showBottomBorder: showBottomBorder,
+                  trailing: hasFavorites
+                      ? MyIconButton.ghost(
+                          icon: AppIcons.clear,
+                          iconColor: colorScheme.primary,
+                          tooltip: l10n.clearAll,
+                          onPressed: () => _confirmClearAll(context, l10n),
+                        )
+                      : null,
+                );
+              },
+            ),
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            BlocSelector<
+              FavoritesBloc,
+              IdiomsState,
+              ({
+                bool searchEnabled,
+                List<CategoryEntity> categories,
+                String? selectedCategoryId,
+              })
+            >(
+              selector: (state) => (
+                searchEnabled:
+                    state.status == IdiomsStatus.loaded &&
+                    (state.idioms.isNotEmpty ||
+                        state.hasActiveFilters ||
+                        state.isApplyingFilter),
+                categories: state.categories,
+                selectedCategoryId: state.selectedCategoryId,
+              ),
+              builder: (context, headerState) {
+                final isArabic =
+                    Directionality.of(context) == TextDirection.rtl;
+                final selectedCategoryName = headerState.categories
+                    .where((c) => c.id == headerState.selectedCategoryId)
+                    .firstOrNull
+                    ?.localizedName(isArabic: isArabic);
+
+                return ExploreSearchHeader(
+                  searchEnabled: headerState.searchEnabled,
+                  searchController: _searchController,
+                  onSearchChanged: (value) {
+                    context.read<FavoritesBloc>().add(
+                      IdiomsSearchChanged(value),
+                    );
+                  },
+                  hasCategories: headerState.categories.isNotEmpty,
+                  hasActiveCategoryFilter:
+                      headerState.selectedCategoryId != null,
+                  selectedCategoryName: selectedCategoryName,
+                  onClearCategory: () {
+                    context.read<FavoritesBloc>().add(
+                      const IdiomsCategorySelected(null, toggle: false),
+                    );
+                  },
+                  onOpenCategorySheet: () {
+                    SelectCategorySheet.show(
+                      context,
+                      categories: headerState.categories,
+                      selectedCategoryId: headerState.selectedCategoryId,
+                      onCategorySelected: (categoryId) {
                         context.read<FavoritesBloc>().add(
-                          IdiomsSearchChanged(value),
-                        );
-                      },
-                      hasCategories: headerState.categories.isNotEmpty,
-                      hasActiveCategoryFilter:
-                          headerState.selectedCategoryId != null,
-                      onOpenCategorySheet: () {
-                        SelectCategorySheet.show(
-                          context,
-                          categories: headerState.categories,
-                          selectedCategoryId: headerState.selectedCategoryId,
-                          onCategorySelected: (categoryId) {
-                            context.read<FavoritesBloc>().add(
-                              IdiomsCategorySelected(categoryId),
-                            );
-                          },
+                          IdiomsCategorySelected(categoryId),
                         );
                       },
                     );
                   },
-                ),
-          ),
-          BlocBuilder<FavoritesBloc, IdiomsState>(
-            builder: (context, state) => _buildBodySliver(context, state, l10n),
-          ),
-        ],
+                );
+              },
+            ),
+            BlocBuilder<FavoritesBloc, IdiomsState>(
+              builder: (context, state) =>
+                  _buildBodySliver(context, state, l10n),
+            ),
+          ],
+        ),
       ),
     );
   }

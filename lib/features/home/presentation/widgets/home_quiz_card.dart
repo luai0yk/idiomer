@@ -28,7 +28,6 @@ class HomeQuizCard extends StatelessWidget {
         : l10n.quizFirstTimeSubtitle;
 
     final primary = colorScheme.primary;
-    final tertiary = colorScheme.tertiary;
     final baseSurface = colorScheme.surfaceContainerLow;
 
     return MyCard.bordered(

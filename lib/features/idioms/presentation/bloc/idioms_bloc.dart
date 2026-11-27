@@ -56,7 +56,13 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
     IdiomsStarted event,
     Emitter<IdiomsState> emit,
   ) async {
-    emit(state.copyWith(status: IdiomsStatus.loading, errorMessage: null));
+    emit(
+      state.copyWith(
+        status: IdiomsStatus.loading,
+        selectedCategoryId: event.categoryId,
+        errorMessage: null,
+      ),
+    );
     _subscribeCategories();
     await _subscribeIdioms();
   }
@@ -82,7 +88,8 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
     IdiomsCategorySelected event,
     Emitter<IdiomsState> emit,
   ) async {
-    final nextCategory = state.selectedCategoryId == event.categoryId
+    final nextCategory =
+        (event.toggle && state.selectedCategoryId == event.categoryId)
         ? null
         : event.categoryId;
     if (nextCategory == state.selectedCategoryId && event.categoryId != null) {

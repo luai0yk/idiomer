@@ -57,7 +57,9 @@ class MyFloatingButton extends StatelessWidget {
       child: FloatingActionButton(
         heroTag: null,
         tooltip: tooltip,
-        shape: RoundedRectangleBorder(borderRadius: context.brL),
+        shape: RoundedRectangleBorder(
+          borderRadius: .circular(context.radiusXl * 0.9),
+        ),
         backgroundColor: colors.primary,
         onPressed: onPressed,
         elevation: context.elevationM,

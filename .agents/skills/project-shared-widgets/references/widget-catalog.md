@@ -10,6 +10,7 @@ Complete inventory of `lib/shared/widgets/` and `lib/shared/controller/`. Inspec
 
 ## AppBars & Headers (`lib/shared/widgets/appbars/`)
 - `MyAppBar` (`my_app_bar.dart`)
+- `MyGradientHeader`, `ScrollUnderHeaderColumn` (`my_gradient_header.dart`)
 - `MySliverAppBar`, `MySliverAppBar.expanded` (`my_sliver_app_bar.dart`)
 - `MySliverHeader`, `SliverHeaderDelegate` (`sliver_header_delegate.dart`)
 

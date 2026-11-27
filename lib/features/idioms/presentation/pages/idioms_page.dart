@@ -13,13 +13,17 @@ import 'package:idiomer/features/idioms/presentation/bloc/idioms_state.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/explore_header.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/idiom_card.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
+import 'package:idiomer/shared/widgets/appbars/my_gradient_header.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
 
 class IdiomsPage extends StatefulWidget {
-  const IdiomsPage({super.key});
+  final String? initialCategoryId;
+  final Object? categoryTrigger;
+
+  const IdiomsPage({super.key, this.initialCategoryId, this.categoryTrigger});
 
   @override
   State<IdiomsPage> createState() => _IdiomsPageState();
@@ -33,6 +37,18 @@ class _IdiomsPageState extends State<IdiomsPage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void didUpdateWidget(covariant IdiomsPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.categoryTrigger != oldWidget.categoryTrigger ||
+        (widget.initialCategoryId != null &&
+            widget.initialCategoryId != oldWidget.initialCategoryId)) {
+      context.read<IdiomsBloc>().add(
+        IdiomsCategorySelected(widget.initialCategoryId, toggle: false),
+      );
+    }
   }
 
   void _onScroll() {
@@ -57,60 +73,72 @@ class _IdiomsPageState extends State<IdiomsPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverToBoxAdapter(
-            child:
-                BlocSelector<
-                  IdiomsBloc,
-                  IdiomsState,
-                  ({
-                    List<CategoryEntity> categories,
-                    String? selectedCategoryId,
-                  })
-                >(
-                  selector: (state) => (
-                    categories: state.categories,
-                    selectedCategoryId: state.selectedCategoryId,
-                  ),
-                  builder: (context, filterState) {
-                    return ExploreHeader(
-                      trailing: MyIconButton.ghost(
-                        icon: AppIcons.settings,
-                        tooltip: l10n.settings,
-                        iconColor: colorScheme.primary,
-                        onPressed: () => context.push(AppRoutes.settings),
-                      ),
-                      searchController: _searchController,
-                      onSearchChanged: (value) {
+      body: ScrollUnderHeaderColumn(
+        floatingBarHeight: ExploreSearchHeader.barHeight(context),
+        headerBuilder: (context, showBottomBorder) => ExploreFixedHeader(
+          showBottomBorder: showBottomBorder,
+          trailing: MyIconButton.ghost(
+            icon: AppIcons.settings,
+            tooltip: l10n.settings,
+            iconColor: colorScheme.primary,
+            onPressed: () => context.push(AppRoutes.settings),
+          ),
+        ),
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            BlocSelector<
+              IdiomsBloc,
+              IdiomsState,
+              ({List<CategoryEntity> categories, String? selectedCategoryId})
+            >(
+              selector: (state) => (
+                categories: state.categories,
+                selectedCategoryId: state.selectedCategoryId,
+              ),
+              builder: (context, filterState) {
+                final isArabic =
+                    Directionality.of(context) == TextDirection.rtl;
+                final selectedCategoryName = filterState.categories
+                    .where((c) => c.id == filterState.selectedCategoryId)
+                    .firstOrNull
+                    ?.localizedName(isArabic: isArabic);
+
+                return ExploreSearchHeader(
+                  searchController: _searchController,
+                  onSearchChanged: (value) {
+                    context.read<IdiomsBloc>().add(IdiomsSearchChanged(value));
+                  },
+                  hasCategories: filterState.categories.isNotEmpty,
+                  hasActiveCategoryFilter:
+                      filterState.selectedCategoryId != null,
+                  selectedCategoryName: selectedCategoryName,
+                  onClearCategory: () {
+                    context.read<IdiomsBloc>().add(
+                      const IdiomsCategorySelected(null, toggle: false),
+                    );
+                  },
+                  onOpenCategorySheet: () {
+                    SelectCategorySheet.show(
+                      context,
+                      categories: filterState.categories,
+                      selectedCategoryId: filterState.selectedCategoryId,
+                      onCategorySelected: (categoryId) {
                         context.read<IdiomsBloc>().add(
-                          IdiomsSearchChanged(value),
-                        );
-                      },
-                      hasCategories: filterState.categories.isNotEmpty,
-                      hasActiveCategoryFilter:
-                          filterState.selectedCategoryId != null,
-                      onOpenCategorySheet: () {
-                        SelectCategorySheet.show(
-                          context,
-                          categories: filterState.categories,
-                          selectedCategoryId: filterState.selectedCategoryId,
-                          onCategorySelected: (categoryId) {
-                            context.read<IdiomsBloc>().add(
-                              IdiomsCategorySelected(categoryId),
-                            );
-                          },
+                          IdiomsCategorySelected(categoryId),
                         );
                       },
                     );
                   },
-                ),
-          ),
-          BlocBuilder<IdiomsBloc, IdiomsState>(
-            builder: (context, state) => _buildBodySliver(context, state, l10n),
-          ),
-        ],
+                );
+              },
+            ),
+            BlocBuilder<IdiomsBloc, IdiomsState>(
+              builder: (context, state) =>
+                  _buildBodySliver(context, state, l10n),
+            ),
+          ],
+        ),
       ),
     );
   }

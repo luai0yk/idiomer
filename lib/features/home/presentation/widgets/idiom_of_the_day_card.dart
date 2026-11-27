@@ -108,14 +108,14 @@ class IdiomOfTheDayCard extends StatelessWidget {
           Padding(
             padding: context.insetsAllL,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildTopRow(context, l10n, textTheme, onPrimary),
-                context.verticalSpace(12),
+                context.verticalSpace(4),
                 Text(
                   idiom.englishText,
                   textDirection: TextDirection.ltr,
-                  style: textTheme.headlineSmall?.copyWith(
+                  style: textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                     color: onPrimary,
                     height: 1.25,
@@ -125,8 +125,8 @@ class IdiomOfTheDayCard extends StatelessWidget {
                 Text(
                   idiom.arabicText,
                   textDirection: TextDirection.rtl,
-                  style: textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                  style: textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
                     color: onPrimary.withValues(alpha: 0.88),
                   ),
                 ),
@@ -252,47 +252,24 @@ class IdiomOfTheDayCard extends StatelessWidget {
       borderColor: onPrimary.withValues(alpha: 0.2),
       borderRadius: context.brL,
       padding: context.insetsAllM,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              MyIcon(
-                icon: icon,
-                size: context.iconS,
-                color: onPrimary.withValues(alpha: 0.92),
-              ),
-              context.horizontalSpace(6),
-              Text(
-                label,
-                style: textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: onPrimary.withValues(alpha: 0.92),
-                ),
-              ),
-            ],
-          ),
-          context.verticalSpace(6),
-          HighlightedMarkupText(
-            englishText,
-            textDirection: TextDirection.ltr,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: textTheme.bodySmall?.copyWith(
-              fontStyle: fontStyle,
-              color: onPrimary.withValues(alpha: 0.88),
-              height: 1.4,
-            ),
-            highlightStyle: textTheme.bodyMedium?.copyWith(
-              fontStyle: fontStyle,
-              color: onPrimary,
-              fontWeight: FontWeight.w800,
-              decoration: TextDecoration.underline,
-              decorationColor: highlightColor,
-              height: 1.4,
-            ),
-          ),
-        ],
+      child: HighlightedMarkupText(
+        englishText,
+        textDirection: TextDirection.ltr,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        style: textTheme.bodySmall?.copyWith(
+          fontStyle: fontStyle,
+          color: onPrimary.withValues(alpha: 0.88),
+          height: 1.4,
+        ),
+        highlightStyle: textTheme.bodyMedium?.copyWith(
+          fontStyle: fontStyle,
+          color: onPrimary,
+          fontWeight: FontWeight.w800,
+          decoration: TextDecoration.underline,
+          decorationColor: highlightColor,
+          height: 1.4,
+        ),
       ),
     );
   }

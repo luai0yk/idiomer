@@ -699,4 +699,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadingQuizReview => 'Loading review...';
+
+  @override
+  String get continueStudying => 'Continue Studying';
+
+  @override
+  String get browseCategories => 'Browse Categories';
 }

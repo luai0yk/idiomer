@@ -706,4 +706,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loadingQuizReview => 'جارٍ تحميل المراجعة...';
+
+  @override
+  String get continueStudying => 'مواصلة الدراسة';
+
+  @override
+  String get browseCategories => 'تصفح التصنيفات';
 }
