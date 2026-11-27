@@ -47,9 +47,9 @@ class IdiomShareCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.hardEdge,
         children: [
-          PositionedDirectional(
+          Positioned(
             top: context.setSize(28),
-            start: -context.setSize(12),
+            left: -context.setSize(12),
             child: Transform.rotate(
               angle: -0.1,
               child: MyIcon(
@@ -59,9 +59,9 @@ class IdiomShareCard extends StatelessWidget {
               ),
             ),
           ),
-          PositionedDirectional(
+          Positioned(
             bottom: -context.setSize(14),
-            end: context.setSize(8),
+            right: context.setSize(8),
             child: Transform.rotate(
               angle: -0.08,
               child: MyIcon(

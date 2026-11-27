@@ -22,8 +22,8 @@ import 'package:idiomer/shared/widgets/buttons/my_button.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/buttons/my_popup_menu.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_progress_bar.dart';
-import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
 
 enum _StudyMenuAction { showIdioms, takeQuiz }
 
@@ -209,7 +209,7 @@ class _FlashcardStudyPageState extends State<FlashcardStudyPage> {
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
     if (_isLoading) {
-      return const Center(child: MyProgressIndicator());
+      return Center(child: MyLoadingState(label: l10n.loadingFlashcards));
     }
 
     if (_hasError) {

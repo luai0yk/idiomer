@@ -11,11 +11,7 @@ class HomeQuizCard extends StatelessWidget {
   final QuizStatsEntity stats;
   final VoidCallback onTap;
 
-  const HomeQuizCard({
-    super.key,
-    required this.stats,
-    required this.onTap,
-  });
+  const HomeQuizCard({super.key, required this.stats, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -35,42 +31,14 @@ class HomeQuizCard extends StatelessWidget {
     final tertiary = colorScheme.tertiary;
     final baseSurface = colorScheme.surfaceContainerLow;
 
-    final cardGradient = LinearGradient(
-      begin: AlignmentDirectional.topStart,
-      end: AlignmentDirectional.bottomEnd,
-      stops: const [0.0, 0.52, 1.0],
-      colors: [
-        Color.alphaBlend(primary.withValues(alpha: 0.18), baseSurface),
-        Color.alphaBlend(primary.withValues(alpha: 0.08), baseSurface),
-        Color.alphaBlend(tertiary.withValues(alpha: 0.16), baseSurface),
-      ],
-    );
-
     return MyCard.bordered(
-      gradient: cardGradient,
+      color: Color.alphaBlend(primary.withValues(alpha: 0.08), baseSurface),
       borderColor: primary.withValues(alpha: 0.22),
       borderRadius: context.brXl,
       padding: EdgeInsets.zero,
       onTap: onTap,
       child: Stack(
         children: [
-          PositionedDirectional(
-            end: -context.setSize(28),
-            bottom: -context.setSize(34),
-            child: Container(
-              width: context.setSize(130),
-              height: context.setSize(130),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    tertiary.withValues(alpha: 0.14),
-                    tertiary.withValues(alpha: 0.0),
-                  ],
-                ),
-              ),
-            ),
-          ),
           PositionedDirectional(
             end: -context.setSize(10),
             top: -context.setSize(16),

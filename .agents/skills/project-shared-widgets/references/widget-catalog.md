@@ -54,6 +54,7 @@ Complete inventory of `lib/shared/widgets/` and `lib/shared/controller/`. Inspec
 - `MyDotIndicator`, `DotIndicatorEffect` (`my_dot_indicator.dart`)
 - `MyEmptyState`, `MyEmptyStateSize` (`my_empty_state.dart`)
 - `MyIcon` (`my_icon.dart`)
+- `MyLoadingState` (`my_loading_state.dart`)
 - `MyProgressIndicator` (`my_progress_indicator.dart`)
 - `MySnackBar`, `SnackBarStatus` (`my_snackbar.dart`)
 - `MyStepper`, `MyStep` (`my_stepper.dart`)

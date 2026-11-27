@@ -10,6 +10,7 @@ import 'package:idiomer/core/utils/helpers/ui/app_navigator.dart';
 import 'package:idiomer/features/flashcards/data/datasources/flashcards_local_datasource.dart';
 import 'package:idiomer/features/flashcards/data/repositories/flashcards_repository_impl.dart';
 import 'package:idiomer/features/flashcards/domain/entities/flashcard_group_entity.dart';
+import 'package:idiomer/features/flashcards/domain/repositories/flashcards_repository.dart';
 import 'package:idiomer/features/flashcards/domain/usecases/clear_all_flashcard_groups_usecase.dart';
 import 'package:idiomer/features/flashcards/domain/usecases/create_flashcard_group_usecase.dart';
 import 'package:idiomer/features/flashcards/domain/usecases/delete_flashcard_group_usecase.dart';
@@ -27,6 +28,18 @@ import 'package:idiomer/features/idioms/data/datasources/idioms_local_datasource
 
 import '../idioms/idioms_local_datasource_test.dart';
 import '../quiz/quiz_test.dart';
+
+class _StubFlashcardsRepository implements FlashcardsRepository {
+  final List<FlashcardGroupEntity> groups;
+
+  _StubFlashcardsRepository(this.groups);
+
+  @override
+  Stream<List<FlashcardGroupEntity>> watchGroups() => Stream.value(groups);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 void main() {
   testWidgets(
@@ -250,17 +263,14 @@ void main() {
   testWidgets(
     'FlashcardsPage does not navigate when clicking zero-idiom group and shows clarifying message',
     (tester) async {
-      final db = AppDatabase(NativeDatabase.memory());
-      await seedTestDatabase(db);
-
-      final idiomsDs = IdiomsLocalDataSourceImpl(database: db);
-      final flashcardsDs = FlashcardsLocalDataSourceImpl(
-        database: db,
-        idiomsLocalDataSource: idiomsDs,
+      final emptyGroup = FlashcardGroupEntity(
+        id: 1,
+        name: 'Empty Deck',
+        idiomCount: 0,
+        createdAt: DateTime(2026),
+        updatedAt: DateTime(2026),
       );
-      final repository = FlashcardsRepositoryImpl(localDataSource: flashcardsDs);
-
-      await repository.createGroup(name: 'Empty Deck');
+      final repository = _StubFlashcardsRepository([emptyGroup]);
 
       final cubit = FlashcardsCubit(
         watchGroups: WatchFlashcardGroupsUseCase(repository),
@@ -269,12 +279,7 @@ void main() {
         deleteGroup: DeleteFlashcardGroupUseCase(repository),
         clearAllGroups: ClearAllFlashcardGroupsUseCase(repository),
       );
-      debugPrint('T4: 1');
-      await cubit.watchAll();
-      await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 50)),
-      );
-      debugPrint('T4: 2');
+      addTearDown(cubit.close);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -283,19 +288,16 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider.value(
-            value: cubit,
+            value: cubit..watchAll(),
             child: const FlashcardsPage(),
           ),
         ),
       );
-      debugPrint('T4: 3');
       await tester.pumpAndSettle();
-      debugPrint('T4: 4');
 
       await tester.tap(find.text('Empty Deck'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
-      debugPrint('T4: 5');
 
       expect(find.byType(FlashcardsPage), findsOneWidget);
       expect(find.byType(FlashcardStudyPage), findsNothing);
@@ -304,18 +306,6 @@ void main() {
       // Wait out toast dismiss duration so no pending timer remains.
       await tester.pump(const Duration(seconds: 4));
       await tester.pump(const Duration(milliseconds: 300));
-      debugPrint('T4: 6');
-
-      await tester.pumpWidget(const SizedBox.shrink());
-      debugPrint('T4: 7');
-      await tester.pumpAndSettle();
-      debugPrint('T4: 8');
-      final closeFuture = cubit.close();
-      await tester.pump(const Duration(milliseconds: 50));
-      await closeFuture;
-      debugPrint('T4: 9');
-      await db.close();
-      debugPrint('T4: 10');
     },
   );
 

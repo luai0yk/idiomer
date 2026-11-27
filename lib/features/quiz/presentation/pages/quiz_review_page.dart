@@ -12,7 +12,7 @@ import 'package:idiomer/features/quiz/presentation/widgets/quiz_header.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
-import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/texts/highlighted_markup_text.dart';
 
 /// Read-only review screen for a previously completed quiz attempt.
@@ -51,7 +51,9 @@ class _QuizReviewPageState extends State<QuizReviewPage> {
               builder: (context, state) {
                 if (state.status == QuizReviewStatus.initial ||
                     state.status == QuizReviewStatus.loading) {
-                  return const Center(child: MyProgressIndicator());
+                  return Center(
+                    child: MyLoadingState(label: l10n.loadingQuizReview),
+                  );
                 }
 
                 if (state.status == QuizReviewStatus.error) {

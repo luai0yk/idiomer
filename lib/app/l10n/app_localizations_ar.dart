@@ -474,7 +474,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get next => 'التالي';
 
   @override
-  String get submitQuiz => 'إرسال الاختبار';
+  String get submitQuiz => 'تأكيد الإجابات';
 
   @override
   String get quizQuestionPrompt => 'أي تعبير يطابق هذا التعريف؟';
@@ -682,4 +682,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get showIdiomsList => 'عرض التعبيرات';
+
+  @override
+  String get loading => 'جارٍ التحميل...';
+
+  @override
+  String get loadingIdioms => 'جارٍ تحميل التعابير...';
+
+  @override
+  String get loadingIdiomDetails => 'جارٍ تحميل التعبير...';
+
+  @override
+  String get loadingFavorites => 'جارٍ تحميل المفضلة...';
+
+  @override
+  String get loadingFlashcards => 'جارٍ تحميل البطاقات...';
+
+  @override
+  String get preparingQuiz => 'جارٍ تجهيز الاختبار...';
+
+  @override
+  String get loadingQuizOverview => 'جارٍ تحميل الاختبارات...';
+
+  @override
+  String get loadingQuizReview => 'جارٍ تحميل المراجعة...';
 }

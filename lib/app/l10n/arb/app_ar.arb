@@ -141,7 +141,7 @@
   "questionProgress": "السؤال {current} من {total}",
   "previous": "السابق",
   "next": "التالي",
-  "submitQuiz": "إرسال الاختبار",
+  "submitQuiz": "تأكيد الإجابات",
   "quizQuestionPrompt": "أي تعبير يطابق هذا التعريف؟",
   "quizCompletedTitle": "تم إكمال الاختبار!",
   "timeUpTitle": "انتهى الوقت!",
@@ -202,5 +202,13 @@
   "readOnlyReview": "للمراجعة فقط",
   "reviewQuizNotFound": "لم يتم العثور على الاختبار",
   "takeQuiz": "إجراء اختبار",
-  "showIdiomsList": "عرض التعبيرات"
+  "showIdiomsList": "عرض التعبيرات",
+  "loading": "جارٍ التحميل...",
+  "loadingIdioms": "جارٍ تحميل التعابير...",
+  "loadingIdiomDetails": "جارٍ تحميل التعبير...",
+  "loadingFavorites": "جارٍ تحميل المفضلة...",
+  "loadingFlashcards": "جارٍ تحميل البطاقات...",
+  "preparingQuiz": "جارٍ تجهيز الاختبار...",
+  "loadingQuizOverview": "جارٍ تحميل الاختبارات...",
+  "loadingQuizReview": "جارٍ تحميل المراجعة..."
 }

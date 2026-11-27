@@ -19,7 +19,7 @@ import 'package:idiomer/shared/widgets/buttons/my_floating_button.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/dialogs/my_dialog.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
-import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_toast.dart';
 
 class FlashcardsPage extends StatelessWidget {
@@ -67,7 +67,9 @@ class FlashcardsPage extends StatelessWidget {
               builder: (context, state) {
                 if (state.status == FlashcardsStatus.initial ||
                     state.status == FlashcardsStatus.loading) {
-                  return const Center(child: MyProgressIndicator());
+                  return Center(
+                    child: MyLoadingState(label: l10n.loadingFlashcards),
+                  );
                 }
 
                 if (state.status == FlashcardsStatus.error) {

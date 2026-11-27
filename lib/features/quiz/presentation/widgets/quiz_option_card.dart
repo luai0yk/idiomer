@@ -52,42 +52,47 @@ class QuizOptionCard extends StatelessWidget {
         ),
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: context.iconM),
-          child: Row(
-            children: [
-              AnimatedSize(
-                duration: AppDurations.fast,
-                curve: Curves.easeOutCubic,
-                child: MyAnimatedScaleFadeSwitcher(
-                  duration: AppDurations.fast,
-                  child: isSelected
-                      ? Padding(
-                          key: const ValueKey(true),
-                          padding: EdgeInsetsDirectional.only(
-                            end: context.spaceM,
-                          ),
-                          child: MyIcon(
-                            icon: AppIcons.checkCircle,
-                            color: colorScheme.primary,
-                            size: context.iconM,
-                          ),
-                        )
-                      : const SizedBox.shrink(key: ValueKey(false)),
+          child: Directionality(
+            textDirection: .ltr,
+            child: Row(
+              children: [
+                Expanded(
+                  child: AnimatedDefaultTextStyle(
+                    duration: AppDurations.fast,
+                    curve: Curves.easeOutCubic,
+                    style: (textTheme.bodyLarge ?? const TextStyle()).copyWith(
+                      fontWeight: isSelected
+                          ? FontWeight.w700
+                          : FontWeight.w500,
+                      color: isSelected
+                          ? colorScheme.primary
+                          : colorScheme.onSurface,
+                    ),
+                    child: Text(text, textDirection: textDirection),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: AnimatedDefaultTextStyle(
+                AnimatedSize(
                   duration: AppDurations.fast,
                   curve: Curves.easeOutCubic,
-                  style: (textTheme.bodyLarge ?? const TextStyle()).copyWith(
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected
-                        ? colorScheme.primary
-                        : colorScheme.onSurface,
+                  child: MyAnimatedScaleFadeSwitcher(
+                    duration: AppDurations.fast,
+                    child: isSelected
+                        ? Padding(
+                            key: const ValueKey(true),
+                            padding: EdgeInsetsDirectional.only(
+                              end: context.spaceM,
+                            ),
+                            child: MyIcon(
+                              icon: AppIcons.checkCircle,
+                              color: colorScheme.primary,
+                              size: context.iconM,
+                            ),
+                          )
+                        : const SizedBox.shrink(key: ValueKey(false)),
                   ),
-                  child: Text(text, textDirection: textDirection),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

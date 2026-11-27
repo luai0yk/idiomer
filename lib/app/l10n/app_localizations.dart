@@ -1315,6 +1315,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show Idioms'**
   String get showIdiomsList;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @loadingIdioms.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading idioms...'**
+  String get loadingIdioms;
+
+  /// No description provided for @loadingIdiomDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading idiom...'**
+  String get loadingIdiomDetails;
+
+  /// No description provided for @loadingFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading favorites...'**
+  String get loadingFavorites;
+
+  /// No description provided for @loadingFlashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading flashcards...'**
+  String get loadingFlashcards;
+
+  /// No description provided for @preparingQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing quiz...'**
+  String get preparingQuiz;
+
+  /// No description provided for @loadingQuizOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading quizzes...'**
+  String get loadingQuizOverview;
+
+  /// No description provided for @loadingQuizReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading review...'**
+  String get loadingQuizReview;
 }
 
 class _AppLocalizationsDelegate

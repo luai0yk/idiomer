@@ -301,5 +301,13 @@
   "readOnlyReview": "Review Only",
   "reviewQuizNotFound": "Quiz attempt not found",
   "takeQuiz": "Take Quiz",
-  "showIdiomsList": "Show Idioms"
+  "showIdiomsList": "Show Idioms",
+  "loading": "Loading...",
+  "loadingIdioms": "Loading idioms...",
+  "loadingIdiomDetails": "Loading idiom...",
+  "loadingFavorites": "Loading favorites...",
+  "loadingFlashcards": "Loading flashcards...",
+  "preparingQuiz": "Preparing quiz...",
+  "loadingQuizOverview": "Loading quizzes...",
+  "loadingQuizReview": "Loading review..."
 }

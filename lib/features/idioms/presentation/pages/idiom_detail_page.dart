@@ -20,7 +20,7 @@ import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
-import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_snackbar.dart';
 import 'package:idiomer/shared/widgets/misc/my_toast.dart';
 import 'package:idiomer/shared/widgets/texts/highlighted_markup_text.dart';
@@ -110,7 +110,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
   ) {
     if (state.status == IdiomDetailStatus.initial ||
         state.status == IdiomDetailStatus.loading) {
-      return const Center(child: MyProgressIndicator());
+      return Center(child: MyLoadingState(label: l10n.loadingIdiomDetails));
     }
 
     if (state.status == IdiomDetailStatus.error) {

@@ -675,4 +675,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showIdiomsList => 'Show Idioms';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get loadingIdioms => 'Loading idioms...';
+
+  @override
+  String get loadingIdiomDetails => 'Loading idiom...';
+
+  @override
+  String get loadingFavorites => 'Loading favorites...';
+
+  @override
+  String get loadingFlashcards => 'Loading flashcards...';
+
+  @override
+  String get preparingQuiz => 'Preparing quiz...';
+
+  @override
+  String get loadingQuizOverview => 'Loading quizzes...';
+
+  @override
+  String get loadingQuizReview => 'Loading review...';
 }

@@ -88,9 +88,11 @@ class QuizQuestionCard extends StatelessWidget {
               ),
             ),
           ),
-          context.verticalSpace(8),
           Padding(
-            padding: context.insetsAllM,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.spaceL,
+              vertical: context.setSize(20),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -118,21 +120,21 @@ class QuizQuestionCard extends StatelessWidget {
                     ],
                   ],
                 ),
-                context.verticalSpace(10),
+                context.verticalSpace(14),
                 HighlightedMarkupText(
                   englishMeaning,
                   textDirection: TextDirection.ltr,
                   style: textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                     color: onPrimary,
-                    height: 1.35,
+                    height: 1.4,
                   ),
                   highlightStyle: textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                     color: onPrimary,
                     decoration: TextDecoration.underline,
                     decorationColor: onPrimary.withValues(alpha: 0.65),
-                    height: 1.35,
+                    height: 1.4,
                   ),
                 ),
               ],

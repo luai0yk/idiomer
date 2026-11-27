@@ -81,9 +81,9 @@ class IdiomOfTheDayCard extends StatelessWidget {
               ),
             ),
           ),
-          PositionedDirectional(
+          Positioned(
             top: context.setSize(26),
-            start: -context.setSize(12),
+            left: -context.setSize(12),
             child: Transform.rotate(
               angle: -0.1,
               child: MyIcon(
@@ -93,9 +93,9 @@ class IdiomOfTheDayCard extends StatelessWidget {
               ),
             ),
           ),
-          PositionedDirectional(
+          Positioned(
             bottom: -context.setSize(14),
-            end: context.setSize(6),
+            right: context.setSize(6),
             child: Transform.rotate(
               angle: -0.08,
               child: MyIcon(
@@ -111,7 +111,7 @@ class IdiomOfTheDayCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildTopRow(context, l10n, textTheme, onPrimary),
-                context.verticalSpace(14),
+                context.verticalSpace(12),
                 Text(
                   idiom.englishText,
                   textDirection: TextDirection.ltr,
@@ -278,7 +278,7 @@ class IdiomOfTheDayCard extends StatelessWidget {
             textDirection: TextDirection.ltr,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.bodyMedium?.copyWith(
+            style: textTheme.bodySmall?.copyWith(
               fontStyle: fontStyle,
               color: onPrimary.withValues(alpha: 0.88),
               height: 1.4,
@@ -345,7 +345,7 @@ class IdiomOfTheDayCard extends StatelessWidget {
             context.horizontalSpace(4),
             MyIcon(
               icon: AppIcons.arrowForward(context),
-              size: context.iconS,
+              size: context.iconXs,
               color: onPrimary.withValues(alpha: 0.95),
             ),
           ],

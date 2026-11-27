@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idiomer/app/l10n/app_localizations.dart';
 import 'package:idiomer/app/routes/app_routes.dart';
+import 'package:idiomer/core/constants/app_durations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_size.dart';
@@ -14,12 +17,14 @@ import 'package:idiomer/features/quiz/presentation/cubit/quiz_session_state.dart
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_header.dart';
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_option_card.dart';
 import 'package:idiomer/features/quiz/presentation/widgets/quiz_question_card.dart';
+import 'package:idiomer/shared/widgets/animations/my_animated_scale_fade_switcher.dart';
 import 'package:idiomer/shared/widgets/buttons/my_button.dart';
+import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/cards/my_card.dart';
 import 'package:idiomer/shared/widgets/dialogs/my_dialog.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_icon.dart';
-import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/texts/highlighted_markup_text.dart';
 
 class QuizSessionPage extends StatelessWidget {
@@ -69,7 +74,7 @@ class QuizSessionPage extends StatelessWidget {
   ) {
     if (state.status == QuizSessionStatus.initial ||
         state.status == QuizSessionStatus.loading) {
-      return const Center(child: MyProgressIndicator());
+      return Center(child: MyLoadingState(label: l10n.preparingQuiz));
     }
 
     if (state.status == QuizSessionStatus.error) {
@@ -172,106 +177,334 @@ class _Timer extends StatelessWidget {
   }
 }
 
-class _QuizQuestionView extends StatelessWidget {
+class _QuizQuestionView extends StatefulWidget {
   final QuizSessionState state;
   final AppLocalizations l10n;
 
   const _QuizQuestionView({required this.state, required this.l10n});
 
   @override
+  State<_QuizQuestionView> createState() => _QuizQuestionViewState();
+}
+
+class _QuizQuestionViewState extends State<_QuizQuestionView> {
+  late final PageController _pageController;
+  Timer? _autoAdvanceTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.state.currentIndex);
+  }
+
+  @override
+  void didUpdateWidget(covariant _QuizQuestionView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldIndex = oldWidget.state.currentIndex;
+    final newIndex = widget.state.currentIndex;
+    if (oldIndex != newIndex && _pageController.hasClients) {
+      final currentPage = _pageController.page?.round();
+      if (currentPage != newIndex) {
+        final jumpDistance = (newIndex - oldIndex).abs();
+        if (jumpDistance > 1) {
+          _pageController.jumpToPage(newIndex);
+        } else {
+          _pageController.animateToPage(
+            newIndex,
+            duration: AppDurations.medium,
+            curve: Curves.easeOutCubic,
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _autoAdvanceTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _cancelAutoAdvance() {
+    _autoAdvanceTimer?.cancel();
+    _autoAdvanceTimer = null;
+  }
+
+  void _goToQuestion(QuizSessionCubit cubit, int index) {
+    _cancelAutoAdvance();
+    cubit.jumpToQuestion(index);
+  }
+
+  void _handleOptionTap({
+    required QuizSessionCubit cubit,
+    required int questionIndex,
+    required int optionIdiomId,
+  }) {
+    if (widget.state.isSubmitting) return;
+    _cancelAutoAdvance();
+    cubit.selectOption(optionIdiomId, questionIndex: questionIndex);
+
+    // Pause briefly so the user sees the option selection animation before sliding.
+    if (questionIndex < widget.state.totalQuestions - 1) {
+      _autoAdvanceTimer = Timer(AppDurations.fast, () {
+        if (!mounted) return;
+        final latest = cubit.state;
+        if (latest.status == QuizSessionStatus.inProgress &&
+            !latest.isSubmitting &&
+            latest.currentIndex == questionIndex &&
+            questionIndex + 1 < latest.totalQuestions) {
+          cubit.jumpToQuestion(questionIndex + 1);
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final question = state.currentQuestion;
-    if (question == null) return const SizedBox.shrink();
+    final state = widget.state;
+    final l10n = widget.l10n;
+    if (state.questions.isEmpty) return const SizedBox.shrink();
 
     final cubit = context.read<QuizSessionCubit>();
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
 
     return SafeArea(
       top: false,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          context.spaceM,
-          context.spaceS,
-          context.spaceM,
-          context.spaceM,
-        ),
+        padding: EdgeInsets.only(top: context.spaceM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _QuestionStepPills(
-              total: state.totalQuestions,
-              currentIndex: state.currentIndex,
-              selectedAnswers: state.selectedAnswers,
-              onSelectStep: cubit.jumpToQuestion,
+            Padding(
+              padding: context.insetsHorizontalM,
+              child: _QuestionStepPills(
+                total: state.totalQuestions,
+                currentIndex: state.currentIndex,
+                selectedAnswers: state.selectedAnswers,
+                onSelectStep: (index) => _goToQuestion(cubit, index),
+              ),
             ),
-            context.verticalSpace(8),
+            context.verticalSpace(20),
             Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Reserve space for the 4 non-scrollable choice cards so long
-                  // definitions never trigger a RenderFlex overflow on short screens.
-                  final maxQuestionHeight = (constraints.maxHeight - 302.0)
-                      .clamp(80.0, constraints.maxHeight);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: maxQuestionHeight,
-                        ),
-                        child: SingleChildScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          child: QuizQuestionCard(
-                            prompt: l10n.quizQuestionPrompt,
-                            englishMeaning: question.englishMeaning,
-                            questionCounterLabel:
-                                '${state.currentIndex + 1} / ${state.totalQuestions}',
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      for (int i = 0; i < question.options.length; i++) ...[
-                        if (i > 0) context.verticalSpace(6),
-                        QuizOptionCard(
-                          text: question.options[i].englishText,
-                          isSelected:
-                              state.currentSelectedOptionId ==
-                              question.options[i].idiomId,
-                          textDirection: TextDirection.ltr,
-                          onTap: () =>
-                              cubit.selectOption(question.options[i].idiomId),
-                        ),
-                      ],
-                    ],
+              child: PageView.builder(
+                controller: _pageController,
+                pageSnapping: true,
+                clipBehavior: Clip.none,
+                itemCount: state.totalQuestions,
+                onPageChanged: (index) {
+                  _cancelAutoAdvance();
+                  if (cubit.state.currentIndex != index) {
+                    cubit.jumpToQuestion(index);
+                  }
+                },
+                itemBuilder: (context, index) {
+                  final question = state.questions[index];
+                  return _QuestionSlide(
+                    question: question,
+                    questionNumber: index + 1,
+                    totalQuestions: state.totalQuestions,
+                    selectedOptionId: state.selectedAnswers[index],
+                    canGoPrevious: index > 0,
+                    canGoNext: index < state.totalQuestions - 1,
+                    isSubmitting: state.isSubmitting,
+                    bottomSpacing: state.allAnswered
+                        ? context.spaceM
+                        : context.spaceXxl,
+                    l10n: l10n,
+                    colorScheme: colorScheme,
+                    textTheme: textTheme,
+                    onPrevious: () => _goToQuestion(cubit, index - 1),
+                    onNext: () => _goToQuestion(cubit, index + 1),
+                    onSelectOption: (optionId) => _handleOptionTap(
+                      cubit: cubit,
+                      questionIndex: index,
+                      optionIdiomId: optionId,
+                    ),
                   );
                 },
               ),
             ),
-            context.verticalSpace(8),
-            Row(
-              children: [
-                Expanded(
-                  child: MyButton.outlinedNeutral(
-                    text: l10n.previous,
-                    isDisabled: !state.canGoPrevious || state.isSubmitting,
-                    onPressed: cubit.previousQuestion,
-                  ),
-                ),
-                context.horizontalSpace(10),
-                Expanded(
-                  child: MyButton.primary(
-                    text: l10n.next,
-                    isDisabled:
-                        state.isSubmitting ||
-                        (!state.allAnswered && !state.canGoNext),
-                    onPressed: state.allAnswered
-                        ? () => cubit.submitQuiz()
-                        : cubit.nextQuestion,
-                  ),
-                ),
-              ],
+            MyAnimatedScaleFadeSwitcher(
+              duration: AppDurations.fast,
+              child: state.allAnswered
+                  ? Padding(
+                      key: const ValueKey('submit_quiz_wrapper'),
+                      padding: EdgeInsets.fromLTRB(
+                        context.spaceM,
+                        context.spaceS,
+                        context.spaceM,
+                        context.spaceM,
+                      ),
+                      child: MyButton.primary(
+                        text: l10n.submitQuiz,
+                        isDisabled: state.isSubmitting,
+                        onPressed: () {
+                          _cancelAutoAdvance();
+                          cubit.submitQuiz();
+                        },
+                      ),
+                    )
+                  : const SizedBox.shrink(key: ValueKey('no_submit_quiz')),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _QuestionSlide extends StatelessWidget {
+  final QuizQuestionEntity question;
+  final int questionNumber;
+  final int totalQuestions;
+  final int? selectedOptionId;
+  final bool canGoPrevious;
+  final bool canGoNext;
+  final bool isSubmitting;
+  final double bottomSpacing;
+  final AppLocalizations l10n;
+  final ColorScheme colorScheme;
+  final TextTheme textTheme;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+  final ValueChanged<int> onSelectOption;
+
+  const _QuestionSlide({
+    required this.question,
+    required this.questionNumber,
+    required this.totalQuestions,
+    required this.selectedOptionId,
+    required this.canGoPrevious,
+    required this.canGoNext,
+    required this.isSubmitting,
+    required this.bottomSpacing,
+    required this.l10n,
+    required this.colorScheme,
+    required this.textTheme,
+    required this.onPrevious,
+    required this.onNext,
+    required this.onSelectOption,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      physics: const ClampingScrollPhysics(),
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.fromLTRB(
+            context.spaceM,
+            0,
+            context.spaceM,
+            bottomSpacing,
+          ),
+          sliver: SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                QuizQuestionCard(
+                  prompt: l10n.quizQuestionPrompt,
+                  englishMeaning: question.englishMeaning,
+                ),
+                const Spacer(),
+                context.verticalSpace(16),
+                _QuestionNavRow(
+                  questionNumber: questionNumber,
+                  totalQuestions: totalQuestions,
+                  canGoPrevious: canGoPrevious,
+                  canGoNext: canGoNext,
+                  isSubmitting: isSubmitting,
+                  l10n: l10n,
+                  colorScheme: colorScheme,
+                  textTheme: textTheme,
+                  onPrevious: onPrevious,
+                  onNext: onNext,
+                ),
+                context.verticalSpace(12),
+                for (int i = 0; i < question.options.length; i++) ...[
+                  if (i > 0) context.verticalSpace(10),
+                  QuizOptionCard(
+                    text: question.options[i].englishText,
+                    isSelected: selectedOptionId == question.options[i].idiomId,
+                    textDirection: TextDirection.ltr,
+                    onTap: () => onSelectOption(question.options[i].idiomId),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuestionNavRow extends StatelessWidget {
+  final int questionNumber;
+  final int totalQuestions;
+  final bool canGoPrevious;
+  final bool canGoNext;
+  final bool isSubmitting;
+  final AppLocalizations l10n;
+  final ColorScheme colorScheme;
+  final TextTheme textTheme;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+
+  const _QuestionNavRow({
+    required this.questionNumber,
+    required this.totalQuestions,
+    required this.canGoPrevious,
+    required this.canGoNext,
+    required this.isSubmitting,
+    required this.l10n,
+    required this.colorScheme,
+    required this.textTheme,
+    required this.onPrevious,
+    required this.onNext,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final buttonSize = context.setSize(36);
+    final iconSize = context.iconM;
+
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MyIconButton.ghost(
+            icon: AppIcons.arrowBack(context),
+            tooltip: l10n.previous,
+            buttonSize: buttonSize,
+            iconSize: iconSize,
+            iconColor: colorScheme.primary,
+            disabled: !canGoPrevious || isSubmitting,
+            onPressed: onPrevious,
+          ),
+          context.horizontalSpace(4),
+          Text(
+            l10n.questionProgress(questionNumber, totalQuestions),
+            style: textTheme.labelLarge?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          context.horizontalSpace(4),
+          MyIconButton.ghost(
+            icon: AppIcons.arrowForward(context),
+            tooltip: l10n.next,
+            buttonSize: buttonSize,
+            iconSize: iconSize,
+            iconColor: colorScheme.primary,
+            disabled: !canGoNext || isSubmitting,
+            onPressed: onNext,
+          ),
+        ],
       ),
     );
   }
@@ -301,7 +534,7 @@ class _QuestionStepPills extends StatelessWidget {
           if (i > 0) context.horizontalSpace(6),
           Expanded(
             child: MyCard.filled(
-              padding: EdgeInsets.symmetric(vertical: context.setSize(6)),
+              padding: EdgeInsets.symmetric(vertical: context.spaceS),
               borderRadius: context.brCircular,
               color: i == currentIndex
                   ? colorScheme.primary

@@ -83,13 +83,18 @@ class QuizSessionCubit extends Cubit<QuizSessionState> {
     });
   }
 
-  void selectOption(int optionIdiomId) {
+  void selectOption(int optionIdiomId, {int? questionIndex}) {
     if (state.status != QuizSessionStatus.inProgress || state.isSubmitting) {
       return;
     }
 
+    final targetIndex = questionIndex ?? state.currentIndex;
+    if (targetIndex < 0 || targetIndex >= state.questions.length) {
+      return;
+    }
+
     final updated = Map<int, int>.from(state.selectedAnswers)
-      ..[state.currentIndex] = optionIdiomId;
+      ..[targetIndex] = optionIdiomId;
     emit(state.copyWith(selectedAnswers: updated));
   }
 

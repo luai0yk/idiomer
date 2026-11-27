@@ -15,6 +15,7 @@ import 'package:idiomer/features/idioms/presentation/widgets/idiom_card.dart';
 import 'package:idiomer/features/idioms/presentation/widgets/select_category_sheet.dart';
 import 'package:idiomer/shared/widgets/buttons/my_icon_button.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
 
 class IdiomsPage extends StatefulWidget {
@@ -121,9 +122,9 @@ class _IdiomsPageState extends State<IdiomsPage> {
   ) {
     if (state.status == IdiomsStatus.initial ||
         state.status == IdiomsStatus.loading) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
         hasScrollBody: false,
-        child: Center(child: MyProgressIndicator()),
+        child: Center(child: MyLoadingState(label: l10n.loadingIdioms)),
       );
     }
 

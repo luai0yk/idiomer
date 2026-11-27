@@ -52,8 +52,8 @@ class MyEmptyState extends StatelessWidget {
                 begin: AlignmentDirectional.topStart,
                 end: AlignmentDirectional.bottomEnd,
                 colors: [
-                  primary.withValues(alpha: 0.16),
-                  colorScheme.tertiary.withValues(alpha: 0.08),
+                  primary.withValues(alpha: 0.18),
+                  primary.withValues(alpha: 0.06),
                 ],
               ),
               borderRadius: badgeRadius,
@@ -77,7 +77,7 @@ class MyEmptyState extends StatelessWidget {
           ),
           context.verticalSpace(isSmall ? 4 : 6),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: context.screenWidth * 0.65),
+            constraints: BoxConstraints(maxWidth: context.screenWidth * 0.80),
             child: Text(
               subtitle,
               textAlign: TextAlign.center,
@@ -89,11 +89,11 @@ class MyEmptyState extends StatelessWidget {
           ),
           if (actionText != null && onAction != null) ...[
             context.verticalSpace(isSmall ? 12 : 20),
-            MyButton.primary(
+            MyButton.text(
               text: actionText!,
-              width: 0,
-              height: context.setSize(isSmall ? 36 : 42),
-              fontSize: context.setSize(isSmall ? 12 : 13),
+              width: context.screenWidth * 0.5,
+              height: context.setSize(isSmall ? 40 : 46),
+              fontSize: context.setSize(isSmall ? 13 : 14),
               padding: EdgeInsets.symmetric(horizontal: context.spaceL),
               borderRadius: context.brL,
               onPressed: onAction,

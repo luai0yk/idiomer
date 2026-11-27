@@ -12,7 +12,7 @@ import 'package:idiomer/features/home/presentation/widgets/home_quiz_card.dart';
 import 'package:idiomer/features/home/presentation/widgets/home_welcome_header.dart';
 import 'package:idiomer/features/home/presentation/widgets/idiom_of_the_day_card.dart';
 import 'package:idiomer/shared/widgets/misc/my_empty_state.dart';
-import 'package:idiomer/shared/widgets/misc/my_progress_indicator.dart';
+import 'package:idiomer/shared/widgets/misc/my_loading_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,7 +28,9 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           if (state.status == HomeStatus.initial ||
               state.status == HomeStatus.loading) {
-            return const SafeArea(child: Center(child: MyProgressIndicator()));
+            return SafeArea(
+              child: Center(child: MyLoadingState(label: l10n.loading)),
+            );
           }
 
           if (state.status == HomeStatus.error) {
