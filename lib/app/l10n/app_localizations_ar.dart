@@ -731,4 +731,56 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get defaultTab => 'التبويب الافتراضي';
+
+  @override
+  String get ttsSettings => 'النطق الصوتي';
+
+  @override
+  String get ttsAccent => 'اللهجة';
+
+  @override
+  String get ttsAccentUs => 'أمريكي';
+
+  @override
+  String get ttsAccentUk => 'بريطاني';
+
+  @override
+  String get ttsAccentAu => 'أسترالي';
+
+  @override
+  String get ttsVoice => 'المتحدث';
+
+  @override
+  String get ttsDefaultVoice => 'افتراضي';
+
+  @override
+  String get ttsNoVoicesAvailable =>
+      'لا توجد أصوات إنجليزية مثبّتة في هذا المحرك';
+
+  @override
+  String get ttsSpeed => 'سرعة النطق';
+
+  @override
+  String get ttsSample => 'تجربة الصوت';
+
+  @override
+  String get ttsSampleSentence =>
+      'Break the ice and speak English with confidence.';
+
+  @override
+  String get listen => 'استماع';
+
+  @override
+  String get stopSpeaking => 'إيقاف';
+
+  @override
+  String get deviceTtsSettings => 'إعدادات النطق في الجهاز';
+
+  @override
+  String get deviceTtsSettingsSubtitle =>
+      'إدارة الأصوات المثبّتة ومحركات النطق';
+
+  @override
+  String get deviceTtsSettingsUnavailable =>
+      'تعذّر فتح إعدادات النطق في الجهاز';
 }

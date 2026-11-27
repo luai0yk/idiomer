@@ -724,4 +724,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultTab => 'Default Tab';
+
+  @override
+  String get ttsSettings => 'Text-to-Speech';
+
+  @override
+  String get ttsAccent => 'Accent';
+
+  @override
+  String get ttsAccentUs => 'US';
+
+  @override
+  String get ttsAccentUk => 'UK';
+
+  @override
+  String get ttsAccentAu => 'AU';
+
+  @override
+  String get ttsVoice => 'Speaker';
+
+  @override
+  String get ttsDefaultVoice => 'Default';
+
+  @override
+  String get ttsNoVoicesAvailable =>
+      'No installed English speakers found on this engine';
+
+  @override
+  String get ttsSpeed => 'Speech Speed';
+
+  @override
+  String get ttsSample => 'Voice Sample';
+
+  @override
+  String get ttsSampleSentence =>
+      'Break the ice and speak English with confidence.';
+
+  @override
+  String get listen => 'Listen';
+
+  @override
+  String get stopSpeaking => 'Stop';
+
+  @override
+  String get deviceTtsSettings => 'Device TTS Settings';
+
+  @override
+  String get deviceTtsSettingsSubtitle =>
+      'Manage installed voices and speech engines';
+
+  @override
+  String get deviceTtsSettingsUnavailable =>
+      'Could not open device TTS settings';
 }

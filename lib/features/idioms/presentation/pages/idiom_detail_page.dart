@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:idiomer/app/di/injection.dart';
 import 'package:idiomer/app/l10n/app_localizations.dart';
 import 'package:idiomer/core/constants/app_icons.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/core/utils/extensions/responsive_values.dart';
 import 'package:idiomer/core/utils/helpers/settings_helper.dart';
@@ -37,14 +39,40 @@ class IdiomDetailPage extends StatefulWidget {
 }
 
 class _IdiomDetailPageState extends State<IdiomDetailPage> {
+  TtsService? _ttsService;
+
   @override
   void initState() {
     super.initState();
+    _ttsService = sl.isRegistered<TtsService>() ? sl<TtsService>() : null;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<IdiomDetailCubit>().watchIdiom(widget.idiomId);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    final tts = _ttsService;
+    if (tts != null && tts.activeUtteranceId.value != null) {
+      Future.microtask(tts.stop);
+    }
+    super.dispose();
+  }
+
+  Future<void> _speakText(String text, {required String utteranceId}) async {
+    final tts = _ttsService;
+    if (tts == null) return;
+    final config = SettingsHelper.readTtsConfig(context);
+    await tts.speak(
+      text,
+      utteranceId: utteranceId,
+      accent: config.accent,
+      speechRate: config.speechRate,
+      voiceName: config.voiceName,
+      voiceLocale: config.voiceLocale,
+    );
   }
 
   @override
@@ -141,86 +169,107 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     final colorScheme = context.colorScheme;
     final showTranslation = SettingsHelper.watchShowTranslation(context);
 
-    return SelectionArea(
-      child: ListView(
-        padding: EdgeInsets.fromLTRB(
-          context.spaceM,
-          context.spaceM,
-          context.spaceM,
-          context.spaceXxl,
-        ),
-        children: [
-          IdiomDetailHeroCard(
-            idiom: idiom,
-            onCopy: () => _copyText(
-              showTranslation && idiom.arabicText.trim().isNotEmpty
-                  ? '${idiom.englishText}\n${idiom.arabicText}'
-                  : idiom.englishText,
-              l10n.copiedToClipboard,
-            ),
+    Widget buildContent(String? activeUtteranceId) {
+      final heroUtteranceId = 'idiom_${idiom.id}';
+      return SelectionArea(
+        child: ListView(
+          padding: EdgeInsets.fromLTRB(
+            context.spaceM,
+            context.spaceM,
+            context.spaceM,
+            context.spaceXxl,
           ),
-          if (idiom.definitions.isNotEmpty) ...[
-            context.verticalSpace(20),
-            _buildSectionTitle(
-              context,
-              idiom.definitions.length > 1
-                  ? l10n.meaningsLabel
-                  : l10n.meaningLabel,
-              AppIcons.info,
-              textTheme,
-              colorScheme,
+          children: [
+            IdiomDetailHeroCard(
+              idiom: idiom,
+              isSpeaking: activeUtteranceId == heroUtteranceId,
+              onSpeak: _ttsService == null
+                  ? null
+                  : () => _speakText(
+                      idiom.englishText,
+                      utteranceId: heroUtteranceId,
+                    ),
+              onCopy: () => _copyText(
+                showTranslation && idiom.arabicText.trim().isNotEmpty
+                    ? '${idiom.englishText}\n${idiom.arabicText}'
+                    : idiom.englishText,
+                l10n.copiedToClipboard,
+              ),
             ),
-            context.verticalSpace(8),
-            ..._buildDefinitions(
-              context,
-              idiom,
-              textTheme,
-              colorScheme,
-              l10n,
-              showTranslation: showTranslation,
-            ),
+            if (idiom.definitions.isNotEmpty) ...[
+              context.verticalSpace(20),
+              _buildSectionTitle(
+                context,
+                idiom.definitions.length > 1
+                    ? l10n.meaningsLabel
+                    : l10n.meaningLabel,
+                AppIcons.info,
+                textTheme,
+                colorScheme,
+              ),
+              context.verticalSpace(8),
+              ..._buildDefinitions(
+                context,
+                idiom,
+                textTheme,
+                colorScheme,
+                l10n,
+                showTranslation: showTranslation,
+                activeUtteranceId: activeUtteranceId,
+              ),
+            ],
+            if (idiom.examples.isNotEmpty) ...[
+              context.verticalSpace(20),
+              _buildSectionTitle(
+                context,
+                idiom.examples.length > 1
+                    ? l10n.examplesLabel
+                    : l10n.exampleLabel,
+                AppIcons.text,
+                textTheme,
+                colorScheme,
+              ),
+              context.verticalSpace(8),
+              ..._buildExamples(
+                context,
+                idiom,
+                textTheme,
+                colorScheme,
+                l10n,
+                showTranslation: showTranslation,
+                activeUtteranceId: activeUtteranceId,
+              ),
+            ],
+            if (_hasNotes(idiom, showTranslation: showTranslation)) ...[
+              context.verticalSpace(20),
+              _buildSectionTitle(
+                context,
+                l10n.notesLabel,
+                AppIcons.notes,
+                textTheme,
+                colorScheme,
+              ),
+              context.verticalSpace(8),
+              _buildNotesCard(
+                context,
+                idiom,
+                textTheme,
+                colorScheme,
+                showTranslation: showTranslation,
+              ),
+            ],
           ],
-          if (idiom.examples.isNotEmpty) ...[
-            context.verticalSpace(20),
-            _buildSectionTitle(
-              context,
-              idiom.examples.length > 1
-                  ? l10n.examplesLabel
-                  : l10n.exampleLabel,
-              AppIcons.text,
-              textTheme,
-              colorScheme,
-            ),
-            context.verticalSpace(8),
-            ..._buildExamples(
-              context,
-              idiom,
-              textTheme,
-              colorScheme,
-              l10n,
-              showTranslation: showTranslation,
-            ),
-          ],
-          if (_hasNotes(idiom, showTranslation: showTranslation)) ...[
-            context.verticalSpace(20),
-            _buildSectionTitle(
-              context,
-              l10n.notesLabel,
-              AppIcons.notes,
-              textTheme,
-              colorScheme,
-            ),
-            context.verticalSpace(8),
-            _buildNotesCard(
-              context,
-              idiom,
-              textTheme,
-              colorScheme,
-              showTranslation: showTranslation,
-            ),
-          ],
-        ],
-      ),
+        ),
+      );
+    }
+
+    if (_ttsService == null) {
+      return buildContent(null);
+    }
+
+    return ValueListenableBuilder<String?>(
+      valueListenable: _ttsService!.activeUtteranceId,
+      builder: (context, activeId, _) => buildContent(activeId),
     );
   }
 
@@ -231,6 +280,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     ColorScheme colorScheme,
     AppLocalizations l10n, {
     required bool showTranslation,
+    required String? activeUtteranceId,
   }) {
     return [
       for (int i = 0; i < idiom.definitions.length; i++) ...[
@@ -244,6 +294,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           colorScheme: colorScheme,
           l10n: l10n,
           showTranslation: showTranslation,
+          activeUtteranceId: activeUtteranceId,
         ),
       ],
     ];
@@ -258,9 +309,12 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     required ColorScheme colorScheme,
     required AppLocalizations l10n,
     required bool showTranslation,
+    required String? activeUtteranceId,
   }) {
     final hasArabicMeaning =
         showTranslation && definition.arabicMeaning.trim().isNotEmpty;
+    final utteranceId = 'def_${definition.id}';
+    final isSpeaking = activeUtteranceId == utteranceId;
 
     return MyCard.filled(
       borderRadius: context.brXl,
@@ -282,6 +336,20 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                   ),
                 ),
               ),
+              if (_ttsService != null)
+                MyIconButton.ghost(
+                  icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
+                  iconSize: context.iconS,
+                  iconColor: isSpeaking
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                  tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
+                  autoLoading: false,
+                  onPressed: () => _speakText(
+                    definition.englishMeaning,
+                    utteranceId: utteranceId,
+                  ),
+                ),
               MyIconButton.ghost(
                 icon: AppIcons.copy,
                 iconSize: context.iconS,
@@ -319,6 +387,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     ColorScheme colorScheme,
     AppLocalizations l10n, {
     required bool showTranslation,
+    required String? activeUtteranceId,
   }) {
     return [
       for (int i = 0; i < idiom.examples.length; i++) ...[
@@ -332,6 +401,7 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
           colorScheme: colorScheme,
           l10n: l10n,
           showTranslation: showTranslation,
+          activeUtteranceId: activeUtteranceId,
         ),
       ],
     ];
@@ -346,9 +416,12 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
     required ColorScheme colorScheme,
     required AppLocalizations l10n,
     required bool showTranslation,
+    required String? activeUtteranceId,
   }) {
     final hasArabicSentence =
         showTranslation && example.arabicSentence.trim().isNotEmpty;
+    final utteranceId = 'ex_${example.id}';
+    final isSpeaking = activeUtteranceId == utteranceId;
 
     return MyCard.filled(
       borderRadius: context.brXl,
@@ -370,6 +443,20 @@ class _IdiomDetailPageState extends State<IdiomDetailPage> {
                   ),
                 ),
               ),
+              if (_ttsService != null)
+                MyIconButton.ghost(
+                  icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
+                  iconSize: context.iconS,
+                  iconColor: isSpeaking
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                  tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
+                  autoLoading: false,
+                  onPressed: () => _speakText(
+                    example.englishSentence,
+                    utteranceId: utteranceId,
+                  ),
+                ),
               MyIconButton.ghost(
                 icon: AppIcons.copy,
                 iconSize: context.iconS,

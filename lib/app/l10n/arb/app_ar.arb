@@ -218,5 +218,21 @@
   "showTranslationSubtitle": "عرض الترجمة العربية للتعابير والأمثلة في التطبيق",
   "idiomTapAction": "عند الضغط على تعبير",
   "shareSheetOption": "نافذة المشاركة",
-  "defaultTab": "التبويب الافتراضي"
+  "defaultTab": "التبويب الافتراضي",
+  "ttsSettings": "النطق الصوتي",
+  "ttsAccent": "اللهجة",
+  "ttsAccentUs": "أمريكي",
+  "ttsAccentUk": "بريطاني",
+  "ttsAccentAu": "أسترالي",
+  "ttsVoice": "المتحدث",
+  "ttsDefaultVoice": "افتراضي",
+  "ttsNoVoicesAvailable": "لا توجد أصوات إنجليزية مثبّتة في هذا المحرك",
+  "ttsSpeed": "سرعة النطق",
+  "ttsSample": "تجربة الصوت",
+  "ttsSampleSentence": "Break the ice and speak English with confidence.",
+  "listen": "استماع",
+  "stopSpeaking": "إيقاف",
+  "deviceTtsSettings": "إعدادات النطق في الجهاز",
+  "deviceTtsSettingsSubtitle": "إدارة الأصوات المثبّتة ومحركات النطق",
+  "deviceTtsSettingsUnavailable": "تعذّر فتح إعدادات النطق في الجهاز"
 }

@@ -4,6 +4,7 @@ import 'package:idiomer/app/di/injection.dart';
 import 'package:idiomer/app/l10n/app_locales.dart';
 import 'package:idiomer/core/services/cash/cash_keys.dart';
 import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/features/settings/domain/entities/app_settings.dart';
 import 'package:idiomer/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:idiomer/features/settings/presentation/cubit/settings_state.dart';
@@ -28,6 +29,10 @@ void main() {
           showTranslation: true,
           idiomTapAction: IdiomTapAction.details,
           defaultTab: DefaultAppTab.home,
+          ttsAccent: TtsAccent.us,
+          ttsVoiceName: null,
+          ttsVoiceLocale: null,
+          ttsSpeechRate: 0.5,
         ),
       );
       expect(cubit.state.locale, isNull);
@@ -41,6 +46,10 @@ void main() {
         CashKeys.showTranslation: false,
         CashKeys.idiomTapAction: IdiomTapAction.share.name,
         CashKeys.defaultTab: DefaultAppTab.flashcards.name,
+        CashKeys.ttsAccent: TtsAccent.uk.name,
+        CashKeys.ttsVoiceName: 'en-gb-x-rjs-local',
+        CashKeys.ttsVoiceLocale: 'en-GB',
+        CashKeys.ttsSpeechRate: 0.65,
       });
       await initDependencies();
 
@@ -51,11 +60,15 @@ void main() {
       expect(cubit.state.showTranslation, isFalse);
       expect(cubit.state.idiomTapAction, IdiomTapAction.share);
       expect(cubit.state.defaultTab, DefaultAppTab.flashcards);
+      expect(cubit.state.ttsAccent, TtsAccent.uk);
+      expect(cubit.state.ttsVoiceName, 'en-gb-x-rjs-local');
+      expect(cubit.state.ttsVoiceLocale, 'en-GB');
+      expect(cubit.state.ttsSpeechRate, 0.65);
       await cubit.close();
     });
 
     test(
-      'persists theme, locale, translation, tap action, and default tab updates',
+      'persists theme, locale, translation, tap action, default tab, and TTS updates',
       () async {
         SharedPreferences.setMockInitialValues({});
         await initDependencies();
@@ -91,6 +104,24 @@ void main() {
         await cubit.changeDefaultTab(DefaultAppTab.explore);
         expect(cubit.state.defaultTab, DefaultAppTab.explore);
         expect(cash.getString(CashKeys.defaultTab), DefaultAppTab.explore.name);
+
+        await cubit.changeTtsVoice(
+          const TtsVoiceOption(name: 'en-us-x-sfg-local', locale: 'en-US'),
+        );
+        expect(cubit.state.ttsVoiceName, 'en-us-x-sfg-local');
+        expect(cubit.state.ttsVoiceLocale, 'en-US');
+
+        // Switching accent clears previously chosen voice so the new accent applies.
+        await cubit.changeTtsAccent(TtsAccent.au);
+        expect(cubit.state.ttsAccent, TtsAccent.au);
+        expect(cash.getString(CashKeys.ttsAccent), TtsAccent.au.name);
+        expect(cubit.state.ttsVoiceName, isNull);
+        expect(cubit.state.ttsVoiceLocale, isNull);
+        expect(cash.contains(CashKeys.ttsVoiceName), isFalse);
+
+        await cubit.changeTtsSpeechRate(1.0);
+        expect(cubit.state.ttsSpeechRate, 1.0);
+        expect(cash.getDouble(CashKeys.ttsSpeechRate), 1.0);
 
         await cubit.close();
       },

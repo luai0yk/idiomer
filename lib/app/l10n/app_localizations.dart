@@ -1411,6 +1411,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default Tab'**
   String get defaultTab;
+
+  /// No description provided for @ttsSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Text-to-Speech'**
+  String get ttsSettings;
+
+  /// No description provided for @ttsAccent.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent'**
+  String get ttsAccent;
+
+  /// No description provided for @ttsAccentUs.
+  ///
+  /// In en, this message translates to:
+  /// **'US'**
+  String get ttsAccentUs;
+
+  /// No description provided for @ttsAccentUk.
+  ///
+  /// In en, this message translates to:
+  /// **'UK'**
+  String get ttsAccentUk;
+
+  /// No description provided for @ttsAccentAu.
+  ///
+  /// In en, this message translates to:
+  /// **'AU'**
+  String get ttsAccentAu;
+
+  /// No description provided for @ttsVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker'**
+  String get ttsVoice;
+
+  /// No description provided for @ttsDefaultVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get ttsDefaultVoice;
+
+  /// No description provided for @ttsNoVoicesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No installed English speakers found on this engine'**
+  String get ttsNoVoicesAvailable;
+
+  /// No description provided for @ttsSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech Speed'**
+  String get ttsSpeed;
+
+  /// No description provided for @ttsSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Sample'**
+  String get ttsSample;
+
+  /// No description provided for @ttsSampleSentence.
+  ///
+  /// In en, this message translates to:
+  /// **'Break the ice and speak English with confidence.'**
+  String get ttsSampleSentence;
+
+  /// No description provided for @listen.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen'**
+  String get listen;
+
+  /// No description provided for @stopSpeaking.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stopSpeaking;
+
+  /// No description provided for @deviceTtsSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Device TTS Settings'**
+  String get deviceTtsSettings;
+
+  /// No description provided for @deviceTtsSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage installed voices and speech engines'**
+  String get deviceTtsSettingsSubtitle;
+
+  /// No description provided for @deviceTtsSettingsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open device TTS settings'**
+  String get deviceTtsSettingsUnavailable;
 }
 
 class _AppLocalizationsDelegate

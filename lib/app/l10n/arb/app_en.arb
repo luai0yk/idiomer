@@ -317,5 +317,21 @@
   "showTranslationSubtitle": "Display Arabic translations across idioms and examples",
   "idiomTapAction": "When Tapping an Idiom",
   "shareSheetOption": "Share Sheet",
-  "defaultTab": "Default Tab"
+  "defaultTab": "Default Tab",
+  "ttsSettings": "Text-to-Speech",
+  "ttsAccent": "Accent",
+  "ttsAccentUs": "US",
+  "ttsAccentUk": "UK",
+  "ttsAccentAu": "AU",
+  "ttsVoice": "Speaker",
+  "ttsDefaultVoice": "Default",
+  "ttsNoVoicesAvailable": "No installed English speakers found on this engine",
+  "ttsSpeed": "Speech Speed",
+  "ttsSample": "Voice Sample",
+  "ttsSampleSentence": "Break the ice and speak English with confidence.",
+  "listen": "Listen",
+  "stopSpeaking": "Stop",
+  "deviceTtsSettings": "Device TTS Settings",
+  "deviceTtsSettingsSubtitle": "Manage installed voices and speech engines",
+  "deviceTtsSettingsUnavailable": "Could not open device TTS settings"
 }

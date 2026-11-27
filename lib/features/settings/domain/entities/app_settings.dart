@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:idiomer/app/l10n/app_locales.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 
 enum IdiomTapAction { details, share }
 
@@ -12,6 +13,10 @@ class AppSettings extends Equatable {
   final bool showTranslation;
   final IdiomTapAction idiomTapAction;
   final DefaultAppTab defaultTab;
+  final TtsAccent ttsAccent;
+  final String? ttsVoiceName;
+  final String? ttsVoiceLocale;
+  final double ttsSpeechRate;
 
   const AppSettings({
     required this.themeMode,
@@ -19,6 +24,10 @@ class AppSettings extends Equatable {
     this.showTranslation = true,
     this.idiomTapAction = IdiomTapAction.details,
     this.defaultTab = DefaultAppTab.home,
+    this.ttsAccent = TtsAccent.us,
+    this.ttsVoiceName,
+    this.ttsVoiceLocale,
+    this.ttsSpeechRate = 0.5,
   });
 
   @override
@@ -28,5 +37,9 @@ class AppSettings extends Equatable {
     showTranslation,
     idiomTapAction,
     defaultTab,
+    ttsAccent,
+    ttsVoiceName,
+    ttsVoiceLocale,
+    ttsSpeechRate,
   ];
 }

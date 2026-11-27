@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:idiomer/app/routes/app_routes.dart';
 import 'package:idiomer/core/services/cash/cash_keys.dart';
 import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/core/utils/extensions/context_extension.dart';
 import 'package:idiomer/features/settings/domain/entities/app_settings.dart';
 import 'package:idiomer/features/settings/presentation/cubit/settings_cubit.dart';
@@ -62,6 +63,38 @@ class SettingsHelper {
       (tab) => tab.name == stored,
       orElse: () => DefaultAppTab.home,
     );
+  }
+
+  static TtsAccent get ttsAccent {
+    final stored = _cash.getString(CashKeys.ttsAccent);
+    return TtsAccent.values.firstWhere(
+      (accent) => accent.name == stored,
+      orElse: () => TtsAccent.us,
+    );
+  }
+
+  static String? get ttsVoiceName => _cash.getString(CashKeys.ttsVoiceName);
+
+  static String? get ttsVoiceLocale => _cash.getString(CashKeys.ttsVoiceLocale);
+
+  static double get ttsSpeechRate =>
+      (_cash.getDouble(CashKeys.ttsSpeechRate) ?? 0.5).clamp(0.25, 1.0);
+
+  static String getTtsAccentName(BuildContext context, TtsAccent accent) {
+    final l10n = context.l10n;
+    switch (accent) {
+      case TtsAccent.us:
+        return l10n.ttsAccentUs;
+      case TtsAccent.uk:
+        return l10n.ttsAccentUk;
+      case TtsAccent.au:
+        return l10n.ttsAccentAu;
+    }
+  }
+
+  static String formatSpeechRate(double rate) {
+    final multiplier = rate / 0.5;
+    return '${multiplier.toStringAsFixed(1)}x';
   }
 
   static String getDefaultTabName(BuildContext context, DefaultAppTab tab) {
@@ -132,5 +165,30 @@ class SettingsHelper {
       return defaultTab;
     }
     return context.read<SettingsCubit>().state.defaultTab;
+  }
+
+  static ({
+    TtsAccent accent,
+    String? voiceName,
+    String? voiceLocale,
+    double speechRate,
+  })
+  readTtsConfig(BuildContext context) {
+    if (context.findAncestorWidgetOfExactType<BlocProvider<SettingsCubit>>() ==
+        null) {
+      return (
+        accent: ttsAccent,
+        voiceName: ttsVoiceName,
+        voiceLocale: ttsVoiceLocale,
+        speechRate: ttsSpeechRate,
+      );
+    }
+    final state = context.read<SettingsCubit>().state;
+    return (
+      accent: state.ttsAccent,
+      voiceName: state.ttsVoiceName,
+      voiceLocale: state.ttsVoiceLocale,
+      speechRate: state.ttsSpeechRate,
+    );
   }
 }

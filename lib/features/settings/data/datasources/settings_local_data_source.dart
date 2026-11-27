@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:idiomer/app/l10n/app_locales.dart';
 import 'package:idiomer/core/services/cash/cash_keys.dart';
 import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/features/settings/domain/entities/app_settings.dart';
 
 abstract interface class SettingsLocalDataSource {
@@ -15,6 +16,13 @@ abstract interface class SettingsLocalDataSource {
   Future<void> saveIdiomTapAction(IdiomTapAction action);
   DefaultAppTab getDefaultTab();
   Future<void> saveDefaultTab(DefaultAppTab tab);
+  TtsAccent getTtsAccent();
+  Future<void> saveTtsAccent(TtsAccent accent);
+  String? getTtsVoiceName();
+  String? getTtsVoiceLocale();
+  Future<void> saveTtsVoice(TtsVoiceOption? voice);
+  double getTtsSpeechRate();
+  Future<void> saveTtsSpeechRate(double speechRate);
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -95,5 +103,53 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> saveDefaultTab(DefaultAppTab tab) async {
     await _cashService.setString(CashKeys.defaultTab, tab.name);
+  }
+
+  @override
+  TtsAccent getTtsAccent() {
+    final stored = _cashService.getString(CashKeys.ttsAccent);
+    if (stored == null) return TtsAccent.us;
+    return TtsAccent.values.firstWhere(
+      (accent) => accent.name == stored,
+      orElse: () => TtsAccent.us,
+    );
+  }
+
+  @override
+  Future<void> saveTtsAccent(TtsAccent accent) async {
+    await _cashService.setString(CashKeys.ttsAccent, accent.name);
+  }
+
+  @override
+  String? getTtsVoiceName() => _cashService.getString(CashKeys.ttsVoiceName);
+
+  @override
+  String? getTtsVoiceLocale() =>
+      _cashService.getString(CashKeys.ttsVoiceLocale);
+
+  @override
+  Future<void> saveTtsVoice(TtsVoiceOption? voice) async {
+    if (voice == null) {
+      await _cashService.remove(CashKeys.ttsVoiceName);
+      await _cashService.remove(CashKeys.ttsVoiceLocale);
+      return;
+    }
+    await _cashService.setString(CashKeys.ttsVoiceName, voice.name);
+    await _cashService.setString(CashKeys.ttsVoiceLocale, voice.locale);
+  }
+
+  @override
+  double getTtsSpeechRate() {
+    final stored = _cashService.getDouble(CashKeys.ttsSpeechRate);
+    if (stored == null) return 0.5;
+    return stored.clamp(0.25, 1.0);
+  }
+
+  @override
+  Future<void> saveTtsSpeechRate(double speechRate) async {
+    await _cashService.setDouble(
+      CashKeys.ttsSpeechRate,
+      speechRate.clamp(0.25, 1.0),
+    );
   }
 }

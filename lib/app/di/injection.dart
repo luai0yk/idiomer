@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:idiomer/core/database/app_database.dart';
 import 'package:idiomer/core/database/database_paths.dart';
 import 'package:idiomer/core/services/cash/cash_service.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/features/db_setup/data/datasources/db_setup_local_datasource.dart';
 import 'package:idiomer/features/db_setup/data/datasources/db_setup_remote_datasource.dart';
 import 'package:idiomer/features/db_setup/data/repositories/db_setup_repository_impl.dart';
@@ -59,6 +60,9 @@ import 'package:idiomer/features/settings/domain/usecases/update_idiom_tap_actio
 import 'package:idiomer/features/settings/domain/usecases/update_language_usecase.dart';
 import 'package:idiomer/features/settings/domain/usecases/update_show_translation_usecase.dart';
 import 'package:idiomer/features/settings/domain/usecases/update_theme_mode_usecase.dart';
+import 'package:idiomer/features/settings/domain/usecases/update_tts_accent_usecase.dart';
+import 'package:idiomer/features/settings/domain/usecases/update_tts_speech_rate_usecase.dart';
+import 'package:idiomer/features/settings/domain/usecases/update_tts_voice_usecase.dart';
 import 'package:idiomer/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -86,6 +90,12 @@ void _initCore({AppDatabase? database}) {
   }
   if (!sl.isRegistered<DatabasePaths>()) {
     sl.registerLazySingleton<DatabasePaths>(() => const DatabasePaths());
+  }
+  if (!sl.isRegistered<TtsService>()) {
+    sl.registerLazySingleton<TtsService>(
+      () => TtsService(),
+      dispose: (tts) => tts.dispose(),
+    );
   }
   if (!sl.isRegistered<AppDatabase>()) {
     if (database != null) {
@@ -123,6 +133,15 @@ void _initSettings() {
     ..registerLazySingleton<UpdateDefaultTabUseCase>(
       () => UpdateDefaultTabUseCase(sl()),
     )
+    ..registerLazySingleton<UpdateTtsAccentUseCase>(
+      () => UpdateTtsAccentUseCase(sl()),
+    )
+    ..registerLazySingleton<UpdateTtsVoiceUseCase>(
+      () => UpdateTtsVoiceUseCase(sl()),
+    )
+    ..registerLazySingleton<UpdateTtsSpeechRateUseCase>(
+      () => UpdateTtsSpeechRateUseCase(sl()),
+    )
     ..registerFactory<SettingsCubit>(
       () => SettingsCubit(
         getSettings: sl(),
@@ -131,6 +150,9 @@ void _initSettings() {
         updateShowTranslation: sl(),
         updateIdiomTapAction: sl(),
         updateDefaultTab: sl(),
+        updateTtsAccent: sl(),
+        updateTtsVoice: sl(),
+        updateTtsSpeechRate: sl(),
       ),
     );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:idiomer/app/l10n/app_locales.dart';
+import 'package:idiomer/core/services/tts/tts_service.dart';
 import 'package:idiomer/features/settings/data/datasources/settings_local_data_source.dart';
 import 'package:idiomer/features/settings/domain/entities/app_settings.dart';
 import 'package:idiomer/features/settings/domain/repositories/settings_repository.dart';
@@ -19,6 +20,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
       showTranslation: _localDataSource.getShowTranslation(),
       idiomTapAction: _localDataSource.getIdiomTapAction(),
       defaultTab: _localDataSource.getDefaultTab(),
+      ttsAccent: _localDataSource.getTtsAccent(),
+      ttsVoiceName: _localDataSource.getTtsVoiceName(),
+      ttsVoiceLocale: _localDataSource.getTtsVoiceLocale(),
+      ttsSpeechRate: _localDataSource.getTtsSpeechRate(),
     );
   }
 
@@ -45,5 +50,20 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<void> saveDefaultTab(DefaultAppTab tab) {
     return _localDataSource.saveDefaultTab(tab);
+  }
+
+  @override
+  Future<void> saveTtsAccent(TtsAccent accent) {
+    return _localDataSource.saveTtsAccent(accent);
+  }
+
+  @override
+  Future<void> saveTtsVoice(TtsVoiceOption? voice) {
+    return _localDataSource.saveTtsVoice(voice);
+  }
+
+  @override
+  Future<void> saveTtsSpeechRate(double speechRate) {
+    return _localDataSource.saveTtsSpeechRate(speechRate);
   }
 }

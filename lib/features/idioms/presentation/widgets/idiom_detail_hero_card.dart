@@ -14,11 +14,15 @@ import 'package:idiomer/shared/widgets/misc/my_icon.dart';
 class IdiomDetailHeroCard extends StatelessWidget {
   final IdiomDetailEntity idiom;
   final VoidCallback onCopy;
+  final VoidCallback? onSpeak;
+  final bool isSpeaking;
 
   const IdiomDetailHeroCard({
     super.key,
     required this.idiom,
     required this.onCopy,
+    this.onSpeak,
+    this.isSpeaking = false,
   });
 
   @override
@@ -111,6 +115,16 @@ class IdiomDetailHeroCard extends StatelessWidget {
                       ),
                     ),
                     context.horizontalSpace(8),
+                    if (onSpeak != null) ...[
+                      MyIconButton.ghost(
+                        icon: isSpeaking ? AppIcons.stop : AppIcons.volume,
+                        iconColor: onPrimary,
+                        tooltip: isSpeaking ? l10n.stopSpeaking : l10n.listen,
+                        autoLoading: false,
+                        onPressed: onSpeak,
+                      ),
+                      context.horizontalSpace(2),
+                    ],
                     MyIconButton.ghost(
                       icon: AppIcons.copy,
                       iconColor: onPrimary,
